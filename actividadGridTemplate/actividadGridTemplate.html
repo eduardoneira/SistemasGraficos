@@ -146,13 +146,6 @@
                     // triangle-strip
                     //
 
-                    for (var i = 0; i < this.rows-1; i++) {
-                        for (var j = 0; j < 2*this.cols; j++) {
-                            this.index_buffer.push(j+i)
-                        }
-                        this.index_buffer.push(this.index_buffer[a.length - 1])
-                    }
-
                     this.index_buffer = [0, 1, 2, 3];
                 }
 
