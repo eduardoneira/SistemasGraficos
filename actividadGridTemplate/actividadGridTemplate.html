@@ -135,18 +135,32 @@
                 this.webgl_color_buffer = null;
                 this.webgl_index_buffer = null;
 
+                // Index buffer for strip
                 this.createIndexBuffer = function(){
+                    this.index_buffer = [];
+                    var index_top = 0;
+                    var index_bottom = this.rows;
+                    var moveIndex = function(a) {return a+1;};
 
-                    // ACTIVIDAD 1.
-                    // Este index buffer está armado para renderizar dos los triangulos
-                    // que se obervan como ejemplo.
-                    // Modificar el método para que a partir de conocer las dimensiones
-                    // de la grilla (que deberían estar en los atributos this.rows y this.cols)
-                    // se genere el index buffer correspondiente para renderizar la grilla utilizando
-                    // triangle-strip
-                    //
+                    for (var j = 0; j < this.cols - 1; j++) {
+                        
+                        for (var  i = 0; i < 2 * this.rows; i++) {
+                            // index = (i % 2 == 0) ? index_top : index_bottom;
+                            if (i % 2 == 0) {
+                              this.index_buffer.push(index_top);
+                              index_top = moveIndex(index_top);
+                            } else {
+                              this.index_buffer.push(index_bottom);
+                              index_bottom = moveIndex(index_bottom);
+                            } 
+                        }
 
-                    this.index_buffer = [0, 1, 2, 3];
+                        moveIndex = (j % 2 != 0) ? function(a) {return a+1;} : function(a) {return a-1;};
+
+                        index_top = moveIndex(index_top + this.rows);
+                        index_bottom = moveIndex(index_bottom + this.rows);
+
+                    }
                 }
 
                 // Esta función inicializa el position_buffer y el color buffer de forma de 
@@ -169,10 +183,12 @@
                            this.position_buffer.push(0);
 
                            // Para cada vértice definimos su color
-                           this.color_buffer.push(1.0/this.rows * i);
-                           this.color_buffer.push(0.2);
-                           this.color_buffer.push(1.0/this.cols * j);
-                                                  
+                           // this.color_buffer.push(1.0/this.rows * i);
+                           // this.color_buffer.push(0.2);
+                           // this.color_buffer.push(1.0/this.cols * j);
+                           this.color_buffer.push(Math.random());
+                           this.color_buffer.push(Math.random());
+                           this.color_buffer.push(Math.random());
                        };
                     };
                     
@@ -214,10 +230,6 @@
                 // para dibujar el VertexGrid.
                 // En el caso del ejemplo puede observarse que la última línea del método
                 // indica dibujar triángulos utilizando los 6 índices cargados en el Index_Buffer.
-                //
-                // ACTIVIDAD 3.
-                // Reemplazar dicha línea de código por la correspondiente para dibujar el strip
-                // de triángulos utilizando el index buffer generado en la ACTIVIDAD 1.
                 this.drawVertexGrid = function(){
 
                     var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
@@ -233,7 +245,7 @@
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
                     // Dibujamos.
-                    gl.drawElements(gl.TRIANGLE_STRIP, 4, gl.UNSIGNED_SHORT, 0);
+                    gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
                 }
             }
             //
@@ -332,7 +344,7 @@
                 var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
                 // Preparamos una matriz de modelo+vista.
                 mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -5.0]);
+                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -20.0]);
                 mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
                 t = t + 0.01;
 
