@@ -1,7 +1,10 @@
 <!doctype html>
-<meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
-<meta content="ISO-8859-1" http-equiv="encoding">
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type">
+<meta content="UTF-8" http-equiv="encoding">
 <script src="scripts/vertex_grid.js"></script>
+<script src="scripts/utils.js"></script>
+<script src="scripts/cylinder.js"></script>
+
 <html>
     <head>
         <title>66.71 WebGL FrameWork</title>
@@ -187,7 +190,7 @@
             
             function setupBuffers()
             {
-                my_grid = new VertexGrid(2,2);
+                my_grid = new Cylinder(10,10);
                 my_grid.createUniformPlaneGrid();
                 my_grid.createIndexBuffer();
                 my_grid.setupWebGLBuffers();
@@ -204,7 +207,7 @@
                 var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
                 // Preparamos una matriz de modelo+vista.
                 mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -20.0]);
+                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -10.0]);
                 mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
                 t = t + 0.01;
 
