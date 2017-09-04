@@ -1,15 +1,16 @@
 // OBJETO VERTEX-GRID
 // Definimos un constructor para el objeto VertexGrid
-function VertexGrid (_rows, _cols) {
+function VertexGrid (_rows, _cols, _texture) {
   this.cols = _cols;
   this.rows = _rows;
+  this.texture = _texture;
   this.index_buffer = [];
 
   this.position_buffer = [];
-  this.color_buffer = [];
+  this.texture_buffer = [];
 
   this.webgl_position_buffer = null;
-  this.webgl_color_buffer = null;
+  this.webgl_texture_buffer = null;
   this.webgl_index_buffer = null;
 
   // Index buffer for strip
@@ -41,7 +42,7 @@ function VertexGrid (_rows, _cols) {
   // El plano se genera centrado en el origen.
   // El propósito de esta función es a modo de ejemplo de como inicializar y cargar
   // los buffers de las posiciones y el color para cada vértice.
-  this.createUniformPlaneGrid = function(){
+  this.createUniformPlaneGrid = function() {
     this.position_buffer = [];
     this.color_buffer = [];
 
@@ -53,12 +54,37 @@ function VertexGrid (_rows, _cols) {
         this.position_buffer.push(0);
 
         // Para cada vértice definimos su color
-        this.color_buffer.push(Math.random());
-        this.color_buffer.push(Math.random());
-        this.color_buffer.push(Math.random());
+        this.texture_buffer.push(i * (1.0/(this.rows-1)));
+        this.texture_buffer.push(j * (1.0/(this.rows-1)));
       };
     };
   }
+
+  this.loadTexture = function() {
+    // Create a texture.
+    var texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    // Fill the texture with a 1x1 blue pixel.
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+                  new Uint8Array([0, 0, 255, 255]));
+     
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+   
+    // Asynchronously load an image
+    var image = new Image();
+    image.src = this.texture;
+    image.addEventListener('load', function() {
+      // Now that the image has loaded make copy it to the texture.
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+
+      gl.generateMipmap(gl.TEXTURE_2D);
+    });
+  }
+
 
   // Esta función crea e incializa los buffers dentro del pipeline para luego
   // utlizarlos a la hora de renderizar.
@@ -72,9 +98,9 @@ function VertexGrid (_rows, _cols) {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
 
     // Repetimos los pasos 1. 2. y 3. para la información del color
-    this.webgl_color_buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);   
+    this.webgl_texture_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_buffer), gl.STATIC_DRAW);   
 
     // Repetimos los pasos 1. 2. y 3. para la información de los índices
     // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
@@ -94,10 +120,10 @@ function VertexGrid (_rows, _cols) {
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
     gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
-    var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
-    gl.enableVertexAttribArray(vertexColorAttribute);
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-    gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+    var vertexTextureAttribute = gl.getAttribLocation(glProgram, "aVertexTextureCoord");
+    gl.enableVertexAttribArray(vertexTextureAttribute);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
+    gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
