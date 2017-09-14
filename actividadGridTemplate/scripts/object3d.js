@@ -34,22 +34,14 @@ function Object3d(){
 		//returns array of x,y pairs of points
 		//of an N sided regular polygon
 
-		//format is: [x0, y0, x1, y1, ..., xN-1, yN-1]
-
-		//version alternativa: points.x = [x0, ..., xN-1]
-		//                     points.y = [y0, ..., yN-1]
-		//cual conviene mas? 
-
-		var points = {
-			x: [];
-			y: [];
-		};
-		var STEP = 2*Math.PI/N;
+		var points = [];
 
 		for(var i = 0; i < N; i++)
 		{
-			points.x.push(Math.cos(i*STEP));
-			points.y.push(Math.sin(i*STEP));
+			points.push({
+				x: Math.cos(i*2*Math.PI/N);
+				y: Math.sin(i*2*Math.PI/N);
+			});
 		}
 
 		return points;
@@ -74,11 +66,42 @@ function ExtrudedObject(polygon, depth, Nsteps)
 
 ExtrudedObject.prototype = Object3d;
 
-function CylinderObject(Nsides, depth, Ndepth)
+function CylinderObject(_radius, _Nsides, _depth, _Ndepth)
 {
-	this.Nsi
+	this.radius = _radius;
+	this.Nsides = _Nsides;
+	this.depth = _depth;
+	this.Ndepth = _Ndepth;
+
+	var circlePoints = this.getCirclePoints(this.Nsides);
+
+	//Lleno el position buffer:
+
+	for(var i = 0; i < this.Ndepth; i++)
+	{
+			for(circlePoint in circlePoints)
+			{
+				this.position_buffer.push(circlePoint.x);
+				this.position_buffer.push(circlePoint.y);
+				this.position_buffer.push(i*this.depth/this.Ndepth);
+			}
+
+	}
+
+	//Los caps:
+
+	this.position_buffer.push(0); // centro x
+	this.position_buffer.push(0); // centro y
+	this.position_buffer.push(0); // centro z
+
+	this.position_buffer.push(0); // centro x
+	this.position_buffer.push(0); // centro y
+	this.position_buffer.push(this.depth); // fin z
+
+
 }
 
+CylinderObject.prototype = Object3d;
 
 
 
