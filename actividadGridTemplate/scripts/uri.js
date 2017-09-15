@@ -28,7 +28,6 @@ var Uri = {
 
 
 		return (function (N, i){
-			console.log(memo);
 
 			if(memo.hasOwnProperty(N)){ //si esta hasheado
 				return memo[N][i];
@@ -56,7 +55,6 @@ var Uri = {
 
 
 		return (function (N, i){
-			console.log(memo);
 
 			if(memo.hasOwnProperty(N)){ //si esta hasheado
 				return memo[N][i];
