@@ -192,7 +192,7 @@
       
       function setupBuffers()
       {
-        my_grid = new Cylinder(20,20,"resources/cylinder.jpg",2);
+        my_grid = new Cylinder(40,40,"resources/cylinder2.png",2);
         my_grid.loadTexture();
         my_grid.createUniformPlaneGrid();
         my_grid.createIndexBuffer();
@@ -210,7 +210,7 @@
         var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
         // Preparamos una matriz de modelo+vista.
         mat4.identity(mvMatrix);
-        mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -10.0]);
+        mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -20.0]);
         mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
         t = t + 0.01;
 
