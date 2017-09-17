@@ -1,10 +1,10 @@
 // TODO: Make getters for position, rotation and scale
 // TODO: Set up buffer and webgl buffer normals. Add bind in draw
-function Object3d(_rows,_cols,_texture){
-
+function Object3D(_rows,_cols,_texture){
   this.texture = _texture;
   this.rows = _rows;
   this.cols = _cols;
+  this.drawEnabled = true;
 
   this.index_buffer = [];
   this.position_buffer = [];
@@ -16,8 +16,8 @@ function Object3d(_rows,_cols,_texture){
   this.webgl_index_buffer = null;
   this.webgl_normal_buffer = null;
 
-  this.transformations = mat4.create();
-  this.childs = [];
+  this.state = mat4.create();
+  this.childs = {};
 
   var that = this;
 
@@ -77,24 +77,42 @@ function Object3d(_rows,_cols,_texture){
     this._setUpWebGLBuffers();
   }
 
+  this.disableDraw = function() {
+    this.drawEnabled = false;
+  }
+
+  this.enableDraw = function() {
+    this.drawEnabled = true;
+  }
+
+  this.add_child = function(id,child) {
+    this.childs[id] = child;
+  }
+
   this.translate = function (tVect) {
-    mat4.translate(this.transformations, this.transformations, tVect);
+    mat4.translate(this.state, this.state, tVect);
   }
 
   this.scale = function(sVect) {
-    mat4.scale(this.transformations, this.transformations, sVect);
+    mat4.scale(this.state, this.state, sVect);
   }
 
   this.rotate = function(rad, axis) {
-    mat4.rotate(this.transformations, this.transformations, rad, axis);
+    mat4.rotate(this.state, this.state, rad, axis);
   }
 
+  this._resetState = function () {
+    // Stub. Do nothing by default
+  }
 
-  this._draw = function(all_transformations) {
-    //TODO: merge view and model matrix in js
+  this._drawChilds = function(transformations_parent) {
+    // Stub. Do nothing by default
+  }
+
+  this._draw = function() {
     var u_view_model_matrix = gl.getUniformLocation(glProgram, "uVMMatrix");
-    mat4.multiply(all_transformations,vMatrix,all_transformations)
-    gl.uniformMatrix4fv(u_view_model_matrix, false, vMatrix);
+    mat4.multiply(this.state,vMatrix,this.state)
+    gl.uniformMatrix4fv(u_view_model_matrix, false, this.state);
 
     var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
     gl.enableVertexAttribArray(vertexPositionAttribute);
@@ -105,28 +123,26 @@ function Object3d(_rows,_cols,_texture){
     gl.enableVertexAttribArray(vertexTextureAttribute);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
     gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
-    
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
+    var uSampler = gl.getUniformLocation(glProgram, 'uSampler');
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D,this.texture);
-    var uSampler = gl.getUniformLocation(glProgram, 'uSampler');
     gl.uniform1i(uSampler, 0);
 
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
     gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
   }
 
-  this.draw = function(transformations_parent) {
-    mat4.multiply(this.transformations,transformations_parent,this.transformations);
+  this.draw = function(transformations_parent) {    
+    mat4.identity(this.state);
 
-    this._draw(this.transformations);
+    if (this.drawEnabled) {
+      this._resetState();
+      mat4.multiply(this.state,transformations_parent,this.state);
+      this._draw();
+    }
 
-    this.childs.forEach(function(elem) { elem.draw(that.transformations); });
-    mat4.identity(this.transformations);
-  }
-
-  this.add_child = function(child) {
-    this.childs.push(child);
+    this._drawChilds(transformations_parent);
   }
 
 }

@@ -1,8 +1,12 @@
 function Cylinder(rows,cols,texture,radius) {
-  Object3d.call(this,rows,cols,texture);
+  Object3D.call(this,rows,cols,texture);
 
   this.radius = radius;
   var _STEP = 0.5;
+
+  this._resetState = function() {
+    this.rotate(5.0*t, [1.0, 0.0, 0.0]);
+  }
 
   this._createPointsAxialSymmetry = function(x,v) {
     for (var i = 0; i < this.rows; i++) {
@@ -13,7 +17,6 @@ function Cylinder(rows,cols,texture,radius) {
 
   this._createNormalBuffer = function() {
     //TODO: implement
-    console.log("hola");
   }
 
   this._createTexturePositionBuffer = function(){
@@ -47,7 +50,6 @@ function Cylinder(rows,cols,texture,radius) {
       this.texture_buffer = this.texture_buffer.concat([0.5,1]);
     }
   }
-
 }
 
-inheritPrototype(Cylinder, Object3d);
+inheritPrototype(Cylinder, Object3D);

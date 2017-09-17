@@ -1,6 +1,11 @@
 var textures = {};
 
-function loadTexture(gl, url) {
+// No se puede acceder al filesystem, vamos a tener que hardcodear a mano aca
+function loadAllTextures() {
+  textures["cylinder"] = loadTexture("resources/cylinder.jpg");
+}
+
+function loadTexture(url) {
   const texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -11,7 +16,7 @@ function loadTexture(gl, url) {
   const border = 0;
   const srcFormat = gl.RGBA;
   const srcType = gl.UNSIGNED_BYTE;
-  const pixel = new Uint8Array([0, 255, 0, 0]);  // opaque blue
+  const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
 
   gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
                 width, height, border, srcFormat, srcType,
