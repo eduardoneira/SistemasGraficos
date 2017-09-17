@@ -172,7 +172,7 @@
 
       // read from folder all textures
       function loadTextures() {
-        textures["cylinder"] = loadTexture(gl,"resources/cylinder2.png");
+        textures["cylinder"] = loadTexture(gl,"resources/cylinder.jpg");
       }
       
       function createScene() {
@@ -191,7 +191,7 @@
 
         mat4.identity(vMatrix);
         mat4.translate(vMatrix, vMatrix, [0.0, 0.0, -20.0]);
-        mat4.rotate(vMatrix,vMatrix,t, [1.0, 0.0, 0.0]);
+        mat4.rotate(vMatrix,vMatrix,t, [0.0, 1.0, 0.0]);
         
         t = t + 0.01;
 
