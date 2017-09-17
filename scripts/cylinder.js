@@ -1,5 +1,5 @@
 function Cylinder(rows,cols,texture,radius) {
-  VertexGrid.call(this,rows,cols,texture);
+  Object3d.call(this,rows,cols,texture);
 
   this.radius = radius;
   var _STEP = 0.5;
@@ -11,7 +11,12 @@ function Cylinder(rows,cols,texture,radius) {
     } 
   }
 
-  this.createUniformPlaneGrid = function(){
+  this._createNormalBuffer = function() {
+    //TODO: implement
+    console.log("hola");
+  }
+
+  this._createTexturePositionBuffer = function(){
     if (this.cols < 4) {
       throw "Deben haber al menos 4 columnas";
     }
@@ -42,6 +47,7 @@ function Cylinder(rows,cols,texture,radius) {
       this.texture_buffer = this.texture_buffer.concat([0.5,1]);
     }
   }
+
 }
 
-inheritPrototype(Cylinder, VertexGrid);
+inheritPrototype(Cylinder, Object3d);

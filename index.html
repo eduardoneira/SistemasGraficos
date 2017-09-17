@@ -1,9 +1,11 @@
 <!doctype html>
 <meta content="text/html;charset=UTF-8" http-equiv="Content-Type">
 <meta content="UTF-8" http-equiv="encoding">
-<script src="scripts/vertex_grid.js"></script>
+<script src="scripts/object3d.js"></script>
 <script src="scripts/utils.js"></script>
 <script src="scripts/cylinder.js"></script>
+<script src="scripts/texture_handler.js"></script>
+<script src="gl-matrix.js"></script>
 
 <html>
   <head>
@@ -15,50 +17,28 @@
     </style>
 
     <script type="text/javascript" src="gl-matrix.js"></script>
-    <!--
-    Vertex shader
-
-    El vertex shader define la posición y forma de cada vertice de cada polígono.
-    --> 
     <script id="shader-vs" type="x-shader/x-vertex">
-      // Los atributos son características propias de cada vertice.
       attribute vec3 aVertexPosition;
       attribute vec2 aVertexTextureCoord;
 
-      // Los uniforms son características propias de una etapa de dibujado completa.
-      // Son comunes a todos los vertices involucrados en el dibujado.
-      uniform mat4 uMVMatrix;
+      uniform mat4 uVMMatrix;
       uniform mat4 uPMatrix;
 
-      // Los varying son propiedades que toman valor para cada fragmento a partir
-      // de interpolar linealmente entre los valores que se les asigna en cada 
-      // vértice del polígono al cual pertenecen.
 			varying highp vec2 vTextureCoord;
 
       void main(void) {
-          // gl_Position es una variable "built-in" de GLSL que es usada para 
-          // almacenar la posición resultante del fragmento.
-          gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+          gl_Position = uPMatrix * uVMMatrix * vec4(aVertexPosition, 1.0);
           vTextureCoord = aVertexTextureCoord;
       }
     </script>
 
-    <!--
-    Fragment shader
-
-    Cada pixel en un polígono se llama fragmento. El fragment shader se encarga de
-    establecer el color de cada pixel. En este caso, asignamos el color blanco a 
-    cada pixel.
-    -->
     <script id="shader-fs" type="x-shader/x-fragment">
       varying highp vec2 vTextureCoord;
 
-      uniform sampler2D uTextureCoord;
+      uniform sampler2D uSampler;
 
       void main(void) {
-        // gl_FragColor es una variable "built-in" de GLSL que es usada para 
-        // almacenar el color resultante del fragmento.
-        gl_FragColor = texture2D(uTextureCoord,vTextureCoord);
+        gl_FragColor = texture2D(uSampler,vTextureCoord);
       }
     </script>
 
@@ -69,11 +49,10 @@
           fragmentShader = null,
           vertexShader = null,
           t = 0.0;
-					my_grid = null;
+					cylinder = null;
 
-      var mvMatrix = mat4.create();
+      var vMatrix = mat4.create();
       var pMatrix = mat4.create();
-
 
        // SHADERS FUNCTION
       function getShader(gl, id) {
@@ -132,7 +111,8 @@
         {
             setupWebGL();
             initShaders();
-            setupBuffers();
+            loadTextures();
+            createScene();
             setInterval(drawScene, 10);  
         }else{    
             alert(  "Error: Your browser does not appear to support WebGL.");
@@ -189,34 +169,33 @@
         }
         return shader;
       }
-      
-      function setupBuffers()
-      {
-        my_grid = new Cylinder(40,40,"resources/cylinder2.png",2);
-        my_grid.loadTexture();
-        my_grid.createUniformPlaneGrid();
-        my_grid.createIndexBuffer();
-        my_grid.setupWebGLBuffers();
+
+      // read from folder all textures
+      function loadTextures() {
+        textures["cylinder"] = loadTexture(gl,"resources/cylinder2.png");
       }
+      
+      function createScene() {
+        cylinder = new Cylinder(40,40,textures["cylinder"],2);
+        cylinder.init();
+      }
+
+      var identity = mat4.create();
       
       function drawScene()
       {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
-        // Preparamos una matriz de perspectiva.
         mat4.perspective(pMatrix, 45, 640.0/480.0, 0.1, 100.0);
         gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
-        var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
-        // Preparamos una matriz de modelo+vista.
-        mat4.identity(mvMatrix);
-        mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -20.0]);
-        mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
+        mat4.identity(vMatrix);
+        mat4.translate(vMatrix, vMatrix, [0.0, 0.0, -20.0]);
+        mat4.rotate(vMatrix,vMatrix,t, [1.0, 0.0, 0.0]);
+        
         t = t + 0.01;
 
-        gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
-
-        my_grid.drawVertexGrid();
+        cylinder.draw(identity);
       }
     </script>
   </head>

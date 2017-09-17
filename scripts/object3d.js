@@ -1,0 +1,132 @@
+// TODO: Make getters for position, rotation and scale
+// TODO: Set up buffer and webgl buffer normals. Add bind in draw
+function Object3d(_rows,_cols,_texture){
+
+  this.texture = _texture;
+  this.rows = _rows;
+  this.cols = _cols;
+
+  this.index_buffer = [];
+  this.position_buffer = [];
+  this.normal_buffer = [];
+  this.texture_buffer = [];
+
+  this.webgl_position_buffer = null;
+  this.webgl_texture_buffer = null;
+  this.webgl_index_buffer = null;
+  this.webgl_normal_buffer = null;
+
+  this.transformations = mat4.create();
+  this.childs = [];
+
+  var that = this;
+
+  this._createTexturePositionBuffer = function() {
+    throw "Not implemented";
+  }
+
+  this._createNormalBuffer = function() {
+    throw "Not implemented";
+  }
+
+  this._createIndexBuffer = function() {
+    var index_top = 0;
+    var index_bottom = this.rows;
+    var moveIndex = function(a) {return a+1;};
+
+    for (var j = 0; j < this.cols - 1; j++) {
+      for (var  i = 0; i < 2 * this.rows; i++) {
+        if (i % 2 == 0) {
+          this.index_buffer.push(index_top);
+          index_top = moveIndex(index_top);
+        } else {
+          this.index_buffer.push(index_bottom);
+          index_bottom = moveIndex(index_bottom);
+        } 
+      }
+
+      moveIndex = (j % 2 != 0) ? function(a) {return a+1;} : function(a) {return a-1;};
+
+      index_top = moveIndex(index_top + this.rows);
+      index_bottom = moveIndex(index_bottom + this.rows);
+    }
+  }
+
+  this._setUpBuffers = function() {
+    this._createIndexBuffer();
+    this._createTexturePositionBuffer();
+    this._createNormalBuffer();
+  }
+
+  this._setUpWebGLBuffers = function() {
+    this.webgl_position_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
+
+    this.webgl_texture_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_buffer), gl.STATIC_DRAW);   
+
+    this.webgl_index_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
+  }
+
+  this.init = function() {
+    this._setUpBuffers();
+    this._setUpWebGLBuffers();
+  }
+
+  this.translate = function (tVect) {
+    mat4.translate(this.transformations, this.transformations, tVect);
+  }
+
+  this.scale = function(sVect) {
+    mat4.scale(this.transformations, this.transformations, sVect);
+  }
+
+  this.rotate = function(rad, axis) {
+    mat4.rotate(this.transformations, this.transformations, rad, axis);
+  }
+
+
+  this._draw = function(all_transformations) {
+    //TODO: merge view and model matrix in js
+    var u_view_model_matrix = gl.getUniformLocation(glProgram, "uVMMatrix");
+    mat4.multiply(all_transformations,vMatrix,all_transformations)
+    gl.uniformMatrix4fv(u_view_model_matrix, false, vMatrix);
+
+    var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
+    gl.enableVertexAttribArray(vertexPositionAttribute);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+    gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+    var vertexTextureAttribute = gl.getAttribLocation(glProgram, "aVertexTextureCoord");
+    gl.enableVertexAttribArray(vertexTextureAttribute);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
+    gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
+    
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D,this.texture);
+    var uSampler = gl.getUniformLocation(glProgram, 'uSampler');
+    gl.uniform1i(uSampler, 0);
+
+    gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
+  }
+
+  this.draw = function(transformations_parent) {
+    mat4.multiply(this.transformations,transformations_parent,this.transformations);
+
+    this._draw(this.transformations);
+
+    this.childs.forEach(function(elem) { elem.draw(that.transformations); });
+    mat4.identity(this.transformations);
+  }
+
+  this.add_child = function(child) {
+    this.childs.push(child);
+  }
+
+}
