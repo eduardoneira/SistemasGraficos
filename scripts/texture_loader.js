@@ -3,6 +3,7 @@ var textures = {};
 // No se puede acceder al filesystem, vamos a tener que hardcodear a mano aca
 function loadAllTextures() {
   textures["cylinder"] = loadTexture("resources/cylinder.jpg");
+  textures["checker"] = loadTexture("resources/checker.jpg");
 }
 
 function loadTexture(url) {
