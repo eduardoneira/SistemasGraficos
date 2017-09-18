@@ -3,7 +3,7 @@ function Scene() {
   // var cylinder = new Cylinder(40,60,textures["cylinder"],5);
   // cylinder.init();
 
-  var loft = new Loft(undefined, undefined, textures["cylinder"]);
+  var loft = new Loft(undefined, undefined, textures["checker"]);
   loft.init();
   // debugger;
 
