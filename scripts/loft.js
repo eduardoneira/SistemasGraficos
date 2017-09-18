@@ -126,7 +126,7 @@ function Loft(shape, sweep_path, texture){
 		vec3.cross(path_normal, path_normal, path_tangent);
 		vec3.cross(path_binormal, path_normal, path_tangent);
 
-		angle1 = angle(path_normal, [0,1,0]);
+		angle1 = angle(path_normal, [1,0,0]);
 		angle2 = angle(path_binormal, [0,0,1]);
 
 		path_transforms = mat4.create();
@@ -147,7 +147,7 @@ function Loft(shape, sweep_path, texture){
 
 		//middle rows
 
-		for(var j = 3; j < sweep_path.length; j+=3){
+		for(var j = 6; j < sweep_path.length; j+=3){
 			vec3.copy(path_tangent2, path_tangent); // me acuerdo la tg anterior
 			path_tangent = vec3.create(); // limpio variable
 			vec3.sub(path_tangent, sweep_path.slice(j+3,j+6), sweep_path.slice(j,j+3));
@@ -158,9 +158,9 @@ function Loft(shape, sweep_path, texture){
 			vec3.sub(path_normal, sweep_path.slice(j+3,j+6), sweep_path.slice(j-3,j));
 
 			vec3.cross(path_normal, path_normal, path_tangent);
-			vec3.cross(path_binormal, path_normal, path_tangent);
+			vec3.cross(path_binormal, path_tangent, path_normal);
 
-			angle1 = angle(path_normal, [0,1,0]);
+			angle1 = angle(path_normal, [1,0,0]);
 			angle2 = angle(path_binormal, [0,0,1]);
 
 			path_transforms = mat4.create();
@@ -189,7 +189,7 @@ function Loft(shape, sweep_path, texture){
 		vec3.cross(path_normal, path_normal, path_tangent);
 		vec3.cross(path_binormal, path_normal, path_tangent);
 
-		angle1 = angle(path_normal, [0,1,0]);
+		angle1 = angle(path_normal, [1,0,0]);
 		angle2 = angle(path_binormal, [0,0,1]);
 
 		path_transforms = mat4.create();
@@ -207,8 +207,8 @@ function Loft(shape, sweep_path, texture){
 			});
 		}	
 
-		for(i = 0; i < that.rows; i++){
-			for(j = 0; j < that.cols; j++){
+		for(j = 0; j < that.cols; j++){
+			for(i = 0; i < that.rows; i++){
 				that.texture_buffer.push(i/that.rows);
 				that.texture_buffer.push(j/that.cols);
 			}
