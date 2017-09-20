@@ -116,6 +116,9 @@ function Loft(shape, sweep_path, texture){
 		var path_binormal = vec3.create();
 		var angle1 = 0, angle2 = 0;
 		var current_vertex = [];
+		var transform_mat_args = [];
+
+		var cambio_base = mat4.create();
 
 		//first row
 
@@ -163,9 +166,38 @@ function Loft(shape, sweep_path, texture){
 			angle1 = angle(path_normal, [1,0,0]);
 			angle2 = angle(path_binormal, [0,0,1]);
 
+
+
+			vec3.normalize(path_normal, path_normal);
+			vec3.normalize(path_binormal, path_binormal);
+			vec3.normalize(path_tangent, path_tangent);
+
+
 			path_transforms = mat4.create();
-			mat4.rotate(path_transforms, path_transforms, angle1+that.initial_twist, path_tangent);
-			mat4.rotate(path_transforms, path_transforms, angle2, path_normal);
+			transform_mat_args = [];
+			// transform_mat_args = transform_mat_args.concat(path_normal,   0,
+			// 											   path_binormal, 0,
+			// 											   path_tangent,  0,
+			// 											   0,   0,   0,   1);
+
+			transform_mat_args = transform_mat_args.concat(path_normal);
+			transform_mat_args.push(0);
+			transform_mat_args = transform_mat_args.concat(path_binormal);
+			transform_mat_args.push	(0);
+			transform_mat_args = transform_mat_args.concat(path_tangent);
+			transform_mat_args.push	(0);
+			transform_mat_args = transform_mat_args.concat([0,0,0,1]);
+
+			
+
+
+			transform_mat_args.forEach(function(elem, index){
+				path_transforms[index] = elem;
+			});
+
+			debugger;
+			// mat4.rotate(path_transforms, path_transforms, angle1+that.initial_twist, path_tangent);
+			// mat4.rotate(path_transforms, path_transforms, angle2, path_normal);
 			mat4.translate(path_transforms, path_transforms, sweep_path.slice(j,j+3));
 
 			for(i = 0; i < shape.length; i+=2){
