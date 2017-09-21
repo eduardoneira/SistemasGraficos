@@ -20,8 +20,10 @@ function Loft2(shape, sweep_path, texture){
 			})
 		}
 
-		function makeTgNorBi(tangent, normal, binormal, 
-							 prev_vert, curr_vert, next_vert){
+		function makeTgNorBi(){
+			//Deben existir:
+			//tangent, normal, binormal, 
+			//prev_vert, curr_vert, next_vert
 
 			tangent = vec3.create();
 			vec3.sub(tangent, next_vert, curr_vert);
@@ -37,12 +39,14 @@ function Loft2(shape, sweep_path, texture){
 			vec3.normalize(normal, normal);
 			vec3.normalize(binormal, binormal);
 
-			console.log("me llamaron");
+			// vec3.scale(normal, normal, 5);
+			// vec3.scale(binormal, binormal, 5);
 
 		}
 
-		function makeTransformMatrix(transform_matrix, curr_vert,
-									 tangent, normal, binormal){
+		function makeTransformMatrix(){
+			// transform_matrix, curr_vert,
+			 // tangent, normal, binormal
 
 			var matrix_values = [];
 
@@ -54,30 +58,34 @@ function Loft2(shape, sweep_path, texture){
 			matrix_values.push(0);
 			concatVectorElems(matrix_values, [0,0,0,1]);
 
-			transform_matrix.forEach(function(elem, index){
+			mat4.translate(matrix_values, matrix_values, curr_vert);
+
+			matrix_values.forEach(function(elem, index){
 				transform_matrix[index] = elem;
 			});
 
-			mat4.translate(matrix_values, matrix_values, curr_vert);
+			// debugger;
+
 		}
 
-		function transformShape(new_shape, old_shape, transform_matrix){
+		function transformShape(){
+			// new_shape, shape, transform_matrix
 
 			var curr_vert;
 
-			new_shape = [];
-
-			for(i = 0; i < old_shape.length; i+=2){
-				curr_vert = vec3.fromValues(old_shape[i], old_shape[i+1], 0);
+			for(i = 0; i < shape.length; i+=2){
+				curr_vert = vec3.fromValues(shape[i], shape[i+1], 0);
 				vec3.transformMat4(curr_vert, curr_vert, transform_matrix);
 
 				concatVectorElems(new_shape, curr_vert);
 			}
+
+			// debugger;
 		}
 
 		//Empieza el "main"
 
-		for(var j = 0; j < sweep_path.length; j+=3){
+		for(var j = 0; j < sweep_path.length - 1; j+=3){
 			var tangent, normal, binormal;
 			var curr_vert, prev_vert, next_vert;
 
@@ -88,11 +96,23 @@ function Loft2(shape, sweep_path, texture){
 				var second_point = sweep_path.slice(3,6);
 				var third_point = sweep_path.slice(6,9);
 
-				makeTgNorBi(tangent, normal, binormal, 
-					        first_point, second_point, third_point);
-				debugger;
-				makeTgNorBi(tangent, dummy, dummy, 
-					        third_point, first_point, second_point);
+				curr_vert = second_point;
+				prev_vert = first_point;
+				next_vert = third_point;
+
+				makeTgNorBi();
+
+				var normal2 = normal;
+				var binormal2 = binormal;
+
+				curr_vert = first_point;
+				prev_vert = third_point;
+				next_vert = second_point;
+
+				makeTgNorBi();
+
+				normal = normal2;
+				binormal = binormal2;
 
 				curr_vert = first_point;
 				next_vert = second_point;
@@ -105,24 +125,24 @@ function Loft2(shape, sweep_path, texture){
 				prev_vert = sweep_path.slice(j-3, j);
 				next_vert = sweep_path.slice(j+3, j+6);
 
-				makeTgNorBi(tangent, normal, binormal, 
-					        prev_vert, curr_vert, next_vert);
+				makeTgNorBi();
 
 			}
 
-			debugger;
+			// debugger;
 
 			var transform_matrix = mat4.create();
 
-			makeTransformMatrix(transform_matrix, curr_vert, 
-				                tangent, normal, binormal);
+			makeTransformMatrix();
 
-			var transformed_shape = [];
-			transformShape(transformed_shape, shape, transform_matrix);
+			var new_shape = [];
+			transformShape();
 
-			transformed_shape.forEach(function(elem){
+			new_shape.forEach(function(elem){
 				that.position_buffer.push(elem);
 			})
+
+			// debugger;
 		}
 
 		for(j = 0; j < that.cols; j++){

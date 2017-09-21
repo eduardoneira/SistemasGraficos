@@ -3,24 +3,26 @@ function Scene() {
   // var cylinder = new Cylinder(40,60,textures["cylinder"],5);
   // cylinder.init();
 
-  shape = [];
-  N = 12; //circulo de 12 lados
-  r = 0.3;
+  var shape = [];
+  var N = 12; //circulo de 12 lados
+  var r = 0.3;
   for(var i = 0; i < N+1; i++){
     shape.push(r*Math.cos(2*Math.PI*i/N));
     shape.push(r*Math.sin(2*Math.PI*i/N));
   }
 
-  sweep_path = [];
+  var sweep_path = [];
 
-  M = 24;
+  var M = 24;
 
-  for(i = 0; i < M; i++){
-    sweep_path.push(Uri.cos(M,i));
-    sweep_path.push(Uri.sin(M,i));
+  for(var i = 0; i < M+1; i++){
+    sweep_path.push(Math.cos(2*Math.PI*i/M));
+    sweep_path.push(Math.sin(2*Math.PI*i/M));
+    // console.log(sweep_path[3*i+1]);
     sweep_path.push(0);
   }
 
+  // debugger;
 
   var loft = new Loft2(shape, sweep_path, textures["checker"]);
   loft.init();
