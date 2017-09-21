@@ -45,8 +45,8 @@ function Loft(shape, sweep_path, texture){
 	N = 12; //circulo de 12 lados
 	r = 0.3;
 	for(var i = 0; i < N+1; i++){
-		shape.push(r*Uri.cos(N,i));
-		shape.push(r*Uri.sin(N,i));
+		shape.push(r*Math.cos(2*Math.PI*i/N));
+		shape.push(r*Math.sin(2*Math.PI*i/N));
 	}
 
 	// shape[0] = 1;
@@ -195,7 +195,7 @@ function Loft(shape, sweep_path, texture){
 				path_transforms[index] = elem;
 			});
 
-			debugger;
+			// debugger;
 			// mat4.rotate(path_transforms, path_transforms, angle1+that.initial_twist, path_tangent);
 			// mat4.rotate(path_transforms, path_transforms, angle2, path_normal);
 			mat4.translate(path_transforms, path_transforms, sweep_path.slice(j,j+3));
