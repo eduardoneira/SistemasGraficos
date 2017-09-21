@@ -35,9 +35,9 @@ function CubicBezierCurve(_controlPoints = []) {
     var normals = [];   
     
     for (var offset = 0; offset + 3 < this.controlPoints.length; offset+=3) {
-      x = this.control_points.slice(offset,offset+4).map(function(value,index){return value[0]});
-      y = this.control_points.slice(offset,offset+4).map(function(value,index){return value[1]});
-      z = this.control_points.slice(offset,offset+4).map(function(value,index){return value[2]});
+      x = this.controlPoints.slice(offset,offset+4).map(function(value,index){return value[0]});
+      y = this.controlPoints.slice(offset,offset+4).map(function(value,index){return value[1]});
+      z = this.controlPoints.slice(offset,offset+4).map(function(value,index){return value[2]});
  
       for (var t = 0; t <= 1; t += delta) {
         positions.push(_transverse_curve(x,t));    
