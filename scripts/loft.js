@@ -164,7 +164,7 @@ function Loft(shape, sweep_path, texture){
 			vec3.cross(path_binormal, path_tangent, path_normal);
 
 			angle1 = angle(path_normal, [1,0,0]);
-			angle2 = angle(path_binormal, [0,0,1]);
+			angle2 = angle(path_binormal, [0,1,0]);
 
 
 
@@ -172,6 +172,8 @@ function Loft(shape, sweep_path, texture){
 			vec3.normalize(path_binormal, path_binormal);
 			vec3.normalize(path_tangent, path_tangent);
 
+			// vec3.scale(path_normal, path_normal, 5);
+			// vec3.scale(path_binormal, path_binormal, 5);
 
 			path_transforms = mat4.create();
 			transform_mat_args = [];
@@ -180,15 +182,28 @@ function Loft(shape, sweep_path, texture){
 			// 											   path_tangent,  0,
 			// 											   0,   0,   0,   1);
 
-			transform_mat_args = transform_mat_args.concat(path_normal);
-			transform_mat_args.push(0);
-			transform_mat_args = transform_mat_args.concat(path_binormal);
-			transform_mat_args.push	(0);
-			transform_mat_args = transform_mat_args.concat(path_tangent);
-			transform_mat_args.push	(0);
-			transform_mat_args = transform_mat_args.concat([0,0,0,1]);
 
-			
+			function concatVectorElems(arr, vect){
+				Array.prototype.forEach.call(vect, function(elem){
+					arr.push(elem);
+				})
+			}
+
+			concatVectorElems(transform_mat_args, path_normal);
+			transform_mat_args.push(0);
+			concatVectorElems(transform_mat_args, path_tangent);
+			transform_mat_args.push(0);
+			concatVectorElems(transform_mat_args, path_binormal);
+			transform_mat_args.push(0);
+			concatVectorElems(transform_mat_args, [0,0,0,1]);
+
+			// transform_mat_args = transform_mat_args.concat(path_normal);
+			// transform_mat_args.push(0);
+			// transform_mat_args = transform_mat_args.concat(path_binormal);
+			// transform_mat_args.push	(0);
+			// transform_mat_args = transform_mat_args.concat(path_tangent);
+			// transform_mat_args.push	(0);
+			// transform_mat_args = transform_mat_args.concat([0,0,0,1]);
 
 
 			transform_mat_args.forEach(function(elem, index){
