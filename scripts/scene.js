@@ -1,5 +1,8 @@
 function Scene() {
 
+  var surface_circle = new SurfaceCircle(5);
+  surface_circle.discretize(0.05);
+
   // var cylinder = new Cylinder(40,60,textures["cylinder"],5);
   // cylinder.init();
 
