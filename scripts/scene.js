@@ -14,32 +14,35 @@ function Scene() {
   //   shape.push(r*Math.sin(2*Math.PI*i/N));
   // }
 
-  var shape = new SurfaceCircle(0.3);
-  shape.discretize(0.1);
+  // var shape = new SurfaceCircle(0.3);
+  // shape.discretize(0.1);
 
-  // debugger;
+  // var sweep_path = [];
 
-  var sweep_path = [];
+  // var M = 100;
+  // var r = 1;
+  // for(var i = 0; i < M+1; i++){
+  //   sweep_path.push(r*Math.cos(2*Math.PI*i/M));
+  //   sweep_path.push(r*Math.sin(2*Math.PI*i/M));
+  //   sweep_path.push(0);
+  // }
 
-  var M = 100;
-  var r = 1;
-  for(var i = 0; i < M+1; i++){
-    sweep_path.push(r*Math.cos(2*Math.PI*i/M));
-    sweep_path.push(r*Math.sin(2*Math.PI*i/M));
-    // console.log(sweep_path[3*i+1]);
-    sweep_path.push(0);
-  }
-  // debugger;
+  // var loft = new Loft2(shape, sweep_path, textures["checker"]);
+  // loft.init();
 
-  var loft = new Loft2(shape, sweep_path, textures["checker"]);
-  loft.init();
-  // debugger;
+  delta = 0.01;
+  var line = new Line(2);
+  line.travel(delta);
+  var radius_profile = new ConstantRadiusProfile(1);
+  radius_profile.travel(delta);
 
+  var lathe = new Lathe(line,radius_profile,Math.PI/18.0,textures["checker"]);
+  lathe.init();
 
   this.draw = function() {
     cylinder_transformations = mat4.create();
     mat4.rotate(cylinder_transformations, cylinder_transformations, t, [0.0, 1.0, 0.0]);
-    loft.draw(cylinder_transformations);
+    lathe.draw(cylinder_transformations);
   }
 
 }

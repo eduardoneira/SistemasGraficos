@@ -23,8 +23,8 @@ function CubicBezierCurve(_controlPoints = []) {
   }
   
   function _transverse_normal(points,t) {
-    var a = 6*(points[2] - 2*points[1] - points[0])*(1-t);
-    var b = 6*(points[3] - 2*points[2] - points[1])*t;
+    var a = 6*(points[2] - 2*points[1] + points[0])*(1-t);
+    var b = 6*(points[3] - 2*points[2] + points[1])*t;
     return a+b;
   }
 
@@ -83,7 +83,7 @@ function CubicBezierCurve(_controlPoints = []) {
       x = this.controlPoints.slice(offset,offset+4).map(function(value,index){return value[0]});
       y = this.controlPoints.slice(offset,offset+4).map(function(value,index){return value[1]});
       z = this.controlPoints.slice(offset,offset+4).map(function(value,index){return value[2]});
- 
+
       for (var t = 0; t <= 1; t += delta) {
 
         var positions_vect = makePositions(x,y,z,t);
