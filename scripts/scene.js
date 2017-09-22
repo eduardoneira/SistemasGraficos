@@ -8,7 +8,7 @@ function Scene() {
 
   var shape = [];
   var N = 12; //circulo de 12 lados
-  var r = 0.3;
+  var r = 0.5;
   for(var i = 0; i < N+1; i++){
     shape.push(r*Math.cos(2*Math.PI*i/N));
     shape.push(r*Math.sin(2*Math.PI*i/N));
@@ -17,10 +17,10 @@ function Scene() {
   var sweep_path = [];
 
   var M = 24;
-
+  var r = 1;
   for(var i = 0; i < M+1; i++){
-    sweep_path.push(Math.cos(2*Math.PI*i/M));
-    sweep_path.push(Math.sin(2*Math.PI*i/M));
+    sweep_path.push(r*Math.cos(2*Math.PI*i/M));
+    sweep_path.push(r*Math.sin(2*Math.PI*i/M));
     // console.log(sweep_path[3*i+1]);
     sweep_path.push(0);
   }

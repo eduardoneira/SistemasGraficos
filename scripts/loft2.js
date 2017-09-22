@@ -26,10 +26,10 @@ function Loft2(shape, sweep_path, texture){
 			//prev_vert, curr_vert, next_vert
 
 			tangent = vec3.create();
-			vec3.sub(tangent, next_vert, curr_vert);
+			vec3.sub(tangent, next_vert, curr_vert); 
 
 			normal = vec3.create();
-			vec3.sub(normal, curr_vert, prev_vert); //el vec que va de curr a prev
+			vec3.sub(normal, prev_vert, curr_vert); //el vec que va de curr a prev
 			vec3.add(normal, normal, tangent);
 
 			binormal = vec3.create();
@@ -39,9 +39,6 @@ function Loft2(shape, sweep_path, texture){
 			vec3.normalize(normal, normal);
 			vec3.normalize(binormal, binormal);
 
-			// vec3.scale(normal, normal, 5);
-			// vec3.scale(binormal, binormal, 5);
-
 		}
 
 		function makeTransformMatrix(){
@@ -50,21 +47,20 @@ function Loft2(shape, sweep_path, texture){
 
 			var matrix_values = [];
 
-			concatVectorElems(matrix_values, normal);
-			matrix_values.push(0);
 			concatVectorElems(matrix_values, tangent);
+			matrix_values.push(0);
+			concatVectorElems(matrix_values, normal);
 			matrix_values.push(0);
 			concatVectorElems(matrix_values, binormal);
 			matrix_values.push(0);
 			concatVectorElems(matrix_values, [0,0,0,1]);
 
+			// mat4.transpose(matrix_values,matrix_values);
 			mat4.translate(matrix_values, matrix_values, curr_vert);
 
 			matrix_values.forEach(function(elem, index){
 				transform_matrix[index] = elem;
 			});
-
-			// debugger;
 
 		}
 
@@ -80,7 +76,7 @@ function Loft2(shape, sweep_path, texture){
 				concatVectorElems(new_shape, curr_vert);
 			}
 
-			// debugger;
+			debugger;
 		}
 
 		//Empieza el "main"
