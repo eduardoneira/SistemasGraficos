@@ -24,12 +24,11 @@ function Loft2(shape, sweep_path, texture){
 			//Deben existir:
 			//tangent, normal, binormal, 
 			//prev_vert, curr_vert, next_vert
-
 			tangent = vec3.create();
 			vec3.sub(tangent, next_vert, curr_vert); 
 
 			normal = vec3.create();
-			vec3.sub(normal, prev_vert, curr_vert); //el vec que va de curr a prev
+			vec3.sub(normal, prev_vert, curr_vert);
 			vec3.add(normal, normal, tangent);
 
 			binormal = vec3.create();
@@ -38,59 +37,49 @@ function Loft2(shape, sweep_path, texture){
 			vec3.normalize(tangent, tangent);
 			vec3.normalize(normal, normal);
 			vec3.normalize(binormal, binormal);
-
 		}
 
 		function makeTransformMatrix(){
 			// transform_matrix, curr_vert,
 			 // tangent, normal, binormal
-
 			var matrix_values = [];
 
-			concatVectorElems(matrix_values, tangent);
-			matrix_values.push(0);
 			concatVectorElems(matrix_values, normal);
 			matrix_values.push(0);
 			concatVectorElems(matrix_values, binormal);
 			matrix_values.push(0);
-			concatVectorElems(matrix_values, [0,0,0,1]);
+			concatVectorElems(matrix_values, tangent);
+			matrix_values.push(0);
+			concatVectorElems(matrix_values, curr_vert);
+			matrix_values.push(0);
 
-			// mat4.transpose(matrix_values,matrix_values);
-			mat4.translate(matrix_values, matrix_values, curr_vert);
-
-			matrix_values.forEach(function(elem, index){
-				transform_matrix[index] = elem;
-			});
-
+			transform_matrix = matrix_values.slice();
 		}
 
 		function transformShape(){
 			// new_shape, shape, transform_matrix
-
-			var curr_vert;
+			var aux_vert;
 
 			for(i = 0; i < shape.length; i+=2){
-				curr_vert = vec3.fromValues(shape[i], shape[i+1], 0);
-				vec3.transformMat4(curr_vert, curr_vert, transform_matrix);
+				aux_vert = vec3.fromValues(shape[i], shape[i+1], 0);
+				vec3.transformMat4(aux_vert, aux_vert, transform_matrix);
 
-				concatVectorElems(new_shape, curr_vert);
+				concatVectorElems(new_shape, aux_vert);
 			}
-
-			debugger;
 		}
 
 		//Empieza el "main"
 
-		for(var j = 0; j < sweep_path.length - 1; j+=3){
+		for(var j = 0; j < sweep_path.length - 2; j+=3){
 			var tangent, normal, binormal;
 			var curr_vert, prev_vert, next_vert;
 
 			if(j === 0){
 				var dummy;
 
-				var first_point = sweep_path.slice(0,3);
-				var second_point = sweep_path.slice(3,6);
-				var third_point = sweep_path.slice(6,9);
+				var first_point = vec3.fromValues(sweep_path[0],sweep_path[1],sweep_path[2]);
+				var second_point = vec3.fromValues(sweep_path[3],sweep_path[4],sweep_path[5]);
+				var third_point = vec3.fromValues(sweep_path[6],sweep_path[7],sweep_path[8]);
 
 				curr_vert = second_point;
 				prev_vert = first_point;
@@ -117,16 +106,13 @@ function Loft2(shape, sweep_path, texture){
 			}
 			else{
 
-				curr_vert = sweep_path.slice(j, j+3);
-				prev_vert = sweep_path.slice(j-3, j);
-				next_vert = sweep_path.slice(j+3, j+6);
+				curr_vert = vec3.fromValues(sweep_path[j], sweep_path[j+1], sweep_path[j+2]);
+				prev_vert = vec3.fromValues(sweep_path[j-3], sweep_path[j-2], sweep_path[j-1]);
+				next_vert = vec3.fromValues(sweep_path[j+3], sweep_path[j+4], sweep_path[j+5]);
 
 				makeTgNorBi();
 
 			}
-
-			// debugger;
-
 			var transform_matrix = mat4.create();
 
 			makeTransformMatrix();

@@ -7,7 +7,7 @@ function Scene() {
   // cylinder.init();
 
   var shape = [];
-  var N = 12; //circulo de 12 lados
+  var N = 50; //circulo de 12 lados
   var r = 0.5;
   for(var i = 0; i < N+1; i++){
     shape.push(r*Math.cos(2*Math.PI*i/N));
@@ -16,7 +16,7 @@ function Scene() {
 
   var sweep_path = [];
 
-  var M = 24;
+  var M = 100;
   var r = 1;
   for(var i = 0; i < M+1; i++){
     sweep_path.push(r*Math.cos(2*Math.PI*i/M));
@@ -24,7 +24,6 @@ function Scene() {
     // console.log(sweep_path[3*i+1]);
     sweep_path.push(0);
   }
-
   // debugger;
 
   var loft = new Loft2(shape, sweep_path, textures["checker"]);
