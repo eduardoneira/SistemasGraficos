@@ -3,6 +3,7 @@ function CurveCircle(_radius) {
   this.positions = [];
   this.tangents = [];
   this.normals = [];
+  this.binormals = [];
 
   var _bezier_curve;
 
@@ -10,11 +11,17 @@ function CurveCircle(_radius) {
     var control_points = [];
     
     control_points.push([radius,0,0]);
-    control_points.push([radius,radius,0]);
-    control_points.push([-radius,radius,0]);
+    control_points.push([radius,0.552284749831*radius,0]);
+    control_points.push([0.552284749831*radius,radius,0]);
+    control_points.push([0,radius,0]);
+    control_points.push([-0.552284749831*radius,radius,0]);
+    control_points.push([-radius,0.552284749831*radius,0]);
     control_points.push([-radius,0,0]);
-    control_points.push([-radius,-radius,0]);
-    control_points.push([radius,-radius,0]);
+    control_points.push([-radius,-0.552284749831*radius,0]);
+    control_points.push([-0.552284749831*radius,-radius,0]);
+    control_points.push([0,-radius,0]);
+    control_points.push([0.552284749831*radius,-radius,0]);
+    control_points.push([radius,-0.552284749831*radius,0]);
     control_points.push([radius,0,0]);
     
     _bezier_curve = new CubicBezierCurve(control_points);
@@ -27,5 +34,6 @@ function CurveCircle(_radius) {
     this.positions = points.positions;
     this.tangents = points.tangents;
     this.normals = points.normals;
+    this.binormals = points.binormals;
   }
 }

@@ -28,11 +28,56 @@ function CubicBezierCurve(_controlPoints = []) {
     return a+b;
   }
 
+  function makePositions(x,y,z,t){
+
+    var positions_vect = vec3.create();
+    positions_vect[0] = _transverse_curve(x,t);
+    positions_vect[1] = _transverse_curve(y,t);
+    positions_vect[2] = _transverse_curve(z,t);
+
+    return positions_vect;
+  }
+
+  function makeTangents(x,y,z,t){
+
+    var tangents_vect = vec3.create();
+    tangents_vect[0] = _transverse_tangent(x,t);
+    tangents_vect[1] = _transverse_tangent(y,t);
+    tangents_vect[2] = _transverse_tangent(z,t);
+
+    vec3.normalize(tangents_vect, tangents_vect);
+
+    return tangents_vect;
+  }
+
+  function makeNormals(x,y,z,t){
+
+    var normals_vect = vec3.create();
+    normals_vect[0] = _transverse_normal(x,t);
+    normals_vect[1] = _transverse_normal(y,t);
+    normals_vect[2] = _transverse_normal(z,t);
+
+    vec3.normalize(normals_vect, normals_vect);
+
+    return normals_vect;
+  }
+
+  function makeBinormals(tangents_vect, normals_vect){
+
+    var binormal_vect = vec3.create();
+    vec3.cross(binormal_vect, tangents_vect, normals_vect);
+
+    vec3.normalize(binormal_vect, binormal_vect);
+
+    return binormal_vect;
+  }
+
   this.travel = function(delta = 0.01) {
 
     var positions = [];
     var tangents = [];
-    var normals = [];   
+    var normals = [];  
+    var binormals = []; 
     
     for (var offset = 0; offset + 3 < this.controlPoints.length; offset+=3) {
       x = this.controlPoints.slice(offset,offset+4).map(function(value,index){return value[0]});
@@ -40,22 +85,26 @@ function CubicBezierCurve(_controlPoints = []) {
       z = this.controlPoints.slice(offset,offset+4).map(function(value,index){return value[2]});
  
       for (var t = 0; t <= 1; t += delta) {
-        positions.push(_transverse_curve(x,t));    
-        positions.push(_transverse_curve(y,t));    
-        positions.push(_transverse_curve(z,t));    
-        tangents.push(_transverse_tangent(x,t));    
-        tangents.push(_transverse_tangent(y,t));    
-        tangents.push(_transverse_tangent(z,t));    
-        normals.push(_transverse_normal(x,t));    
-        normals.push(_transverse_normal(y,t));    
-        normals.push(_transverse_normal(z,t));    
+
+        var positions_vect = makePositions(x,y,z,t);
+        concatVectorElems(positions, positions_vect);
+
+        var tangents_vect = makeTangents(x,y,z,t);
+        concatVectorElems(tangents, tangents_vect);
+
+        var normals_vect = makeNormals(x,y,z,t);
+        concatVectorElems(normals, normals_vect);
+
+        var binormal_vect = makeBinormals(tangents_vect, normals_vect);
+        concatVectorElems(binormals, binormal_vect);
       }
     }
   
   return {
           positions: positions,
           tangents: tangents,
-          normals: normals
+          normals: normals,
+          binormals: binormals
          }
   }
 

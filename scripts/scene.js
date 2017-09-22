@@ -6,13 +6,18 @@ function Scene() {
   // var cylinder = new Cylinder(40,60,textures["cylinder"],5);
   // cylinder.init();
 
-  var shape = [];
-  var N = 50; //circulo de 12 lados
-  var r = 0.5;
-  for(var i = 0; i < N+1; i++){
-    shape.push(r*Math.cos(2*Math.PI*i/N));
-    shape.push(r*Math.sin(2*Math.PI*i/N));
-  }
+  // var shape = [];
+  // var N = 50; //circulo de 12 lados
+  // var r = 0.5;
+  // for(var i = 0; i < N+1; i++){
+  //   shape.push(r*Math.cos(2*Math.PI*i/N));
+  //   shape.push(r*Math.sin(2*Math.PI*i/N));
+  // }
+
+  var shape = new SurfaceCircle(0.3);
+  shape.discretize(0.1);
+
+  // debugger;
 
   var sweep_path = [];
 

@@ -1,6 +1,11 @@
+/*
+* shape debe ser un surface
+* sweep_path deber ser un curve
+*/
+
 function Loft2(shape, sweep_path, texture){
 
-	var rows = shape.length/2;
+	var rows = shape.positions.length/2;
 	var cols = sweep_path.length/3;
 
 	Object3D.call(this,rows,cols,texture);
@@ -13,12 +18,6 @@ function Loft2(shape, sweep_path, texture){
   	}
 
 	this._createTexturePositionBuffer = function(){
-
-		function concatVectorElems(arr, vect){
-			Array.prototype.forEach.call(vect, function(elem){
-				arr.push(elem);
-			})
-		}
 
 		function makeTgNorBi(){
 			//Deben existir:
@@ -60,8 +59,8 @@ function Loft2(shape, sweep_path, texture){
 			// new_shape, shape, transform_matrix
 			var aux_vert;
 
-			for(i = 0; i < shape.length; i+=2){
-				aux_vert = vec3.fromValues(shape[i], shape[i+1], 0);
+			for(i = 0; i < shape.positions.length; i+=2){
+				aux_vert = vec3.fromValues(shape.positions[i], shape.positions[i+1], 0);
 				vec3.transformMat4(aux_vert, aux_vert, transform_matrix);
 
 				concatVectorElems(new_shape, aux_vert);
