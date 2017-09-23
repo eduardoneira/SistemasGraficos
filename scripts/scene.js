@@ -41,7 +41,7 @@ function Scene() {
 
   this.draw = function() {
     cylinder_transformations = mat4.create();
-    mat4.rotate(cylinder_transformations, cylinder_transformations, t, [0.0, 1.0, 0.0]);
+    mat4.rotate(cylinder_transformations, cylinder_transformations, t, [1.0, 1.0, 0.0]);
     lathe.draw(cylinder_transformations);
   }
 

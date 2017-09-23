@@ -1,6 +1,6 @@
 function Lathe(axial_curve, profile_curve, theta, texture) {
   var rows = axial_curve.positions.length/3;
-  var cols = 2*Math.PI / theta;
+  var cols = 2*Math.PI / theta + 1;
 
   Object3D.call(this,rows,cols,texture);
   var that = this;
@@ -14,8 +14,8 @@ function Lathe(axial_curve, profile_curve, theta, texture) {
 
   this._createTexturePositionBuffer = function(){
 
-    for (var theta = 0; theta <= 2*Math.PI+this.deltaTheta; theta+=this.deltaTheta) {
-      for (var offset = 0; 3*offset < this.axial_curve.positions.length; offset++) {
+    for (var theta = 0; theta <= 2*Math.PI; theta+=this.deltaTheta) {
+      for (var offset = 0; 3*offset < this.axial_curve.positions.length-1; offset++) {
         normal = this.axial_curve.normals.slice(3*offset, 3*offset+3);
         binormal = this.axial_curve.binormals.slice(3*offset, (3*offset)+3);
         position = this.axial_curve.positions.slice(3*offset, (3*offset)+3);

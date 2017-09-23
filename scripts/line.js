@@ -24,9 +24,9 @@ function Line(length) {
     var points = _bezier_curve.travel(delta);
     this.positions = points.positions;
     this.tangents = points.tangents;
-    this.normals = points.tangents.concat(points.tangents[0]);
+    this.normals = points.tangents.concat(this.tangents[0]);
     this.normals.shift();
-    this.binormals = this.normals.concat(points.normals[0]);
+    this.binormals = this.normals.concat(this.normals[0]);
     this.binormals.shift();
   }
  
