@@ -1,8 +1,10 @@
 function GobletProfile() {
-  this.positions = [];
+  this.radius = [];
+  this.axis = [];
 
   var _bezier_curve;
-
+  var that = this;
+  
   function _init() {
     var control_points = [];
     
@@ -20,9 +22,15 @@ function GobletProfile() {
   _init();
 
   this.travel = function(delta) {
-    this.positions = _bezier_curve.travel(2*delta).positions.filter(
-      function(elem,index) {
-        return (index % 3 == 0);
-      });
+    var positions = _bezier_curve.travel(delta).positions;
+
+    positions.forEach(function(elem,index) {
+      if (index % 3 == 0) {
+        that.radius.push(elem);
+      } else if ((index + 2) % 3 == 0) {
+        that.axis.push(elem);
+      }
+    });
+
   }
 }

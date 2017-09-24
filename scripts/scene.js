@@ -31,17 +31,16 @@ function Scene() {
   // loft.init();
 
   delta = 0.005;
-  var line = new Line(20);
-  line.travel(delta);
-  var goblet_profile = new GreenLanternProfile();
+  var goblet_profile = new GobletProfile();
   goblet_profile.travel(delta);
   debugger;
-  var lathe = new Lathe(line,goblet_profile,Math.PI/18.0,textures["checker"]);
+  var lathe = new Lathe(goblet_profile,Math.PI/18.0,textures["checker"]);
   lathe.init();
 
   this.draw = function() {
     cylinder_transformations = mat4.create();
     mat4.rotate(cylinder_transformations, cylinder_transformations, t, [1.0, 1.0, 0.0]);
+    mat4.translate(cylinder_transformations, cylinder_transformations, [0.0, -6.5, 0.0]);
     lathe.draw(cylinder_transformations);
   }
 
