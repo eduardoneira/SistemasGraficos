@@ -5,6 +5,9 @@ function CubicBezierCurve(_controlPoints = []) {
 
   if ((this.controlPoints.length - 4) % 3 != 0 ) {
     throw "ERROR: wrong number of control points";
+  } else {
+    this.number_of_curves = (this.controlPoints.length - 4) / 3;
+    this.number_of_curves++; 
   }
 
   function _transverse_curve(points,t) {

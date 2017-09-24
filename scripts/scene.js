@@ -30,13 +30,13 @@ function Scene() {
   // var loft = new Loft2(shape, sweep_path, textures["checker"]);
   // loft.init();
 
-  delta = 0.01;
-  var line = new Line(2);
+  delta = 0.005;
+  var line = new Line(20);
   line.travel(delta);
-  var radius_profile = new ConstantRadiusProfile(1);
-  radius_profile.travel(delta);
-
-  var lathe = new Lathe(line,radius_profile,Math.PI/18.0,textures["checker"]);
+  var goblet_profile = new GreenLanternProfile();
+  goblet_profile.travel(delta);
+  debugger;
+  var lathe = new Lathe(line,goblet_profile,Math.PI/18.0,textures["checker"]);
   lathe.init();
 
   this.draw = function() {

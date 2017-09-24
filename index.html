@@ -18,6 +18,8 @@
 <script type="text/javascript" src="scripts/line.js"></script>
 <script type="text/javascript" src="scripts/constant_radius_profile.js"></script>
 <script type="text/javascript" src="scripts/lathe.js"></script>
+<script type="text/javascript" src="scripts/goblet_profile.js"></script>
+<script type="text/javascript" src="scripts/green_lantern_profile.js"></script>
 
 <html>
   <head>
@@ -167,7 +169,7 @@
         gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
         mat4.identity(vMatrix);
-        mat4.translate(vMatrix, vMatrix, [0.0, 0.0, -5]);
+        mat4.translate(vMatrix, vMatrix, [0.0, 0.0, -25]);
         
         t = t + 0.01;
 
