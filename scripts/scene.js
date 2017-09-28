@@ -30,8 +30,8 @@ function Scene() {
   // var loft = new Loft2(shape, sweep_path, textures["checker"]);
   // loft.init();
 
-  delta = 0.005;
-  var goblet_profile = new GobletProfile();
+  delta = 0.05;
+  var goblet_profile = new Base1Profile();
   goblet_profile.travel(delta);
   debugger;
   var lathe = new Lathe(goblet_profile,Math.PI/18.0,textures["checker"]);
