@@ -33,22 +33,24 @@
 
     <script id="shader-vs" type="x-shader/x-vertex">
       attribute vec3 aVertexPosition;
+      attribute vec3 aNormalVector;
       attribute vec2 aVertexTextureCoord;
 
       uniform mat4 uVMMatrix;
+      // uniform mat4 uNormalMatrix;
       uniform mat4 uPMatrix;
 
 			varying highp vec2 vTextureCoord;
 
       void main(void) {
           gl_Position = uPMatrix * uVMMatrix * vec4(aVertexPosition, 1.0);
+          // vNormalCoord = uNormalMatrix * vec4(aNormalVector,1.0);
           vTextureCoord = aVertexTextureCoord;
       }
     </script>
 
     <script id="shader-fs" type="x-shader/x-fragment">
       varying highp vec2 vTextureCoord;
-
       uniform sampler2D uSampler;
 
       void main(void) {

@@ -67,6 +67,10 @@ function Object3D(_rows,_cols,_texture){
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_buffer), gl.STATIC_DRAW);   
 
+    this.webgl_normal_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);   
+
     this.webgl_index_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
@@ -118,6 +122,11 @@ function Object3D(_rows,_cols,_texture){
     gl.enableVertexAttribArray(vertexPositionAttribute);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
     gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+    var vertexNormalAttribute = gl.getAttribLocation(glProgram, "aNormalVector");
+    gl.enableVertexAttribArray(vertexNormalAttribute);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+    gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
     var vertexTextureAttribute = gl.getAttribLocation(glProgram, "aVertexTextureCoord");
     gl.enableVertexAttribArray(vertexTextureAttribute);
