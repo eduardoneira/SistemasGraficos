@@ -30,10 +30,9 @@ function Scene() {
   // var loft = new Loft2(shape, sweep_path, textures["checker"]);
   // loft.init();
 
-  delta = 0.05;
+  delta = 0.02;
   var goblet_profile = new Base1Profile();
   goblet_profile.travel(delta);
-  debugger;
   var lathe = new Lathe(goblet_profile,Math.PI/18.0,textures["checker"]);
   lathe.init();
 
@@ -41,6 +40,7 @@ function Scene() {
     cylinder_transformations = mat4.create();
     mat4.rotate(cylinder_transformations, cylinder_transformations, t, [1.0, 1.0, 0.0]);
     mat4.translate(cylinder_transformations, cylinder_transformations, [0.0, -6.5, 0.0]);
+    mat4.scale(cylinder_transformations,cylinder_transformations,[1.0,1.5,1.0]);
     lathe.draw(cylinder_transformations);
   }
 
