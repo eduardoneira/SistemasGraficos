@@ -32,8 +32,6 @@ function Lathe(profile_curve, theta, texture) {
       }
     }
 
-    debugger;
-
     for(j = 0; j < that.cols; j++){
       for(i = 0; i < that.rows; i++) {
         that.texture_buffer.push(i/that.rows);

@@ -3,6 +3,7 @@
 <meta content="UTF-8" http-equiv="encoding">
 
 <!-- Todos los imports de js files -->
+<script type="text/javascript" src="scripts/jquery-1.11.2.min.js"></script>
 <script type="text/javascript" src="scripts/gl-matrix.js"></script>
 <script type="text/javascript" src="scripts/object3d.js"></script>
 <script type="text/javascript" src="scripts/utils.js"></script>
@@ -21,6 +22,7 @@
 <script type="text/javascript" src="scripts/goblet_profile.js"></script>
 <script type="text/javascript" src="scripts/green_lantern_profile.js"></script>
 <script type="text/javascript" src="scripts/base1_profile.js"></script>
+<script type="text/javascript" src="scripts/camera.js"></script>
 
 <html>
   <head>
@@ -65,6 +67,8 @@
           fragmentShader = null,
           vertexShader = null,
 					scene = null,
+
+          camera = null,
           t = 0.0;
 
       var vMatrix = mat4.create();
@@ -121,6 +125,7 @@
           initShaders();
           loadAllTextures();
           scene = new Scene();
+          camera = new Camera();
           setInterval(drawScene, 10);  
         }else {    
           alert("Error: Your browser does not appear to support WebGL.");
@@ -168,11 +173,10 @@
       function drawScene() {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
-        mat4.perspective(pMatrix, 45, 640.0/480.0, 0.1, 100.0);
+        mat4.perspective(pMatrix, 45, canvas.width/canvas.height, 0.1, 100.0);
         gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
-        mat4.identity(vMatrix);
-        mat4.translate(vMatrix, vMatrix, [0.0, 0.0, -25]);
+        vMatrix = camera.getViewMatrix();
         
         t = t + 0.01;
 
@@ -184,9 +188,11 @@
 		<center>
 			<h1>Sistemas Gráficos - 66.71</h1>
 			<h2>WebGL - Grilla de vértices</h2>
-			<canvas id="my-canvas" width="1200" height="800">
-			Your browser does not support the HTML5 canvas element.
-			</canvas>
+      <div id="contenedor3d">
+  			<canvas id="my-canvas" width="1200" height="800">
+  			Your browser does not support the HTML5 canvas element.
+  			</canvas>
+      </div>
 		</center>
   </body>
 </html>
