@@ -6,6 +6,7 @@ function Lathe(profile_curve, theta, texture) {
   var that = this;
   this.axial_curve = profile_curve.axis;
   this.profile_curve = profile_curve.radius;
+  this.normals_curve = profile_curve.normals;
   this.deltaTheta = theta;
   
   this._createNormalBuffer = function() {
@@ -30,7 +31,7 @@ function Lathe(profile_curve, theta, texture) {
         var normal_vector = [0.0,0.0,0.0];
         vec3.add(normal_vector, normal_vector, normal);
         vec3.add(normal_vector, normal_vector, binormal);
-        vec3.add(normal_vector,normal_vector,[0.0,0.0,this.profile_curve.normals[offset]])
+        vec3.add(normal_vector,normal_vector,[0.0,0.0,this.normals_curve[offset]]);
 
         this.normal_buffer.push(normal_vector[0]);
         this.normal_buffer.push(normal_vector[1]);
