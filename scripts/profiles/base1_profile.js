@@ -28,7 +28,6 @@ function Base1Profile() {
     control_points.push([3.5,7.5,0.0]);
     control_points.push([1.0,8.0,0.0]);
     control_points.push([2.5,10.0,0.0]);
-
     
     _bezier_curve = new CubicBezierCurve(control_points); 
   }

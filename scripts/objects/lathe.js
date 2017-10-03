@@ -12,23 +12,28 @@ function Lathe(profile_curve, theta, texture) {
     //TODO: implement
   }
 
-  this._createTexturePositionBuffer = function(){
-
+  this._createTexturePositionBuffer = function() {
     for (var theta = 0; theta <= 2*Math.PI; theta+=this.deltaTheta) {
       for (var offset = 0; offset < this.axial_curve.length; offset++) {
-        normal = [that.profile_curve[offset]*Math.cos(theta),0.0,0.0]
-        binormal = [0.0,0.0,-1.0*that.profile_curve[offset]*Math.sin(theta)]
+        normal = [that.profile_curve[offset]*Math.cos(theta),0.0,0.0];
+        binormal = [0.0,0.0,-1.0*that.profile_curve[offset]*Math.sin(theta)];
         position = [0.0,this.axial_curve[offset],0.0];
 
         var new_position = [0.0,0.0,0.0];
-        
         vec3.add(new_position, position, normal);
-        
         vec3.add(new_position, new_position, binormal);
 
         this.position_buffer.push(new_position[0]);
         this.position_buffer.push(new_position[1]);
         this.position_buffer.push(new_position[2]);
+
+        var normal_vector = [0.0,0.0,0.0];
+        vec3.add(normal_vector, normal_vector, normal);
+        vec3.add(normal_vector, normal_vector, binormal);
+
+        this.normal_buffer.push(normal_vector[0]);
+        this.normal_buffer.push(normal_vector[1]);
+        this.normal_buffer.push(normal_vector[2]);
       }
     }
 

@@ -123,7 +123,7 @@ function Object3D(_rows,_cols,_texture){
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
     gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
-    var vertexNormalAttribute = gl.getAttribLocation(glProgram, "aNormalVector");
+    var vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
     gl.enableVertexAttribArray(vertexNormalAttribute);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
     gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
