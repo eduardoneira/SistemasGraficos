@@ -1,4 +1,4 @@
-function Camera(radius = 15, speed = 0.005) {
+function Camera(radius = 15, speed = 0.003) {
   this.prev_x = 0;
   this.prev_y = 0;
   this.alfa = Math.PI/2;
@@ -8,6 +8,7 @@ function Camera(radius = 15, speed = 0.005) {
   this.prev_look_at = mat4.create();
 
   this.is_mouse_down = false;
+  this.mouse_wheel_triggered = false;
   this.reset_position = true;
   this.switch_mode = true;
 
@@ -58,14 +59,14 @@ function Camera(radius = 15, speed = 0.005) {
     that.is_mouse_down = false;    
   });
 
-  $('#contenedor3d').bind('mousewheel', function(e){
-    debugger;
-    if (e.originalEvent.wheelDelta / 120 > 0) {
+  $('#contenedor3d').mousewheel(function(event) {
+    that.mouse_wheel_triggered = true;
+    if (event.deltaY > 0) {
       if (that.radius > 1){
-        that.radius -= 0.2;   
+        that.radius -= 0.5;   
       }
     } else {
-        that.radius += 0.2;   
+        that.radius += 0.5;   
     }
   });
 
@@ -79,23 +80,25 @@ function Camera(radius = 15, speed = 0.005) {
   });
 
   this.getViewMatrix = function() {
-    if (this.is_mouse_down || this.switch_mode) {
+    if (this.is_mouse_down || this.mouse_wheel_triggered || this.switch_mode) {
       var deltaX = 0;
       var deltaY = 0;
       
-      if (!this.reset_position) {
+      if (!this.reset_position && !this.mouse_wheel_triggered) {
         deltaX = this.mouse.x - this.prev_x;
         deltaY = this.mouse.y - this.prev_y;
       }
 
       if (!this.switch_mode){
-        this.reset_position =  false;
+        this.reset_position = false;
       }
 
       this.switch_mode = false;
 
       this.prev_x = this.mouse.x;
       this.prev_y = this.mouse.y;
+
+      this.mouse_wheel_triggered = false;
 
       this.alfa = this.alfa + deltaX * this.speed;
       this.beta = this.beta + deltaY * this.speed;
