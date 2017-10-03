@@ -1,6 +1,7 @@
 function Base1Profile() {
   this.radius = [];
   this.axis = [];
+  this.normals = [];
 
   var _bezier_curve;
   var that = this;
@@ -35,15 +36,23 @@ function Base1Profile() {
   _init();
 
   this.travel = function(delta) {
-    var positions = _bezier_curve.travel(delta).positions;
+    var bezier_curve = _bezier_curve.travel(delta);
 
-    positions.forEach(function(elem,index) {
+    bezier_curve.positions.forEach(function(elem,index) {
       if (index % 3 == 0) {
         that.radius.push(elem);
       } else if ((index + 2) % 3 == 0) {
         that.axis.push(elem);
       }
     });
+
+    bezier_curve.tangents.forEach(function(elem,index){
+      if ((index + 2) % 3 == 0) {
+        that.normals.push(elem);
+      }
+    });
+
+    debugger;
 
   }
 }
