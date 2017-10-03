@@ -8,13 +8,12 @@ function BasicShaderHandler() {
   this.glProgram.pMatrixUniform = gl.getUniformLocation(this.glProgram, "uPMatrix");
   this.glProgram.vmMatrixUniform = gl.getUniformLocation(this.glProgram, "uVMMatrix");
   this.glProgram.nMatrixUniform = gl.getUniformLocation(this.glProgram, "uNMatrix");
-  this.glProgram.samplerUniform = gl.getUniformLocation(this.glProgram, "uSampler");
-  this.glProgram.useLightingUniform = gl.getUniformLocation(this.glProgram, "uUseLighting");
   this.glProgram.ambientColorUniform = gl.getUniformLocation(this.glProgram, "uAmbientColor");
   this.glProgram.lightingDirectionUniform = gl.getUniformLocation(this.glProgram, "uLightPosition");
   this.glProgram.directionalColorUniform = gl.getUniformLocation(this.glProgram, "uDirectionalColor");
+  this.glProgram.samplerUniform = gl.getUniformLocation(this.glProgram, "uSampler");
 
-  // Attributes 
+  // Attributes
   this.glProgram.vertexPositionAttribute = gl.getAttribLocation(this.glProgram, "aVertexPosition");
   gl.enableVertexAttribArray(this.glProgram.vertexPositionAttribute);
 

@@ -1,5 +1,9 @@
 function Scene() {
 
+}
+
+function TestScene() {
+
   var surface_circle = new SurfaceCircle(5);
   surface_circle.discretize(0.05);
 

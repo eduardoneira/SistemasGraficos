@@ -7,7 +7,8 @@ var time = 0.0;
 var deltaTime = 10;
 
 // Objects
-var scene = new Scene();
+// var scene = new Scene();
+var scene = new TestScene();
 var camera = new Camera();
 
 // Shaders
