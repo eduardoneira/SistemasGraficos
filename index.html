@@ -3,26 +3,27 @@
 <meta content="UTF-8" http-equiv="encoding">
 
 <!-- Todos los imports de js files -->
-<script type="text/javascript" src="scripts/jquery-1.11.2.min.js"></script>
-<script type="text/javascript" src="scripts/gl-matrix.js"></script>
-<script type="text/javascript" src="scripts/object3d.js"></script>
-<script type="text/javascript" src="scripts/utils.js"></script>
-<script type="text/javascript" src="scripts/cylinder.js"></script>
-<script type="text/javascript" src="scripts/scene.js"></script>
-<script type="text/javascript" src="scripts/texture_loader.js"></script>
-<script type="text/javascript" src="scripts/loft.js"></script>
-<script type="text/javascript" src="scripts/loft2.js"></script>
-<script type="text/javascript" src="scripts/uri.js"></script>
-<script type="text/javascript" src="scripts/curve_circle.js"></script>
-<script type="text/javascript" src="scripts/surface_circle.js"></script>
-<script type="text/javascript" src="scripts/cubic_bezier_curve.js"></script>
-<script type="text/javascript" src="scripts/line.js"></script>
-<script type="text/javascript" src="scripts/constant_radius_profile.js"></script>
-<script type="text/javascript" src="scripts/lathe.js"></script>
-<script type="text/javascript" src="scripts/goblet_profile.js"></script>
-<script type="text/javascript" src="scripts/green_lantern_profile.js"></script>
-<script type="text/javascript" src="scripts/base1_profile.js"></script>
-<script type="text/javascript" src="scripts/camera.js"></script>
+<script type="text/javascript" src="scripts/utils/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="scripts/utils/gl-matrix.js"></script>
+<script type="text/javascript" src="scripts/utils/texture_loader.js"></script>
+<script type="text/javascript" src="scripts/utils/utils.js"></script>
+<script type="text/javascript" src="scripts/utils/uri.js"></script>
+<script type="text/javascript" src="scripts/objects/object3d.js"></script>
+<script type="text/javascript" src="scripts/objects/cylinder.js"></script>
+<script type="text/javascript" src="scripts/objects/scene.js"></script>
+<script type="text/javascript" src="scripts/objects/loft.js"></script>
+<script type="text/javascript" src="scripts/objects/loft2.js"></script>
+<script type="text/javascript" src="scripts/objects/globals.js"></script>
+<script type="text/javascript" src="scripts/objects/lathe.js"></script>
+<script type="text/javascript" src="scripts/objects/camera.js"></script>
+<script type="text/javascript" src="scripts/curves/curve_circle.js"></script>
+<script type="text/javascript" src="scripts/curves/cubic_bezier_curve.js"></script>
+<script type="text/javascript" src="scripts/curves/line.js"></script>
+<script type="text/javascript" src="scripts/surfaces/surface_circle.js"></script>
+<script type="text/javascript" src="scripts/profiles/constant_radius_profile.js"></script>
+<script type="text/javascript" src="scripts/profiles/goblet_profile.js"></script>
+<script type="text/javascript" src="scripts/profiles/green_lantern_profile.js"></script>
+<script type="text/javascript" src="scripts/profiles/base1_profile.js"></script>
 
 <html>
   <head>
@@ -61,16 +62,6 @@
     </script>
 
     <script>
-      var gl = null,
-          canvas = null,
-          glProgram = null,
-          fragmentShader = null,
-          vertexShader = null,
-					scene = null,
-
-          camera = null,
-          t = 0.0;
-
       var vMatrix = mat4.create();
       var pMatrix = mat4.create();
 
@@ -116,9 +107,8 @@
       {
         canvas = document.getElementById("my-canvas");  
         try{
-          gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");                    
-        }catch(e){
-        }
+          gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");                   
+        } catch(e) {}
                         
         if(gl) {
           setupWebGL();
@@ -178,7 +168,7 @@
 
         vMatrix = camera.getViewMatrix();
         
-        t = t + 0.01;
+        time = time + 0.01;
 
         scene.draw();
       }
