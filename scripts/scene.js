@@ -31,7 +31,7 @@ function Scene() {
   }
   // debugger;
 
-  var loft = new Loft2(shape, sweep_path, textures["checker"]);
+  var loft = new Loft2(shape, sweep_path, textures["checker"], .01);
   loft.init();
   // debugger;
 

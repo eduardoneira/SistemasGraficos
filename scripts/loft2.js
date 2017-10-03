@@ -3,7 +3,7 @@
 * sweep_path deber ser un curve
 */
 
-function Loft2(shape, sweep_path, texture){
+function Loft2(shape, sweep_path, texture, twist = 0){
 
 	var rows = shape.positions.length/2;
 	var cols = sweep_path.length/3;
@@ -12,6 +12,7 @@ function Loft2(shape, sweep_path, texture){
 	var that = this;
 	that.sweep_path = sweep_path;
 	that.shape = shape;
+	that.twist = twist;
 
 	this._createNormalBuffer = function() {
     	//TODO: implement
@@ -53,15 +54,22 @@ function Loft2(shape, sweep_path, texture){
 			matrix_values.push(0);
 
 			transform_matrix = matrix_values.slice();
+
 		}
 
 		function transformShape(){
 			// new_shape, shape, transform_matrix
-			var aux_vert;
+			var aux_vert, rot;
 
 			for(i = 0; i < shape.positions.length; i+=2){
 				aux_vert = vec3.fromValues(shape.positions[i], shape.positions[i+1], 0);
+
+				rot = mat4.create();
+				mat4.rotateZ(rot, rot, twist*j);
+				vec3.transformMat4(aux_vert, aux_vert, rot);
+
 				vec3.transformMat4(aux_vert, aux_vert, transform_matrix);
+
 
 				concatVectorElems(new_shape, aux_vert);
 			}
