@@ -2,7 +2,7 @@
 
 attribute vec3 aVertexPosition;
 attribute vec3 aVertexNormal;
-attribute vec2 aVertexTextureCoord;
+attribute vec2 aTextureCoord;
 
 uniform mat4 uVMMatrix;
 uniform mat4 uPMatrix;
@@ -20,7 +20,7 @@ void main(void) {
   vec4 pos_camera_view = uVMMatrix * vec4(aVertexPosition, 1.0);
   gl_Position = uPMatrix * pos_camera_view; 
   
-  vTextureCoord = aVertexTextureCoord;
+  vTextureCoord = aTextureCoord;
 
   vec3 light_dir =  uLightPosition - vec3(pos_camera_view);
   normalize(light_dir);
