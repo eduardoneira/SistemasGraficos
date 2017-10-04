@@ -1,6 +1,5 @@
 // TODO: Make getters for position, rotation and scale
-// TODO: Set up buffer and webgl buffer normals. Add bind in draw
-function Object3D(_rows,_cols,_texture){
+function Object3D(_rows, _cols, _texture, glProgram, light){
   this.texture = _texture;
   this.rows = _rows;
   this.cols = _cols;
@@ -16,16 +15,18 @@ function Object3D(_rows,_cols,_texture){
   this.webgl_index_buffer = null;
   this.webgl_normal_buffer = null;
 
+  this.lightPosition = light.lightPosition | [0.0, 100.0, 0.0];
+  this.ambientColor = light.ambientColor | [0.75, 0.75, 0.75];
+  this.diffuseColor = light.diffuseColor | [0.05, 0.05, 0.05];
+
+  this.glProgram = null;
+
   this.state = mat4.create();
   this.childs = {};
 
   var that = this;
 
-  this._createTexturePositionBuffer = function() {
-    throw "Not implemented";
-  }
-
-  this._createNormalBuffer = function() {
+  this._createAttributesBuffers = function() {
     throw "Not implemented";
   }
 
@@ -54,26 +55,33 @@ function Object3D(_rows,_cols,_texture){
 
   this._setUpBuffers = function() {
     this._createIndexBuffer();
-    this._createTexturePositionBuffer();
-    this._createNormalBuffer();
+    this._createAttributesBuffers();
   }
 
   this._setUpWebGLBuffers = function() {
     this.webgl_position_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
+    this.webgl_position_buffer.itemSize = 3;
+    this.webgl_position_buffer.numItems = this.position_buffer.length / 3;
 
     this.webgl_texture_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_buffer), gl.STATIC_DRAW);   
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_buffer), gl.STATIC_DRAW);
+    this.webgl_texture_buffer.itemSize = 2;
+    this.webgl_texture_buffer.numItems = this.texture_buffer.length / 2;  
 
     this.webgl_normal_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);   
+    this.webgl_normal_buffer.itemSize = 3;
+    this.webgl_normal_buffer.numItems = this.normal_buffer.length / 3;
 
     this.webgl_index_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
+    this.webgl_index_buffer.itemSize = 1;
+    this.webgl_index_buffer.numItems = this.index_buffer.length;
   }
 
   this.init = function() {
@@ -113,34 +121,38 @@ function Object3D(_rows,_cols,_texture){
     // Stub. Do nothing by default
   }
 
+  function setupShaders() {
+    gl.useProgram(that.glProgram);
+  }
+
+  function setUpLighting() {
+    gl.uniform3fv(that.glProgram.lightingDirectionUniform, that.lightPosition);
+    gl.uniform3fv(that.glProgram.ambientColorUniform, that.ambientColor);
+    gl.uniform3fv(that.glProgram.directionalColorUniform, that.diffuseColor);
+  }
+
   this._draw = function() {
-    var u_view_model_matrix = gl.getUniformLocation(glProgram, "uVMMatrix");
+    setupShaders();
+    setUpLighting();
+    
     mat4.multiply(this.state,vMatrix,this.state)
-    gl.uniformMatrix4fv(u_view_model_matrix, false, this.state);
+    gl.uniformMatrix4fv(this.glProgram.vmMatrixUniform, false, this.state);
 
-    var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
-    gl.enableVertexAttribArray(vertexPositionAttribute);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-    gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(this.glProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
-    var vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
-    gl.enableVertexAttribArray(vertexNormalAttribute);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
-    gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(this.glProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
-    var vertexTextureAttribute = gl.getAttribLocation(glProgram, "aVertexTextureCoord");
-    gl.enableVertexAttribArray(vertexTextureAttribute);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
-    gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(this.glProgram.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
 
-    var uSampler = gl.getUniformLocation(glProgram, 'uSampler');
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D,this.texture);
-    gl.uniform1i(uSampler, 0);
+    gl.uniform1i(this.glProgram.uSampler, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
     gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
-    gl.drawElements(gl.LINE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
   }
 
   this.draw = function(transformations_parent) {    
