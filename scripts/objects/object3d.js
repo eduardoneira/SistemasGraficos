@@ -1,4 +1,3 @@
-// TODO: Make getters for position, rotation and scale
 function Object3D(_rows, _cols, _texture, glProgram, light){
   this.texture = _texture;
   this.rows = _rows;
@@ -21,7 +20,7 @@ function Object3D(_rows, _cols, _texture, glProgram, light){
 
   this.glProgram = null;
 
-  this.state = mat4.create();
+  this.initial_state = mat4.create();
   this.childs = {};
 
   var that = this;
@@ -102,19 +101,15 @@ function Object3D(_rows, _cols, _texture, glProgram, light){
   }
 
   this.translate = function (tVect) {
-    mat4.translate(this.state, this.state, tVect);
+    mat4.translate(this.initial_state, this.initial_state, tVect);
   }
 
   this.scale = function(sVect) {
-    mat4.scale(this.state, this.state, sVect);
+    mat4.scale(this.initial_state, this.initial_state, sVect);
   }
 
   this.rotate = function(rad, axis) {
-    mat4.rotate(this.state, this.state, rad, axis);
-  }
-
-  this._resetState = function () {
-    // Stub. Do nothing by default
+    mat4.rotate(this.initial_state, this.initial_state, rad, axis);
   }
 
   this._drawChilds = function(transformations_parent) {
@@ -131,12 +126,16 @@ function Object3D(_rows, _cols, _texture, glProgram, light){
     gl.uniform3fv(that.glProgram.directionalColorUniform, that.diffuseColor);
   }
 
-  this._draw = function() {
+  this._draw = function(mvMatrix) {
     setupShaders();
     setUpLighting();
     
-    mat4.multiply(this.state,vMatrix,this.state)
-    gl.uniformMatrix4fv(this.glProgram.vmMatrixUniform, false, this.state);
+    gl.uniformMatrix4fv(this.glProgram.vmMatrixUniform, false, mvMatrix);
+
+    mat3.fromMat4(mvMatrix, mvMatrix);
+    mat3.invert(mvMatrix, mvMatrix);
+    mat3.transpose(mvMatrix, mvMatrix);
+    gl.uniformMatrix3fv(this.glProgram.nMatrixUniform, false, mvMatrix);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
     gl.vertexAttribPointer(this.glProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
@@ -156,15 +155,13 @@ function Object3D(_rows, _cols, _texture, glProgram, light){
   }
 
   this.draw = function(transformations_parent) {    
-    mat4.identity(this.state);
-
     if (this.drawEnabled) {
-      this._resetState();
-      mat4.multiply(this.state,transformations_parent,this.state);
+      var mvMatrix = mat4.create();
+      mat4.multiply(mvMatrix,transformations_parent,this.state);
+      mat4.multiply(mvMatrix,camera.getViewMatrix(),mvMatrix);
       this._draw();
     }
 
     this._drawChilds(transformations_parent);
   }
-
 }
