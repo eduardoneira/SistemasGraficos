@@ -1,4 +1,4 @@
-function Object3D(_rows, _cols, _texture, glProgram, light){
+function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
   this.texture = _texture;
   this.rows = _rows;
   this.cols = _cols;
@@ -14,11 +14,11 @@ function Object3D(_rows, _cols, _texture, glProgram, light){
   this.webgl_index_buffer = null;
   this.webgl_normal_buffer = null;
 
-  this.lightPosition = light.lightPosition | [0.0, 100.0, 0.0];
   this.ambientColor = light.ambientColor | [0.75, 0.75, 0.75];
-  this.diffuseColor = light.diffuseColor | [0.05, 0.05, 0.05];
+  this.lightPosition = light.lightPosition | [0.0, 100.0, 0.0];
+  this.diffuseColor = diffuseColor | [0.05, 0.05, 0.05];
 
-  this.glProgram = null;
+  this.shader = null;
 
   this.initial_state = mat4.create();
   this.childs = {};
@@ -61,26 +61,18 @@ function Object3D(_rows, _cols, _texture, glProgram, light){
     this.webgl_position_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
-    this.webgl_position_buffer.itemSize = 3;
-    this.webgl_position_buffer.numItems = this.position_buffer.length / 3;
 
     this.webgl_texture_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_buffer), gl.STATIC_DRAW);
-    this.webgl_texture_buffer.itemSize = 2;
-    this.webgl_texture_buffer.numItems = this.texture_buffer.length / 2;  
 
     this.webgl_normal_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);   
-    this.webgl_normal_buffer.itemSize = 3;
-    this.webgl_normal_buffer.numItems = this.normal_buffer.length / 3;
 
     this.webgl_index_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
-    this.webgl_index_buffer.itemSize = 1;
-    this.webgl_index_buffer.numItems = this.index_buffer.length;
   }
 
   this.init = function() {
@@ -117,38 +109,38 @@ function Object3D(_rows, _cols, _texture, glProgram, light){
   }
 
   function setupShaders() {
-    gl.useProgram(that.glProgram);
+    that.shader.useProgram();
   }
 
   function setUpLighting() {
-    gl.uniform3fv(that.glProgram.lightingDirectionUniform, that.lightPosition);
-    gl.uniform3fv(that.glProgram.ambientColorUniform, that.ambientColor);
-    gl.uniform3fv(that.glProgram.directionalColorUniform, that.diffuseColor);
+    gl.uniform3fv(that.shader.lightingDirectionUniform, that.lightPosition);
+    gl.uniform3fv(that.shader.ambientColorUniform, that.ambientColor);
+    gl.uniform3fv(that.shader.directionalColorUniform, that.diffuseColor);
   }
 
   this._draw = function(mvMatrix) {
     setupShaders();
     setUpLighting();
     
-    gl.uniformMatrix4fv(this.glProgram.vmMatrixUniform, false, mvMatrix);
+    gl.uniformMatrix4fv(this.shader.vmMatrixUniform, false, mvMatrix);
 
     mat3.fromMat4(mvMatrix, mvMatrix);
     mat3.invert(mvMatrix, mvMatrix);
     mat3.transpose(mvMatrix, mvMatrix);
-    gl.uniformMatrix3fv(this.glProgram.nMatrixUniform, false, mvMatrix);
+    gl.uniformMatrix3fv(this.shader.nMatrixUniform, false, mvMatrix);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-    gl.vertexAttribPointer(this.glProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(this.shader.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
-    gl.vertexAttribPointer(this.glProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(this.shader.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
-    gl.vertexAttribPointer(this.glProgram.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(this.shader.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D,this.texture);
-    gl.uniform1i(this.glProgram.uSampler, 0);
+    gl.uniform1i(this.shader.uSampler, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
     gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);

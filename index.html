@@ -9,16 +9,17 @@
 <script type="text/javascript" src="scripts/utils/texture_loader.js"></script>
 <script type="text/javascript" src="scripts/utils/utils.js"></script>
 <script type="text/javascript" src="scripts/utils/uri.js"></script>
-<script type="text/javascript" src="scripts/utils/shader_constructor.js"></script>
+<script type="text/javascript" src="scripts/utils/shader_helper.js"></script>
 <script type="text/javascript" src="scripts/objects/object3d.js"></script>
 <script type="text/javascript" src="scripts/objects/cylinder.js"></script>
 <script type="text/javascript" src="scripts/objects/scene.js"></script>
 <script type="text/javascript" src="scripts/objects/test_scene.js"></script>
 <script type="text/javascript" src="scripts/objects/loft.js"></script>
 <script type="text/javascript" src="scripts/objects/loft2.js"></script>
-<script type="text/javascript" src="scripts/objects/globals.js"></script>
 <script type="text/javascript" src="scripts/objects/lathe.js"></script>
 <script type="text/javascript" src="scripts/objects/camera.js"></script>
+<script type="text/javascript" src="scripts/objects/projector.js"></script>
+<script type="text/javascript" src="scripts/objects/light.js"></script>
 <script type="text/javascript" src="scripts/curves/curve_circle.js"></script>
 <script type="text/javascript" src="scripts/curves/cubic_bezier_curve.js"></script>
 <script type="text/javascript" src="scripts/curves/line.js"></script>
@@ -27,6 +28,10 @@
 <script type="text/javascript" src="scripts/profiles/goblet_profile.js"></script>
 <script type="text/javascript" src="scripts/profiles/green_lantern_profile.js"></script>
 <script type="text/javascript" src="scripts/profiles/base1_profile.js"></script>
+<!-- Basic Shader -->
+<script type="text/javascript" src="scripts/shaders/basic_vertex_shader.js"></script>
+<script type="text/javascript" src="scripts/shaders/basic_fragment_shader.js"> </script>
+<script type="text/javascript" src="scripts/shaders/basic_shader_handler.js"></script>
 
 <html>
   <head>
@@ -36,10 +41,6 @@
       canvas{ background-color: white; }
 			textarea{ background-color: black; foreground-color: white;}
     </style>
-
-    <script id="-basic-shader-vs" type="x-shader/x-vertex" src="scripts/shaders/basic_vertex_shader.js"></script>
-    <script id="basic-shader-fs" type="x-shader/x-fragment" src="scripts/shaders/basic_fragment_shader.js"> </script>
-    <script type="text/javascript" src="scripts/shaders/basic_shader_handler"></script>
   </head>
   <script type="text/javascript" src="scripts/main.js"></script>
   <body onload="main()">

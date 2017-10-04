@@ -1,8 +1,8 @@
 function BasicShaderHandler() {
-  var fragmentShaderId = "basic-shader-fs";
-  var vertexShaderId = "basic-shader-vs";
+  var vertexShaderSrc = basic_vertex_shader;
+  var fragmentShaderSrc = basic_fragment_shader;
   
-  this.glProgram = createGLProgram(vertexShaderId,fragmentShaderId);
+  this.glProgram = createGLProgram(vertexShaderSrc,fragmentShaderSrc);
 
   // Uniforms
   this.pMatrixUniform = gl.getUniformLocation(this.glProgram, "uPMatrix");

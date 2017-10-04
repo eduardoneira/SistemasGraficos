@@ -1,19 +1,17 @@
-function Lathe(profile_curve, theta, texture) {
+function Lathe(profile_curve, theta, texture, shader, light, diffuseColor) {
   var rows = profile_curve.axis.length;
   var cols = 2*Math.PI / theta + 1;
 
-  Object3D.call(this,rows,cols,texture);
+  Object3D.call(this, rows, cols, texture, shader, light, diffuseColor);
+  
   var that = this;
+  
   this.axial_curve = profile_curve.axis;
   this.profile_curve = profile_curve.radius;
   this.normals_curve = profile_curve.normals;
   this.deltaTheta = theta;
-  
-  this._createNormalBuffer = function() {
-    //TODO: implement
-  }
 
-  this._createTexturePositionBuffer = function() {
+  this._createAttributesBuffers = function() {
     for (var theta = 0; theta <= 2*Math.PI; theta+=this.deltaTheta) {
       for (var offset = 0; offset < this.axial_curve.length; offset++) {
         normal = [this.profile_curve[offset]*Math.cos(theta),0.0,0.0];

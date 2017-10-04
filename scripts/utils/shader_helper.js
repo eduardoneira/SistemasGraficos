@@ -1,26 +1,10 @@
-function getShader(gl, id) {
-  var shaderScript, src, currentChild, shader;
+function getShader(gl, src, type) {
+  var shader;
 
-  shaderScript = document.getElementById(id);
-  if (!shaderScript) {
-    return null;
-  }
-
-  src = "";
-  currentChild = shaderScript.firstChild;
-  while(currentChild) {
-    if (currentChild.nodeType == currentChild.TEXT_NODE) {
-      src += currentChild.textContent;
-    }
-    currentChild = currentChild.nextSibling;
-  }
-
-  if (shaderScript.type == "x-shader/x-fragment") {
+  if (type == "fragment") {
     shader = gl.createShader(gl.FRAGMENT_SHADER);
-  } else if (shaderScript.type == "x-shader/x-vertex") {
+  } else if (type == "vertex") {
     shader = gl.createShader(gl.VERTEX_SHADER);
-  } else {
-      return null;
   }
 
   gl.shaderSource(shader, src);
@@ -35,9 +19,9 @@ function getShader(gl, id) {
   return shader;
 }
 
-function createGLProgram(vertexShaderId, fragmentShaderId) {
-  var vertexShader = getShader(gl, vertexShaderId);
-  var fragmentShader = getShader(gl, fragmentShaderId);
+function createGLProgram(vertexShaderSrc, fragmentShaderSrc) {
+  var vertexShader = getShader(gl, vertexShaderSrc, "vertex");
+  var fragmentShader = getShader(gl, fragmentShaderSrc, "fragment");
 
   glProgram = gl.createProgram();
 
