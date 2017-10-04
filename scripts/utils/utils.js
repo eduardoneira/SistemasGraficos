@@ -8,5 +8,10 @@ function inheritPrototype(child, parent) {
 function concatVectorElems(arr, vect){
 	Array.prototype.forEach.call(vect, function(elem){
 		arr.push(elem);
-	})
+	});
 }
+
+function degToRad(degrees) {
+	return degrees * Math.PI / 180.0;
+}
+

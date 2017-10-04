@@ -2,24 +2,20 @@
 var gl = null;
 var canvas = null;
 
-// Global time variables
-var time = 0.0;
-var deltaTime = 10;
-
-// Objects
-// var scene = new Scene();
-var scene = new TestScene();
-var camera = new Camera();
-
 // Shaders
 var basicShaderHandler = new BasicShaderHandler();
 
-//TODO: Move this to scene?
-var vMatrix = mat4.create();
-var pMatrix = mat4.create();
+// Global time variables
+var time = 0;
+var deltaTime = 10;
 
+// Objects
+// var scene = new Scene();  //Usar para la escene posta
+var scene = new TestScene();
+var camera = new Camera();
+var projector = new Projector();
 
-function initWebGL() { 
+function main() { 
   canvas = document.getElementById("my-canvas");  
   try {
     gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");                   
@@ -45,14 +41,7 @@ function setupWebGL() {
 
 function drawScene() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
-  mat4.perspective(pMatrix, 45, canvas.width/canvas.height, 0.1, 100.0);
-  gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
-
-  vMatrix = camera.getViewMatrix();
-  
+ 
   time = time + 0.01;
-
   scene.draw();
 }
-   
