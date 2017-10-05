@@ -20,9 +20,9 @@ function initShaders() {
 }
 
 function initScene() {
-  scene = new TestScene();
   camera = new Camera();
   projector = new Projector(basicShaderHandler);
+  scene = new TestScene();
 }
 
 function main() { 

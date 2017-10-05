@@ -18,8 +18,8 @@ function TestScene() {
     lathe.activateShader();
     
     transformations = mat4.create();
-    mat4.rotate(transformations, transformations, time, [1.0, 1.0, 0.0]);
-    mat4.translate(transformations, transformations, [5.0, -6.5, 5.0]);
+    // mat4.rotate(transformations, transformations, time, [1.0, 1.0, 0.0]);
+    mat4.translate(transformations, transformations, [0.0, -6.5, 0.0]);
     mat4.scale(transformations, transformations, [1.0,1.5,1.0]);
     
     projector.applyProjection();
