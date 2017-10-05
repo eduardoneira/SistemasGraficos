@@ -36,25 +36,22 @@ function main() {
     initShaders();
     loadAllTextures();
     initScene();
-    setInterval(drawScene, deltaTime);  
+    tick();  
   }else {    
     alert("Error: Your browser does not appear to support WebGL.");
   }
 }
 
 function setupWebGL() {
-  gl.clearColor(0.1, 0.1, 0.2, 1.0);     
-  gl.enable(gl.DEPTH_TEST);                              
-  gl.depthFunc(gl.LEQUAL); 
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  
-  gl.viewport(0, 0, canvas.width, canvas.height);
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);    
+  gl.enable(gl.DEPTH_TEST);
 }
 
-function drawScene() {
+function tick() {
+  requestAnimFrame(tick);
+  gl.viewport(0, 0, canvas.width, canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   
   time = time + 0.01;
-  projector.applyProjection();
   scene.draw();
 }

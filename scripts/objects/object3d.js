@@ -14,11 +14,11 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
   this.webgl_index_buffer = null;
   this.webgl_normal_buffer = null;
 
-  this.ambientColor = light.ambientColor | [0.75, 0.75, 0.75];
-  this.lightPosition = light.lightPosition | [0.0, 100.0, 0.0];
-  this.diffuseColor = diffuseColor | [0.05, 0.05, 0.05];
+  this.ambientColor = light.ambient_light;
+  this.lightPosition = light.directional_light;
+  this.diffuseColor = diffuseColor;
 
-  this.shader = null;
+  this.shader = shader;
 
   this.initial_state = mat4.create();
   this.childs = {};
@@ -32,7 +32,7 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
   this._createIndexBuffer = function() {
     var index_top = 0;
     var index_bottom = this.rows;
-    var moveIndex = function(a) {return a+1;};
+    var moveIndex = function(a) { return a+1; };
 
     for (var j = 0; j < this.cols - 1; j++) {
       for (var  i = 0; i < 2 * this.rows; i++) {
@@ -108,26 +108,22 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
     // Stub. Do nothing by default
   }
 
-  function setupShaders() {
-    that.shader.useProgram();
-  }
-
   function setUpLighting() {
     gl.uniform3fv(that.shader.lightingDirectionUniform, that.lightPosition);
     gl.uniform3fv(that.shader.ambientColorUniform, that.ambientColor);
     gl.uniform3fv(that.shader.directionalColorUniform, that.diffuseColor);
   }
 
-  this._draw = function(mvMatrix) {
-    setupShaders();
-    setUpLighting();
-    
-    gl.uniformMatrix4fv(this.shader.vmMatrixUniform, false, mvMatrix);
+  this.activateShader = function() {
+    this.shader.activateShader();
+  } 
 
-    mat3.fromMat4(mvMatrix, mvMatrix);
-    mat3.invert(mvMatrix, mvMatrix);
-    mat3.transpose(mvMatrix, mvMatrix);
-    gl.uniformMatrix3fv(this.shader.nMatrixUniform, false, mvMatrix);
+  this._draw = function(mvMatrix) {
+    setUpLighting();
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D,this.texture);
+    gl.uniform1i(this.shader.samplerUniform, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
     gl.vertexAttribPointer(this.shader.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
@@ -138,9 +134,13 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
     gl.vertexAttribPointer(this.shader.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
 
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D,this.texture);
-    gl.uniform1i(this.shader.uSampler, 0);
+    gl.uniformMatrix4fv(this.shader.vmMatrixUniform, false, mvMatrix);
+
+    var nMatrix = mat3.create();
+    mat3.fromMat4(nMatrix, mvMatrix);
+    mat3.invert(nMatrix, nMatrix);
+    mat3.transpose(nMatrix, nMatrix);
+    gl.uniformMatrix3fv(this.shader.nMatrixUniform, false, nMatrix);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
     gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
@@ -149,9 +149,9 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
   this.draw = function(transformations_parent) {    
     if (this.drawEnabled) {
       var mvMatrix = mat4.create();
-      mat4.multiply(mvMatrix,transformations_parent,this.state);
+      mat4.multiply(mvMatrix,transformations_parent,this.initial_state);
       mat4.multiply(mvMatrix,camera.getViewMatrix(),mvMatrix);
-      this._draw();
+      this._draw(mvMatrix);
     }
 
     this._drawChilds(transformations_parent);

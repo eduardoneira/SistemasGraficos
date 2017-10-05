@@ -1,5 +1,5 @@
 function TestScene() {
-  var light = new Light([0.5, 0.5, 0.5],[50.0, 100.0, 50.0]);
+  var light = new Light([0.5, 0.5, 0.5],[-10.0, 10.0, -10.0]);
 
   var delta = 0.01;
   
@@ -11,15 +11,18 @@ function TestScene() {
                         textures["checker"],
                         basicShaderHandler,
                         light,
-                        [0.1, 0.1, 0.1]);
+                        [0.05, 0.05, 0.05]);
   lathe.init();
 
   this.draw = function() {
+    lathe.activateShader();
+    
     transformations = mat4.create();
-    // mat4.rotate(transformations, transformations, t, [1.0, 1.0, 0.0]);
-    mat4.translate(transformations, transformations, [0.0, -6.5, 0.0]);
+    mat4.rotate(transformations, transformations, time, [1.0, 1.0, 0.0]);
+    mat4.translate(transformations, transformations, [5.0, -6.5, 5.0]);
     mat4.scale(transformations, transformations, [1.0,1.5,1.0]);
     
+    projector.applyProjection();
     lathe.draw(transformations);
   }
 

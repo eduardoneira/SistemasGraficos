@@ -23,7 +23,7 @@ function BasicShaderHandler() {
   this.vertexNormalAttribute = gl.getAttribLocation(this.glProgram, "aVertexNormal");
   gl.enableVertexAttribArray(this.vertexNormalAttribute);
 
-  this.useShader = function() {
+  this.activateShader = function() {
     gl.useProgram(this.glProgram);
   }
 }
