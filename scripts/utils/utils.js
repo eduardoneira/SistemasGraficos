@@ -15,3 +15,6 @@ function degToRad(degrees) {
 	return degrees * Math.PI / 180.0;
 }
 
+function generateArrayAlpha(n) {
+  return Array.from({length: n},(v,k) => k+1);
+}

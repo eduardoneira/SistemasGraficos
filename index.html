@@ -2,15 +2,18 @@
 <meta content="text/html;charset=UTF-8" http-equiv="Content-Type">
 <meta content="UTF-8" http-equiv="encoding">
 
-<!-- Todos los imports de js files -->
+<!-- Libs-->
 <script type="text/javascript" src="scripts/lib/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="scripts/lib/jquery-mousewheel.min.js"></script>
 <script type="text/javascript" src="scripts/lib/gl-matrix.js"></script>
 <script type="text/javascript" src="scripts/lib/webgl-utils.js"></script>
+<script type="text/javascript" src="scripts/lib/dat.gui.min.js"></script>
+<!-- Utils files -->
 <script type="text/javascript" src="scripts/utils/texture_loader.js"></script>
 <script type="text/javascript" src="scripts/utils/utils.js"></script>
 <script type="text/javascript" src="scripts/utils/uri.js"></script>
 <script type="text/javascript" src="scripts/utils/shader_helper.js"></script>
+<!-- Objects -->
 <script type="text/javascript" src="scripts/objects/object3d.js"></script>
 <script type="text/javascript" src="scripts/objects/cylinder.js"></script>
 <script type="text/javascript" src="scripts/objects/scene.js"></script>
@@ -21,10 +24,12 @@
 <script type="text/javascript" src="scripts/objects/camera.js"></script>
 <script type="text/javascript" src="scripts/objects/projector.js"></script>
 <script type="text/javascript" src="scripts/objects/light.js"></script>
+<!-- Curves -->
 <script type="text/javascript" src="scripts/curves/curve_circle.js"></script>
 <script type="text/javascript" src="scripts/curves/cubic_bezier_curve.js"></script>
 <script type="text/javascript" src="scripts/curves/line.js"></script>
 <script type="text/javascript" src="scripts/surfaces/surface_circle.js"></script>
+<!-- Profiles -->
 <script type="text/javascript" src="scripts/profiles/constant_radius_profile.js"></script>
 <script type="text/javascript" src="scripts/profiles/goblet_profile.js"></script>
 <script type="text/javascript" src="scripts/profiles/green_lantern_profile.js"></script>
@@ -40,19 +45,20 @@
     <style>
       body{ background-color: grey; }
       canvas{ background-color: white; }
-			textarea{ background-color: black; foreground-color: white;}
+      textarea{ background-color: black; foreground-color: white;}
     </style>
   </head>
   <script type="text/javascript" src="scripts/main.js"></script>
   <body onload="main()">
-		<center>
+    <center>
       <h1>Trabajo Práctico: Sistemas Gráficos 66.71</h1>
       <h2>Ricardo Andreasen - Eduardo Neira</h2>
       <div id="contenedor3d">
-  			<canvas id="my-canvas" width="1200" height="800">
-  			Your browser does not support the HTML5 canvas element.
-  			</canvas>
+        <script type="text/javascript" src="scripts/objects/panel.js"></script>
+        <canvas id="my-canvas" width="1200" height="800">
+          Your browser does not support the HTML5 canvas element.
+        </canvas>
       </div>
-		</center>
+    </center>
   </body>
 </html>
