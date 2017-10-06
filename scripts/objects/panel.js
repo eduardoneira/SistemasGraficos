@@ -37,7 +37,7 @@ function Panel() {
     cancel: _cancel
   }
 
-  function _maxCountours() {
+  function possibleContours() {
     if (app.mode == "Lathe") {
       return generateArrayAlpha(3);
     } else if (app.mode == "Loft") {
@@ -47,13 +47,33 @@ function Panel() {
     }
   }
 
+  function updatePanel() {
+    if (contour_controller != null)
+      contour_controller.remove();
+
+    if (angle_controller != null)
+      angle_controller.remove();
+
+    contour_controller = configuration.add(app,'contour',possibleContours()).name("Contour");
+    contour_controller.updateDisplay();
+
+    if (app.mode == "Loft") {
+      angle_controller = configuration.add(app,'angle_torsion',0,360).name("Angle");
+      angle_controller.updateDisplay();
+    } else {
+      angle_controller = null;
+    }
+  }
+
   var gui = new dat.GUI();
 
   var configuration = gui.addFolder('Configuration');
-  configuration.add(app,'mode',["Lathe","Loft"]).name("Mode");
-  configuration.add(app,'angle_torsion',0,720).name("Angle");
-  configuration.add(app,'contour',[1,_maxCountours(app.mode)]).name("Contour").listen();
+  var mode_controller = configuration.add(app,'mode',["Lathe","Loft"]).name("Mode");
+  var contour_controller = null;
+  var angle_controller = null;
 
+  updatePanel();
+  mode_controller.onChange(updatePanel);
 
   var commands = gui.addFolder('Commands');
   commands.add(app,'start').name('Start');  

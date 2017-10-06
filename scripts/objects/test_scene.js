@@ -11,7 +11,7 @@ function TestScene() {
                         textures["checker"],
                         basicShaderHandler,
                         light,
-                        [0.05, 0.05, 0.05]);
+                        [0.1, 0.1, 0.1]);
   lathe.init();
 
   this.draw = function() {
