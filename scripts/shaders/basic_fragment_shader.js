@@ -1,4 +1,4 @@
-// Fragment Shader Configuration
+// Basic Fragment Shader Configuration
 const basic_fragment_shader = ` 
   precision mediump float;
 

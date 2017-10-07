@@ -14,8 +14,7 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
   this.webgl_index_buffer = null;
   this.webgl_normal_buffer = null;
 
-  this.ambientColor = light.ambient_light;
-  this.lightPosition = light.directional_light;
+  this.light = light;
   this.diffuseColor = diffuseColor;
 
   this.shader = shader;
@@ -109,8 +108,10 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
   }
 
   function setUpLighting() {
-    gl.uniform3fv(that.shader.lightingDirectionUniform, that.lightPosition);
-    gl.uniform3fv(that.shader.ambientColorUniform, that.ambientColor);
+    var light_position = vec3.create();
+    vec3.transformMat4(light_position,that.light.directional_light,camera.prev_look_at);
+    gl.uniform3fv(that.shader.lightingDirectionUniform, light_position);
+    gl.uniform3fv(that.shader.ambientColorUniform, that.light.ambient_light);
     gl.uniform3fv(that.shader.directionalColorUniform, that.diffuseColor);
   }
 

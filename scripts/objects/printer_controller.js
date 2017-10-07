@@ -1,31 +1,28 @@
-function Panel() {
-  // Objeto actual
-  var object = null;
-  var height = 0;
-  var sweep_angle = 0; // va a recorrer en sentido horario al plano xy 
-
-  var finished = true;
-  var stop_drawing = true;
+function PrinterController(printer) {
+  var printer = printer;
+  var printing = false;
 
   // Comandos
   var _start = function() {
-    if (finished) {
-      // crear objeto
-    }
-    _continue();
+    if (!printing) {
+      printing = true;
+      printer.startPrinting(app);
+    } 
   }
 
-  var _continue = function() {
-    stop_drawing = false;
+  var _resume = function() {
+    printer.resumePrinting();
+    printing = true;
   }
 
   var _stop = function() {
-    stop_drawing = true;
+    printing = false;
+    printer.stopPrinting();
   }
 
   var _cancel = function() {
-    object = null;
-    finished = true;
+    printing = false;
+    printer.discarPrinting();
   }
 
   var app = {
@@ -54,6 +51,8 @@ function Panel() {
     if (angle_controller != null)
       angle_controller.remove();
 
+    app.contour = 1;
+
     contour_controller = configuration.add(app,'contour',possibleContours()).name("Contour");
     contour_controller.updateDisplay();
 
@@ -76,10 +75,10 @@ function Panel() {
   mode_controller.onChange(updatePanel);
 
   var commands = gui.addFolder('Commands');
-  commands.add(app,'start').name('Start');  
+  commands.add(app,'start').name('Start/Resume');  
   commands.add(app,'stop').name('Stop');  
   commands.add(app,'cancel').name('Discard');  
 
 }
 
-var panel = Panel();
+// var panel = Panel();

@@ -14,6 +14,9 @@ function TestScene() {
                         [0.1, 0.1, 0.1]);
   lathe.init();
 
+  var printer = new Printer();
+  var printer_controller = new PrinterController(printer);
+
   this.draw = function() {
     lathe.activateShader();
     
