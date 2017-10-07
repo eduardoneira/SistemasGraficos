@@ -38,6 +38,10 @@ function Printer() {
     object_to_print = null;
   }
 
+  function head_position() {
+    var angle = time;
+  }
+
   this._drawChilds = function() {
     if (object_to_print != null) {
       // set z through t
