@@ -22,7 +22,8 @@ function initShaders() {
 function initScene() {
   camera = new Camera();
   projector = new Projector(basicShaderHandler);
-  scene = new TestScene();
+  // scene = new TestScene();
+  scene = new SceneRicky();
 }
 
 function main() { 
