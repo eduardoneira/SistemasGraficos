@@ -2,9 +2,17 @@
 function CubicBezierCurve(_controlPoints = []) {
 
   this.controlPoints = _controlPoints;
+  var that = this;
 
   if ((this.controlPoints.length - 4) % 3 != 0 ) {
     throw "ERROR: wrong number of control points";
+  } else {
+    this.number_of_curves = (this.controlPoints.length - 4) / 3;
+    this.number_of_curves++; 
+  }
+
+  function usesMultipleCurves() {
+    return this.number_of_curves > 1;
   }
 
   function _transverse_curve(points,t) {
@@ -23,8 +31,8 @@ function CubicBezierCurve(_controlPoints = []) {
   }
   
   function _transverse_normal(points,t) {
-    var a = 6*(points[2] - 2*points[1] - points[0])*(1-t);
-    var b = 6*(points[3] - 2*points[2] - points[1])*t;
+    var a = 6*(points[2] - 2*points[1] + points[0])*(1-t);
+    var b = 6*(points[3] - 2*points[2] + points[1])*t;
     return a+b;
   }
 
@@ -72,19 +80,59 @@ function CubicBezierCurve(_controlPoints = []) {
     return binormal_vect;
   }
 
-  this.travel = function(delta = 0.01) {
+  function calculateLengthByCurve(delta) {
+    var curves_length = []
+    
+    for (var offset = 0; offset + 3 < that.controlPoints.length; offset+=3) {
+      var old_positions_vec;
+      var current_length = 0;
+      
+      for (var t = 0; t <= 1; t += delta) {
+        x = that.controlPoints.slice(offset,offset+4).map(function(value,index){return value[0]});
+        y = that.controlPoints.slice(offset,offset+4).map(function(value,index){return value[1]});
+        z = that.controlPoints.slice(offset,offset+4).map(function(value,index){return value[2]});
 
+        var positions_vec = makePositions(x,y,z,t);
+        
+        if (t > 0) {
+          current_length += vec3.distance(positions_vec,old_positions_vec);
+        }
+
+        old_positions_vec = positions_vec;
+      }
+
+      curves_length.push(current_length)
+    }
+
+    return {
+            curves_length: curves_length,
+            total_length: curves_length.reduce(function(a,b) {return a+b;},0)
+           }
+  }
+
+  function calculateDeltaByCurve(delta) {
+    length_info = calculateLengthByCurve(delta);
+    number_of_points = that.number_of_curves/delta;
+    return length_info.curves_length.map(function(value) { return 1.0/(number_of_points*value/length_info.total_length); });
+  }
+
+  this.travel = function(delta = 0.01) {
     var positions = [];
     var tangents = [];
     var normals = [];  
-    var binormals = []; 
+    var binormals = [];
+
+    deltas = calculateDeltaByCurve(delta);
     
     for (var offset = 0; offset + 3 < this.controlPoints.length; offset+=3) {
       x = this.controlPoints.slice(offset,offset+4).map(function(value,index){return value[0]});
       y = this.controlPoints.slice(offset,offset+4).map(function(value,index){return value[1]});
       z = this.controlPoints.slice(offset,offset+4).map(function(value,index){return value[2]});
- 
-      for (var t = 0; t <= 1; t += delta) {
+
+      for (var t = 0; t < 1 + deltas[offset/3]; t += deltas[offset/3]) {
+        if (t > 1.0) {
+          t = 1.0;
+        }
 
         var positions_vect = makePositions(x,y,z,t);
         concatVectorElems(positions, positions_vect);

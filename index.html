@@ -2,183 +2,64 @@
 <meta content="text/html;charset=UTF-8" http-equiv="Content-Type">
 <meta content="UTF-8" http-equiv="encoding">
 
-<!-- Todos los imports de js files -->
-<script type="text/javascript" src="scripts/gl-matrix.js"></script>
-<script type="text/javascript" src="scripts/object3d.js"></script>
-<script type="text/javascript" src="scripts/utils.js"></script>
-<script type="text/javascript" src="scripts/cylinder.js"></script>
-<script type="text/javascript" src="scripts/scene.js"></script>
-<script type="text/javascript" src="scripts/texture_loader.js"></script>
-<script type="text/javascript" src="scripts/loft.js"></script>
-<script type="text/javascript" src="scripts/loft2.js"></script>
-<script type="text/javascript" src="scripts/uri.js"></script>
-<script type="text/javascript" src="scripts/curve_circle.js"></script>
-<script type="text/javascript" src="scripts/surface_circle.js"></script>
-<script type="text/javascript" src="scripts/cubic_bezier_curve.js"></script>
+<!-- Libs-->
+<script type="text/javascript" src="scripts/lib/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="scripts/lib/jquery-mousewheel.min.js"></script>
+<script type="text/javascript" src="scripts/lib/gl-matrix.js"></script>
+<script type="text/javascript" src="scripts/lib/webgl-utils.js"></script>
+<script type="text/javascript" src="scripts/lib/dat.gui.min.js"></script>
+<!-- Utils files -->
+<script type="text/javascript" src="scripts/utils/texture_loader.js"></script>
+<script type="text/javascript" src="scripts/utils/utils.js"></script>
+<script type="text/javascript" src="scripts/utils/uri.js"></script>
+<script type="text/javascript" src="scripts/utils/shader_helper.js"></script>
+<!-- Objects -->
+<script type="text/javascript" src="scripts/objects/object3d.js"></script>
+<script type="text/javascript" src="scripts/objects/cylinder.js"></script>
+<script type="text/javascript" src="scripts/objects/scene.js"></script>
+<script type="text/javascript" src="scripts/objects/test_scene.js"></script>
+<script type="text/javascript" src="scripts/objects/loft.js"></script>
+<script type="text/javascript" src="scripts/objects/loft2.js"></script>
+<script type="text/javascript" src="scripts/objects/lathe.js"></script>
+<script type="text/javascript" src="scripts/objects/camera.js"></script>
+<script type="text/javascript" src="scripts/objects/projector.js"></script>
+<script type="text/javascript" src="scripts/objects/light.js"></script>
+<script type="text/javascript" src="scripts/objects/printer.js"></script>
+<!-- Curves -->
+<script type="text/javascript" src="scripts/curves/curve_circle.js"></script>
+<script type="text/javascript" src="scripts/curves/cubic_bezier_curve.js"></script>
+<script type="text/javascript" src="scripts/curves/line.js"></script>
+<script type="text/javascript" src="scripts/surfaces/surface_circle.js"></script>
+<!-- Profiles -->
+<script type="text/javascript" src="scripts/profiles/constant_radius_profile.js"></script>
+<script type="text/javascript" src="scripts/profiles/goblet_profile.js"></script>
+<script type="text/javascript" src="scripts/profiles/green_lantern_profile.js"></script>
+<script type="text/javascript" src="scripts/profiles/base1_profile.js"></script>
+<!-- Basic Shader -->
+<script type="text/javascript" src="scripts/shaders/basic_vertex_shader.js"></script>
+<script type="text/javascript" src="scripts/shaders/basic_fragment_shader.js"> </script>
+<script type="text/javascript" src="scripts/shaders/basic_shader_handler.js"></script>
 
 <html>
   <head>
-    <title>66.71 WebGL FrameWork</title>
+    <title>Trabajo Práctico: Sistemas Gráficos</title>
     <style>
       body{ background-color: grey; }
       canvas{ background-color: white; }
-			textarea{ background-color: black; foreground-color: white;}
+      textarea{ background-color: black; foreground-color: white;}
     </style>
-
-    <script id="shader-vs" type="x-shader/x-vertex">
-      attribute vec3 aVertexPosition;
-      attribute vec2 aVertexTextureCoord;
-
-      uniform mat4 uVMMatrix;
-      uniform mat4 uPMatrix;
-
-			varying highp vec2 vTextureCoord;
-
-      void main(void) {
-          gl_Position = uPMatrix * uVMMatrix * vec4(aVertexPosition, 1.0);
-          vTextureCoord = aVertexTextureCoord;
-      }
-    </script>
-
-    <script id="shader-fs" type="x-shader/x-fragment">
-      varying highp vec2 vTextureCoord;
-
-      uniform sampler2D uSampler;
-
-      void main(void) {
-        gl_FragColor = texture2D(uSampler,vTextureCoord);
-      }
-    </script>
-
-    <script>
-      var gl = null,
-          canvas = null,
-          glProgram = null,
-          fragmentShader = null,
-          vertexShader = null,
-					scene = null,
-          t = 0.0;
-
-      var vMatrix = mat4.create();
-      var pMatrix = mat4.create();
-
-      function getShader(gl, id) {
-        var shaderScript, src, currentChild, shader;
-
-        shaderScript = document.getElementById(id);
-        if (!shaderScript) {
-          return null;
-        }
-
-        src = "";
-        currentChild = shaderScript.firstChild;
-        while(currentChild) {
-          if (currentChild.nodeType == currentChild.TEXT_NODE) {
-            src += currentChild.textContent;
-          }
-          currentChild = currentChild.nextSibling;
-        }
-
-        if (shaderScript.type == "x-shader/x-fragment") {
-          shader = gl.createShader(gl.FRAGMENT_SHADER);
-        } else if (shaderScript.type == "x-shader/x-vertex") {
-          shader = gl.createShader(gl.VERTEX_SHADER);
-        } else {
-            return null;
-        }
-
-        gl.shaderSource(shader, src);
-
-        gl.compileShader(shader);  
-          
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {  
-          alert("An error occurred compiling the shaders: " + 
-            gl.getShaderInfoLog(shader));  
-          return null;  
-        }
-          
-        return shader;
-      }
-
-      function initWebGL()
-      {
-        canvas = document.getElementById("my-canvas");  
-        try{
-          gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");                    
-        }catch(e){
-        }
-                        
-        if(gl) {
-          setupWebGL();
-          initShaders();
-          loadAllTextures();
-          scene = new Scene();
-          setInterval(drawScene, 10);  
-        }else {    
-          alert("Error: Your browser does not appear to support WebGL.");
-        }
-      }
-      
-      function setupWebGL() {
-        gl.clearColor(0.1, 0.1, 0.2, 1.0);     
-        gl.enable(gl.DEPTH_TEST);                              
-        gl.depthFunc(gl.LEQUAL); 
-        gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-        
-        gl.viewport(0, 0, canvas.width, canvas.height);
-      }
-      
-      function initShaders() {var fragmentShader = getShader(gl, "shader-fs");
-        var vertexShader = getShader(gl, "shader-vs");
-
-        glProgram = gl.createProgram();
-
-        gl.attachShader(glProgram, vertexShader);
-        gl.attachShader(glProgram, fragmentShader);
-
-        gl.linkProgram(glProgram);
-
-        if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
-          alert("Unable to initialize the shader program: " + gl.getProgramInfoLog(glProgram));
-          return null;
-        }
-
-        gl.useProgram(glProgram);
-      }
-      
-      function makeShader(src, type) {
-        var shader = gl.createShader(type);
-        gl.shaderSource(shader, src);
-        gl.compileShader(shader);
-
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-          alert("Error compiling shader: " + gl.getShaderInfoLog(shader));
-        }
-        return shader;
-      }
-
-      function drawScene() {
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
-        mat4.perspective(pMatrix, 45, 640.0/480.0, 0.1, 100.0);
-        gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
-
-        mat4.identity(vMatrix);
-        mat4.translate(vMatrix, vMatrix, [0.0, 0.0, -5]);
-        
-        t = t + 0.01;
-
-        scene.draw();
-      }
-    </script>
   </head>
-  <body onload="initWebGL()">
-		<center>
-			<h1>Sistemas Gráficos - 66.71</h1>
-			<h2>WebGL - Grilla de vértices</h2>
-			<canvas id="my-canvas" width="1200" height="800">
-			Your browser does not support the HTML5 canvas element.
-			</canvas>
-		</center>
+  <script type="text/javascript" src="scripts/main.js"></script>
+  <body onload="main()">
+    <center>
+      <h1>Trabajo Práctico: Sistemas Gráficos 66.71</h1>
+      <h2>Ricardo Andreasen - Eduardo Neira</h2>
+      <div id="contenedor3d">
+        <script type="text/javascript" src="scripts/objects/printer_controller.js"></script>
+        <canvas id="my-canvas" width="1200" height="800">
+          Your browser does not support the HTML5 canvas element.
+        </canvas>
+      </div>
+    </center>
   </body>
 </html>
