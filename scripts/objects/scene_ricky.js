@@ -23,24 +23,24 @@ function SceneRicky() {
 
   // shape = new Polygon(_shape);
 
-  // var sweep_path = [];
+  var _sweep_path = [];
 
-  // var M = 100;
-  // var r = 1;
-  // for(var i = 0; i < M+1; i++){
-  //   sweep_path.push(r*Math.cos(2*Math.PI*i/M));
-  //   sweep_path.push(r*Math.sin(2*Math.PI*i/M));
-  //   sweep_path.push(0);
-  // }
+  var M = 100;
+  var r = 1;
+  for(var i = 0; i < M+1; i++){
+    _sweep_path.push(r*Math.cos(2*Math.PI*i/M));
+    _sweep_path.push(r*Math.sin(2*Math.PI*i/M));
+    _sweep_path.push(0);
+  }
 
-  var _sweep_path = new SurfaceCircle(1);
-  _sweep_path.discretize(0.1);
+  // var _sweep_path = new SurfaceCircle(1);
+  // _sweep_path.discretize(0.1);
 
-  sweep_path = new Polygon(_sweep_path.positions);
+  sweep_path = new Polygon(_sweep_path);
 
   // End shape as a polygon
 
-   var loft = new Loft(shape, sweep_path, textures["checker"], 0.01, basicShaderHandler, light, [0.1, 0.1, 0.1]);
+   var loft = new Loft(shape, sweep_path, textures["checker"], 0, basicShaderHandler, light, [0.1, 0.1, 0.1]);
    loft.init();
 
   
