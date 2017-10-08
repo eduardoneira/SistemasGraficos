@@ -7,16 +7,21 @@ function Printer(light) {
   var height = 0;
   var deltaHeight = 1;
   var sweep_angle = 0; // va a recorrer en sentido horario al plano xy 
+  var deltaX = 0.2;
+  var deltaY = 0.2;
+  var deltaZ = 0.2;
 
   var lathe_contours = [];
   var loft_contours = [];
 
   var light = light;
+  var traveler = null;
 
   this.startPrinting = function(config) {
     if (config.mode == "Lathe") {
       var profile = new ConstantRadiusProfile(4,20);
       profile.travel(0.01);
+
       object_to_print = new Lathe(profile,
                                   Math.PI/36.0,
                                   textures["checker"],
@@ -25,6 +30,7 @@ function Printer(light) {
                                   [0.1, 0.1, 0.1]
                                   );
       object_to_print.init();
+      traveler = new PrintableTraveler(deltaX,deltaZ,deltaY,object_to_print.position_buffer);
     } else if (config.mode == "Loft") {
       //TODO: ricky
     }
@@ -55,7 +61,7 @@ function Printer(light) {
         sweep_angle = -1.0 * Math.PI;
         height += deltaHeight;
       }
-    }
+    } 
 
     gl.uniform1f(printableObjectShaderHandler.uMaxY,height);
     gl.uniform1f(printableObjectShaderHandler.uDeltaY,deltaHeight);
