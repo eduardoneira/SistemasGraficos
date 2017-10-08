@@ -20,7 +20,7 @@ function Printer(light) {
       object_to_print = new Lathe(profile,
                                   Math.PI/36.0,
                                   textures["checker"],
-                                  printableObjectShaderHandler, // TODO: change shader
+                                  printableObjectShaderHandler,
                                   light,
                                   [0.1, 0.1, 0.1]
                                   );
@@ -47,26 +47,25 @@ function Printer(light) {
 
   function head_position() {
     if (printing) {
-      sweep_angle += time/100.0;
+      sweep_angle += degToRad(5);
       
-      if (sweep_angle > 2*Math.PI) {
-        sweep_angle = 0;
+      if (sweep_angle > Math.PI) {
+        sweep_angle = -1.0 * Math.PI;
         height += deltaHeight;
       }
     }
 
-    gl.uniform1f(printableObjectShaderHandler.uMaxZ,height);
-    gl.uniform1f(printableObjectShaderHandler.uDeltaZ,deltaHeight);
+    gl.uniform1f(printableObjectShaderHandler.uMaxY,height);
+    gl.uniform1f(printableObjectShaderHandler.uDeltaY,deltaHeight);
     gl.uniform1f(printableObjectShaderHandler.uMaxAngle,sweep_angle);
     gl.uniform3fv(printableObjectShaderHandler.uPositionPrinter,[0.0,0.0,0.0]);
   }
 
-  this._drawChilds = function() {
+  this._drawChilds = function(transformations) {
     if (object_to_print != null) {
-      debugger;
       object_to_print.activateShader();
       head_position();
-      object_to_print.draw(mat4.create());
+      object_to_print.draw(transformations);
     }
   }
 

@@ -25,9 +25,8 @@ function TestScene() {
     // mat4.translate(transformations, transformations, [0.0, -6.5, 0.0]);
     // mat4.scale(transformations, transformations, [1.0,1.5,1.0]);
     
-    // projector.applyProjection();
     // lathe.draw(transformations);
-    printer.draw();
+    printer.draw(mat4.create());
   }
 
 }

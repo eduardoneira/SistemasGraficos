@@ -17,6 +17,8 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
   this.light = light;
   this.diffuseColor = diffuseColor;
 
+  this.projector = new Projector(shader);
+
   this.shader = shader;
 
   this.initial_state = mat4.create();
@@ -149,12 +151,12 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
 
   this.draw = function(transformations_parent) {    
     if (this.drawEnabled) {
+      this.projector.applyProjection();
       var mvMatrix = mat4.create();
       mat4.multiply(mvMatrix,transformations_parent,this.initial_state);
       mat4.multiply(mvMatrix,camera.getViewMatrix(),mvMatrix);
       this._draw(mvMatrix);
     }
-
     this._drawChilds(transformations_parent);
   }
 }

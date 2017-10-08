@@ -14,7 +14,6 @@ var deltaTime = 10;
 // var scene = new Scene();  //Usar para la escene posta
 var scene = null;
 var camera = null;
-var projector = null;
 
 function initShaders() {
   basicShaderHandler = new BasicShaderHandler(basic_vertex_shader,
@@ -26,7 +25,6 @@ function initShaders() {
 
 function initScene() {
   camera = new Camera();
-  projector = new Projector(basicShaderHandler);
   scene = new TestScene();
 }
 

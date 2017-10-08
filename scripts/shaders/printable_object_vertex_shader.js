@@ -1,7 +1,7 @@
 // Basic Vertex Shader configuration
 const printable_object_vertex_shader = `
   float atan2(in float y, in float x) {
-    return x == 0.0 ? sign(y)*3.1415926535897932384626433832795/2.0 : atan(y, x);
+   return x == 0.0 ? sign(y)*3.1415926535897932384626433832795/2.0 : atan(y, x);
   }
   
   attribute vec3 aVertexPosition;
@@ -16,8 +16,8 @@ const printable_object_vertex_shader = `
   uniform vec3 uLightPosition;
   uniform vec3 uDirectionalColor;
 
-  uniform float uMaxZ;
-  uniform float uDeltaZ;
+  uniform float uMaxY;
+  uniform float uDeltaY;
   uniform float uMaxAngle;
   uniform vec3  uPositionPrinter;
 
@@ -35,7 +35,7 @@ const printable_object_vertex_shader = `
     vec3 ambientColor = vec3(0.0,0.0,0.0);
     vec3 directionalColor = vec3(0.0,0.0,0.0);
 
-    if (realPosition.z <= uMaxZ || (realPosition.z <= uMaxZ + uDeltaZ && atan2(realPosition.y,realPosition.x) <= uMaxAngle)) {
+    if (realPosition.y <= uMaxY || (realPosition.y <= uMaxY + uDeltaY && atan2(realPosition.x,realPosition.z) <= uMaxAngle)) {
       ambientColor = uAmbientColor;
       directionalColor = uDirectionalColor;
     }
