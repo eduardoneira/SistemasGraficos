@@ -6,8 +6,14 @@ const printable_object_fragment_shader = `
   varying vec3 vLightWeighting;
   uniform sampler2D uSampler;
 
+  varying float vDraw;
+
   void main(void) {
-    vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-    gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+    if (vDraw > 0.0){
+      vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+      gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+    } else {
+      discard;
+    }
   }
 `;

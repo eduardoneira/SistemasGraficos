@@ -22,7 +22,7 @@ function PrinterController(printer) {
 
   var _cancel = function() {
     printing = false;
-    printer.discarPrinting();
+    printer.discardPrinting();
   }
 
   var app = {

@@ -43,6 +43,8 @@ function Printer(light) {
   this.discardPrinting = function() {
     printing = false;
     object_to_print = null;
+    height = 0;
+    sweep_angle = 0;
   }
 
   function head_position() {

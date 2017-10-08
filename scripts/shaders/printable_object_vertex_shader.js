@@ -24,26 +24,23 @@ const printable_object_vertex_shader = `
   varying vec2 vTextureCoord;
   varying vec3 vLightWeighting;
 
+  varying float vDraw;
+
   void main(void) {
     vec4 pos_camera_view = uVMMatrix * vec4(aVertexPosition, 1.0);
     gl_Position = uPMatrix * pos_camera_view; 
     
     vTextureCoord = aTextureCoord;
+    vDraw = 0.0;
 
-    vec3 realPosition = aVertexPosition;
-
-    vec3 ambientColor = vec3(0.0,0.0,0.0);
-    vec3 directionalColor = vec3(0.0,0.0,0.0);
-
-    if (realPosition.y <= uMaxY || (realPosition.y <= uMaxY + uDeltaY && atan2(realPosition.x,realPosition.z) <= uMaxAngle)) {
-      ambientColor = uAmbientColor;
-      directionalColor = uDirectionalColor;
+    if (aVertexPosition.y <= uMaxY || (aVertexPosition.y <= uMaxY + uDeltaY && atan2(aVertexPosition.x,aVertexPosition.z) <= uMaxAngle)) {
+      vDraw = 1.0;
     }
 
     vec3 light_dir =  uLightPosition - vec3(pos_camera_view);
     normalize(light_dir);
     vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
     float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
-    vLightWeighting = ambientColor + directionalColor * directionalLightWeighting;
+    vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
   }
 `;
