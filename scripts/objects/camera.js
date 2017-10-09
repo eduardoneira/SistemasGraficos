@@ -18,7 +18,7 @@ function Camera(radius = 15, speed = 0.003) {
   }  
 
   function position_scene() {
-    return [0.0,0.0,0.0];
+    return [0.0,5.0,0.0];
   }
 
   function position_printer() {
