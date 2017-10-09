@@ -1,9 +1,5 @@
 // Basic Vertex Shader configuration
 const printable_object_vertex_shader = `
-  float atan2(in float y, in float x) {
-   return x == 0.0 ? sign(y)*3.1415926535897932384626433832795/2.0 : atan(y, x);
-  }
-  
   attribute vec3 aVertexPosition;
   attribute vec3 aVertexNormal;
   attribute vec2 aTextureCoord;
@@ -18,8 +14,9 @@ const printable_object_vertex_shader = `
 
   uniform float uMaxY;
   uniform float uDeltaY;
-  uniform float uMaxAngle;
-  uniform vec3  uPositionPrinter;
+  uniform float uMaxX;
+  uniform float uDeltaX;
+  uniform float uMaxZ;
 
   varying vec2 vTextureCoord;
   varying vec3 vLightWeighting;
@@ -33,7 +30,7 @@ const printable_object_vertex_shader = `
     vTextureCoord = aTextureCoord;
     vDraw = 0.0;
 
-    if (aVertexPosition.y <= uMaxY || (aVertexPosition.y <= uMaxY + uDeltaY && atan2(aVertexPosition.x,aVertexPosition.z) <= uMaxAngle)) {
+    if (aVertexPosition.y <= uMaxY || (aVertexPosition.y <= uMaxY + uDeltaY && (aVertexPosition.x <= uMaxX || (aVertexPosition.x <= uMaxX + uDeltaX && aVertexPosition.z <= uMaxZ )))) {
       vDraw = 1.0;
     }
 

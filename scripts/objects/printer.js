@@ -4,18 +4,20 @@ function Printer(light) {
 
   var object_to_print = null;
   var printing = false;
-  var height = 0;
-  var deltaHeight = 1;
-  var sweep_angle = 0; // va a recorrer en sentido horario al plano xy 
-  var deltaX = 0.2;
-  var deltaY = 0.2;
-  var deltaZ = 0.2;
+  var finished = false;
+
+  var curY = -1;
+  var curX = 0;
+  var curZ = 0;
+  var deltaX = 1;
+  var deltaY = 1;
+  var deltaZ = 1;
+  var traveler = null;
 
   var lathe_contours = [];
   var loft_contours = [];
 
   var light = light;
-  var traveler = null;
 
   this.startPrinting = function(config) {
     if (config.mode == "Lathe") {
@@ -30,10 +32,13 @@ function Printer(light) {
                                   [0.1, 0.1, 0.1]
                                   );
       object_to_print.init();
-      traveler = new PrintableTraveler(deltaX,deltaZ,deltaY,object_to_print.position_buffer);
     } else if (config.mode == "Loft") {
       //TODO: ricky
     }
+    
+    traveler = new PrintableTraveler(deltaX,deltaZ,deltaY,object_to_print.position_buffer);
+    var current = traveler.square(curY);
+    var finished = false;
 
     this.resumePrinting();
   }
@@ -47,25 +52,49 @@ function Printer(light) {
   }
 
   this.discardPrinting = function() {
-    printing = false;
     object_to_print = null;
-    height = 0;
-    sweep_angle = 0;
+    printing = false;
+    curY = -1;
+    curX = 0;
+    curZ = 0;
   }
 
   function head_position() {
-    if (printing) {
-      sweep_angle += degToRad(5);
+    if (printing && !finished) {
+      var current;
       
-      if (sweep_angle > Math.PI) {
-        sweep_angle = -1.0 * Math.PI;
-        height += deltaHeight;
+      if (curY == -1) {
+        curY = 0;
+        current = traveler.square(curY);
+        curX = current["minX"];
+        curZ = current["minZ"];
+      } else {
+        current = traveler.square(curY);
+        curZ += deltaZ;
+        
+        if (curZ > current["maxZ"] + deltaZ) {
+          curZ = current["minZ"];
+          curX += deltaX;
+          if (curX > current["maxX"] + deltaX) {
+            curY += deltaY;
+            if (curY > traveler.maxY + deltaY) {
+              finished = true;
+            } else {
+              current = traveler.square(curY);
+              curX = current["minX"];
+              curZ = current["minZ"];
+            }
+          }
+        } 
+        
       }
     } 
 
-    gl.uniform1f(printableObjectShaderHandler.uMaxY,height);
-    gl.uniform1f(printableObjectShaderHandler.uDeltaY,deltaHeight);
-    gl.uniform1f(printableObjectShaderHandler.uMaxAngle,sweep_angle);
+    gl.uniform1f(printableObjectShaderHandler.uMaxY,curY);
+    gl.uniform1f(printableObjectShaderHandler.uDeltaY,deltaY);
+    gl.uniform1f(printableObjectShaderHandler.uMaxX,curX);
+    gl.uniform1f(printableObjectShaderHandler.uDeltaX,deltaX);
+    gl.uniform1f(printableObjectShaderHandler.uMaxZ,curZ);
     gl.uniform3fv(printableObjectShaderHandler.uPositionPrinter,[0.0,0.0,0.0]);
   }
 
