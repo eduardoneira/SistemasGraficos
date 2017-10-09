@@ -1,8 +1,8 @@
 function Scene() {
     var light = new Light([0.5, 0.5, 0.5],[-10.0, 10.0, -10.0]);
 
-    var floor = new Plane( 100,
-                          100,
+    var floor = new Plane(10,
+                          10,
                           textures["floor"],
                           basicShaderHandler,
                           light,
@@ -20,7 +20,7 @@ function Scene() {
 
     // lathe.draw(transformations);
     var floor_transformations = mat4.create();
-    mat4.scale(floor_transformations,floor_transformations,[200.0,0.0,200.0])
+    mat4.scale(floor_transformations,floor_transformations,[5.0,1.0,5.0]);
     floor.activateShader();
     floor.draw(floor_transformations);
   }

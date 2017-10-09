@@ -6,9 +6,9 @@ function Plane(rows, cols, texture, shader, light, diffuseColor) {
   this._createAttributesBuffers = function() {
     for(var j = 0; j < that.cols; j++){
       for(var i = 0; i < that.rows; i++) {
-        this.position_buffer.push((i/that.rows)-0.5);
-        this.position_buffer.push(0);
         this.position_buffer.push((j/that.cols)-0.5);
+        this.position_buffer.push(0);
+        this.position_buffer.push((i/that.rows)-0.5);
 
         this.normal_buffer.push(0);
         this.normal_buffer.push(1);
