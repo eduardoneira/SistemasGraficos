@@ -6,13 +6,14 @@ function Scene() {
                           textures["floor"],
                           basicShaderHandler,
                           light,
-                          [0.1, 0.1, 0.1]
+                          [0.1, 0.1, 0.1],
+                          true
                          );
     floor.init();
 
     var cube = new Cube(10,
                         10,
-                        textures["checker"],
+                        textures["black_texture"],
                         basicShaderHandler,
                         light,
                         [0.05, 0.05, 0.05]
@@ -20,12 +21,12 @@ function Scene() {
 
   this.draw = function() {
     var transformations = mat4.create();
-    mat4.translate(transformations,transformations,[13.0,2.0,0.0]);
+    mat4.scale(transformations,transformations,[2.0,5.0,2.0]);
     cube.draw(transformations);
 
-    // var floor_transformations = mat4.create();
-    // mat4.scale(floor_transformations,floor_transformations,[5.0,1.0,5.0]);
-    // floor.activateShader();
-    // floor.draw(floor_transformations);
+    var floor_transformations = mat4.create();
+    mat4.scale(floor_transformations,floor_transformations,[200.0,1.0,200.0]);
+    floor.activateShader();
+    floor.draw(floor_transformations);
   }
 }
