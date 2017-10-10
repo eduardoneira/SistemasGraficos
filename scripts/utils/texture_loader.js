@@ -5,7 +5,9 @@ function loadAllTextures() {
   textures["cylinder"] = loadTexture("resources/cylinder.jpg");
   textures["checker"] = loadTexture("resources/checker.jpg");
   textures["floor"] = loadTexture("resources/floor_texture.jpg");
-  textures["black_texture"] = loadTexture("resources/black_texture.jpg");
+  textures["black_wood"] = loadTexture("resources/black_texture.jpg");
+  textures["metallic_black"] = loadTexture("resources/metallic_black.jpg");
+  textures["wood"] = loadTexture("resources/wood.png");
 }
 
 function loadTexture(url) {

@@ -1,4 +1,4 @@
-function Printer(light) {
+function Printer(light, texture) {
   Object3D.call(this, null, null, null, null, null, null);
   this.drawEnabled = false;
 
@@ -14,14 +14,23 @@ function Printer(light) {
   var deltaZ = 1;
   var traveler = null;
 
+  var vertical_scale = 2.0;
+
   var lathe_contours = [];
   var loft_contours = [];
 
   var light = light;
+  var shelve = new Shelve(1,
+                          2,
+                          texture,
+                          basicShaderHandler,
+                          light,
+                          [0.1,0.1,0.1],
+                          false);
 
   this.startPrinting = function(config) {
     if (config.mode == "Lathe") {
-      var profile = new ConstantRadiusProfile(4,20);
+      var profile = new ConstantRadiusProfile(2,10);
       profile.travel(0.01);
 
       object_to_print = new Lathe(profile,
@@ -37,8 +46,7 @@ function Printer(light) {
     }
     
     traveler = new PrintableTraveler(deltaX,deltaZ,deltaY,object_to_print.position_buffer);
-    var current = traveler.square(curY);
-    var finished = false;
+    finished = false;
 
     this.resumePrinting();
   }
@@ -99,10 +107,19 @@ function Printer(light) {
   }
 
   this._drawChilds = function(transformations) {
+    var printer_transformations = mat4.create();
+    mat4.scale(printer_transformations,printer_transformations,[1.2,vertical_scale,1.2]);
+    mat4.multiply(printer_transformations,transformations,printer_transformations);
+    shelve.draw(printer_transformations);
+    
     if (object_to_print != null) {
       object_to_print.activateShader();
       head_position();
-      object_to_print.draw(transformations);
+      var object_to_print_transformations = mat4.create();
+      mat4.translate(object_to_print_transformations,object_to_print_transformations,[0.0,vertical_scale*2,0.0]);
+      mat4.scale(object_to_print_transformations,object_to_print_transformations,[1.0/traveler.maxY,1.0/traveler.maxY,1.0/traveler.maxY]);
+      mat4.multiply(object_to_print_transformations,transformations,object_to_print_transformations);
+      object_to_print.draw(object_to_print_transformations);
     }
   }
 
