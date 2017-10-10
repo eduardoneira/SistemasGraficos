@@ -1,8 +1,8 @@
 function Scene() {
     var light = new Light([0.5, 0.5, 0.5],[-10.0, 10.0, -10.0]);
 
-    var floor = new Plane(10,
-                          10,
+    var floor = new Plane(100,
+                          100,
                           textures["floor"],
                           basicShaderHandler,
                           light,
@@ -10,18 +10,22 @@ function Scene() {
                          );
     floor.init();
 
-    this.draw = function() {
-    // lathe.activateShader();
+    var cube = new Cube(10,
+                        10,
+                        textures["checker"],
+                        basicShaderHandler,
+                        light,
+                        [0.05, 0.05, 0.05]
+                       );
 
-    // transformations = mat4.create();
-    // mat4.rotate(transformations, transformations, time, [1.0, 1.0, 0.0]);
-    // mat4.translate(transformations, transformations, [0.0, -6.5, 0.0]);
-    // mat4.scale(transformations, transformations, [1.0,1.5,1.0]);
+  this.draw = function() {
+    var transformations = mat4.create();
+    mat4.translate(transformations,transformations,[13.0,2.0,0.0]);
+    cube.draw(transformations);
 
-    // lathe.draw(transformations);
-    var floor_transformations = mat4.create();
-    mat4.scale(floor_transformations,floor_transformations,[5.0,1.0,5.0]);
-    floor.activateShader();
-    floor.draw(floor_transformations);
+    // var floor_transformations = mat4.create();
+    // mat4.scale(floor_transformations,floor_transformations,[5.0,1.0,5.0]);
+    // floor.activateShader();
+    // floor.draw(floor_transformations);
   }
 }

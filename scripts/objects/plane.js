@@ -1,5 +1,5 @@
 function Plane(rows, cols, texture, shader, light, diffuseColor) {
-  Object3D.call(this, rows, cols, texture, shader, light, diffuseColor);
+  Object3D.call(this, rows+1, cols+1, texture, shader, light, diffuseColor);
   var that = this;
 
 
