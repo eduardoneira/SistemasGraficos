@@ -18,3 +18,7 @@ function degToRad(degrees) {
 function generateArrayAlpha(n) {
   return Array.from({length: n},(v,k) => k+1);
 }
+
+function getPositionMat4(matrix) {
+  return matrix.slice(12,15);
+}

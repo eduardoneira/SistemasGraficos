@@ -15,6 +15,7 @@ function Printer(light, texture) {
   var traveler = null;
 
   var vertical_scale = 2.0;
+  var initial_position_printed_object = [0.0,2*vertical_scale,0.0];
 
   var lathe_contours = [];
   var loft_contours = [];
@@ -119,6 +120,8 @@ function Printer(light, texture) {
       mat4.translate(object_to_print_transformations,object_to_print_transformations,[0.0,vertical_scale*2,0.0]);
       mat4.scale(object_to_print_transformations,object_to_print_transformations,[1.0/traveler.maxY,1.0/traveler.maxY,1.0/traveler.maxY]);
       mat4.multiply(object_to_print_transformations,transformations,object_to_print_transformations);
+
+      vec3.add(this.position,initial_position_printed_object,getPositionMat4(object_to_print_transformations));
       object_to_print.draw(object_to_print_transformations);
     }
   }
