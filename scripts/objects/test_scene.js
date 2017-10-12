@@ -1,32 +1,24 @@
 function TestScene() {
   var light = new Light([0.5, 0.5, 0.5],[-10.0, 10.0, -10.0]);
 
-  // var delta = 0.01;
+  var trapezoid = new Trapezoid3D(20,
+                                  20,
+                                  0.5,
+                                  0.5,
+                                  textures["checker"],
+                                  basicShaderHandler,
+                                  light,
+                                  [0.05,0.05,0.05],
+                                  false
+                                  );
   
-  // var profile = new ConstantRadiusProfile(4,20);
-  // profile.travel(delta);
-
-  // var lathe = new Lathe(profile,
-  //                       Math.PI/18.0,
-  //                       textures["checker"],
-  //                       basicShaderHandler,
-  //                       light,
-  //                       [0.1, 0.1, 0.1]);
-  // lathe.init();
-
-  var printer = new Printer(light);
-  var printer_controller = new PrinterController(printer);
-
+  // trapezoid.init();
+  
   this.draw = function() {
-    // lathe.activateShader();
-    
-    // transformations = mat4.create();
-    // mat4.rotate(transformations, transformations, time, [1.0, 1.0, 0.0]);
-    // mat4.translate(transformations, transformations, [0.0, -6.5, 0.0]);
-    // mat4.scale(transformations, transformations, [1.0,1.5,1.0]);
-    
-    // lathe.draw(transformations);
-    printer.draw(mat4.create());
+    // trapezoid.activateShader();
+    var transformations = mat4.create();
+    mat4.scale(transformations,transformations,[20.0,1.0,20.0]);
+    trapezoid.draw(transformations);
   }
 
 }
