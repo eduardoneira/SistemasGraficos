@@ -17,9 +17,9 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
 
   this.draw = function(transformations) {
     var x = 0.0;
+    vec3.add(this.position,initial_position,getPositionMat4(transformations));
+    
     shelves.forEach( function(shelve, index) {
-      vec3.add(this.position,initial_position,getPositionMat4(transformations));
-
       var shelves_transformations = mat4.create();
       mat4.translate(shelves_transformations,shelves_transformations,[index,0.0,0.0]);
       mat4.multiply(shelves_transformations,transformations,shelves_transformations);
