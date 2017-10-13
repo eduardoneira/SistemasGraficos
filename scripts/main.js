@@ -4,6 +4,7 @@ var canvas = null;
 
 // Shaders
 var basicShaderHandler = null;
+var printableObjectShaderHandler = null;
 
 // Global time variables
 var time = 0;
@@ -13,17 +14,18 @@ var deltaTime = 10;
 // var scene = new Scene();  //Usar para la escene posta
 var scene = null;
 var camera = null;
-var projector = null;
 
 function initShaders() {
-  basicShaderHandler = new BasicShaderHandler();
+  basicShaderHandler = new BasicShaderHandler(basic_vertex_shader,
+                                              basic_fragment_shader);
+  
+  printableObjectShaderHandler = new PrintableObjectShaderHandler(printable_object_vertex_shader,
+                                                                  printable_object_fragment_shader);
 }
 
 function initScene() {
   camera = new Camera();
-  projector = new Projector(basicShaderHandler);
-  // scene = new TestScene();
-  scene = new SceneRicky();
+  scene = new Scene();
 }
 
 function main() { 

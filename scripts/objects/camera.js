@@ -18,7 +18,7 @@ function Camera(radius = 15, speed = 0.003) {
   }  
 
   function position_scene() {
-    return [0.0,0.0,0.0];
+    return [0.0,5.0,0.0];
   }
 
   function position_printer() {
@@ -26,7 +26,7 @@ function Camera(radius = 15, speed = 0.003) {
   }
 
   function position_bookcase() {
-    return [-20.0,-20.0,10.0];
+    return [-2.5,5.0,-10.0];
   }
 
   //TODO: Add listener to robot position
@@ -62,7 +62,7 @@ function Camera(radius = 15, speed = 0.003) {
   $('#contenedor3d').mousewheel(function(event) {
     that.mouse_wheel_triggered = true;
     if (event.deltaY > 0) {
-      if (that.radius > 1){
+      if (that.radius > 0){
         that.radius -= 0.5;   
       }
     } else {
@@ -72,6 +72,16 @@ function Camera(radius = 15, speed = 0.003) {
 
   $('body').on("keydown",function(event){
     var key_pressed = event.key;
+
+    if (key_pressed == "+") {
+      that.radius -= 0.5;
+      that.mouse_wheel_triggered = true;
+    }
+
+    if (key_pressed == "-") {
+      that.radius += 0.5;
+      that.mouse_wheel_triggered = true;
+    }
 
     if (that.modes[key_pressed] != undefined && key_pressed != that.current_mode) {
       that.current_mode = key_pressed;

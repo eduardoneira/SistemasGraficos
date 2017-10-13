@@ -1,26 +1,54 @@
-function Printer() {
+function Printer(light, texture) {
   Object3D.call(this, null, null, null, null, null, null);
+  this.drawEnabled = false;
 
   var object_to_print = null;
   var printing = false;
-  var height = 0;
-  var sweep_angle = 0; // va a recorrer en sentido horario al plano xy 
+  var finished = false;
+
+  var curY = -1;
+  var curX = 0;
+  var curZ = 0;
+  var deltaX = 1;
+  var deltaY = 1;
+  var deltaZ = 1;
+  var traveler = null;
+
+  var vertical_scale = 2.0;
+  var initial_position_printed_object = [0.0,2*vertical_scale,0.0];
+  this.position = [];
 
   var lathe_contours = [];
   var loft_contours = [];
 
+  var light = light;
+  var shelve = new Shelve(1,
+                          2,
+                          texture,
+                          basicShaderHandler,
+                          light,
+                          [0.1,0.1,0.1],
+                          false);
+
   this.startPrinting = function(config) {
     if (config.mode == "Lathe") {
-      object_to_print = new Lathe(lathe_contours[config.contour],
+      var profile = new ConstantRadiusProfile(2,10);
+      profile.travel(0.01);
+
+      object_to_print = new Lathe(profile,
                                   Math.PI/36.0,
                                   textures["checker"],
-                                  basicShaderHandler, // TODO: change shader
+                                  printableObjectShaderHandler,
                                   light,
                                   [0.1, 0.1, 0.1]
-                                  )
+                                  );
+      object_to_print.init();
     } else if (config.mode == "Loft") {
       //TODO: ricky
     }
+    
+    traveler = new PrintableTraveler(deltaX,deltaZ,deltaY,object_to_print.position_buffer);
+    finished = false;
 
     this.resumePrinting();
   }
@@ -34,18 +62,68 @@ function Printer() {
   }
 
   this.discardPrinting = function() {
-    printing = false;
     object_to_print = null;
+    printing = false;
+    curY = -1;
+    curX = 0;
+    curZ = 0;
   }
 
   function head_position() {
-    var angle = time;
+    if (printing && !finished) {
+      var current;
+      
+      if (curY == -1) {
+        curY = 0;
+        current = traveler.square(curY);
+        curX = current["minX"];
+        curZ = current["minZ"];
+      } else {
+        current = traveler.square(curY);
+        curZ += deltaZ;
+        
+        if (curZ > current["maxZ"] + deltaZ) {
+          curZ = current["minZ"];
+          curX += deltaX;
+          if (curX > current["maxX"] + deltaX) {
+            curY += deltaY;
+            if (curY > traveler.maxY + deltaY) {
+              finished = true;
+            } else {
+              current = traveler.square(curY);
+              curX = current["minX"];
+              curZ = current["minZ"];
+            }
+          }
+        } 
+        
+      }
+    } 
+
+    gl.uniform1f(printableObjectShaderHandler.uMaxY,curY);
+    gl.uniform1f(printableObjectShaderHandler.uDeltaY,deltaY);
+    gl.uniform1f(printableObjectShaderHandler.uMaxX,curX);
+    gl.uniform1f(printableObjectShaderHandler.uDeltaX,deltaX);
+    gl.uniform1f(printableObjectShaderHandler.uMaxZ,curZ);
+    gl.uniform3fv(printableObjectShaderHandler.uPositionPrinter,[0.0,0.0,0.0]);
   }
 
-  this._drawChilds = function() {
+  this._drawChilds = function(transformations) {
+    var printer_transformations = mat4.create();
+    mat4.scale(printer_transformations,printer_transformations,[1.2,vertical_scale,1.2]);
+    mat4.multiply(printer_transformations,transformations,printer_transformations);
+    shelve.draw(printer_transformations);
+    
     if (object_to_print != null) {
-      // set z through t
-      object_to_print.draw(mat4.create());
+      object_to_print.activateShader();
+      head_position();
+      var object_to_print_transformations = mat4.create();
+      mat4.translate(object_to_print_transformations,object_to_print_transformations,[0.0,vertical_scale*2,0.0]);
+      mat4.scale(object_to_print_transformations,object_to_print_transformations,[1.0/traveler.maxY,1.0/traveler.maxY,1.0/traveler.maxY]);
+      mat4.multiply(object_to_print_transformations,transformations,object_to_print_transformations);
+      
+      vec3.add(this.position,initial_position_printed_object,getPositionMat4(object_to_print_transformations));
+      object_to_print.draw(object_to_print_transformations);
     }
   }
 

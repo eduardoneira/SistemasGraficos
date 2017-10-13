@@ -17,6 +17,8 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
   this.light = light;
   this.diffuseColor = diffuseColor;
 
+  this.projector = new Projector(shader);
+
   this.shader = shader;
 
   this.initial_state = mat4.create();
@@ -144,20 +146,17 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
     gl.uniformMatrix3fv(this.shader.nMatrixUniform, false, nMatrix);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-    // debugger;
     gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
   }
 
   this.draw = function(transformations_parent) {    
-    // debugger;
     if (this.drawEnabled) {
-      // debugger;
+      this.projector.applyProjection();
       var mvMatrix = mat4.create();
       mat4.multiply(mvMatrix,transformations_parent,this.initial_state);
       mat4.multiply(mvMatrix,camera.getViewMatrix(),mvMatrix);
       this._draw(mvMatrix);
     }
-
     this._drawChilds(transformations_parent);
   }
 }

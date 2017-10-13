@@ -38,3 +38,7 @@ function makeTransformMatrix(tangent, normal, binormal, curr_vert){
 
   return transform_matrix;
 }
+
+function getPositionMat4(matrix) {
+  return matrix.slice(12,15);
+}

@@ -9,28 +9,30 @@ const printable_object_vertex_shader = `
   uniform mat3 uNMatrix;
 
   uniform vec3 uAmbientColor;
-
   uniform vec3 uLightPosition;
   uniform vec3 uDirectionalColor;
 
+  uniform float uMaxY;
+  uniform float uDeltaY;
+  uniform float uMaxX;
+  uniform float uDeltaX;
   uniform float uMaxZ;
-  uniform float uMaxDrawingAngle;
 
   varying vec2 vTextureCoord;
   varying vec3 vLightWeighting;
 
-  varying bool draw;
+  varying float vDraw;
 
   void main(void) {
     vec4 pos_camera_view = uVMMatrix * vec4(aVertexPosition, 1.0);
     gl_Position = uPMatrix * pos_camera_view; 
     
     vTextureCoord = aTextureCoord;
+    vDraw = 0.0;
 
-    if (aVertexPosition.z < uMaxZ) {
-
+    if (aVertexPosition.y <= uMaxY || (aVertexPosition.y <= uMaxY + uDeltaY && (aVertexPosition.x <= uMaxX || (aVertexPosition.x <= uMaxX + uDeltaX && aVertexPosition.z <= uMaxZ )))) {
+      vDraw = 1.0;
     }
-    vMaxAngle = uMaxDrawingAngle;
 
     vec3 light_dir =  uLightPosition - vec3(pos_camera_view);
     normalize(light_dir);
