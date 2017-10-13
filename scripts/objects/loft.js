@@ -151,22 +151,38 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 			//Empieza el "main"
 
 		// for(var j = 0; j < sweep_path.length - 2; j+=3){
-		for(var j = 0; j < sweep_path.length; j++){
+		for(var j = 0; j < sweep_path.length; j+=3){
 			var tangent, normal, binormal;
 			var curr_vert, prev_vert, next_vert;
 
 			if(j === 0){
-				curr_vert = vec3.fromValues(sweep_path.points[3*j], 
-																		sweep_path.points[3*j+1], 
-																		sweep_path.points[3*j+2]);
+				// debugger;
+				if(sweep_path.closed === true){
+					curr_vert = vec3.fromValues(sweep_path.points[3*j], 
+																			sweep_path.points[3*j+1], 
+																			sweep_path.points[3*j+2]);
 
-				prev_vert = vec3.fromValues(sweep_path.points[3*(j+2)], 
-																		sweep_path.points[3*(j+2)+1], 
-																		sweep_path.points[3*(j+2)+2]);
+					prev_vert = vec3.fromValues(sweep_path.points[sweep_path.points.length-3],
+																			sweep_path.points[sweep_path.points.length-2], 
+																			sweep_path.points[sweep_path.points.length-1]);
 
-				next_vert = vec3.fromValues(sweep_path.points[3*(j+1)], 
-																		sweep_path.points[3*(j+1)+1], 
-																		sweep_path.points[3*(j+1)+2]);
+					next_vert = vec3.fromValues(sweep_path.points[3*(j+1)], 
+																			sweep_path.points[3*(j+1)+1], 
+																			sweep_path.points[3*(j+1)+2]);
+				}
+				else{
+					curr_vert = vec3.fromValues(sweep_path.points[3*j], 
+																			sweep_path.points[3*j+1], 
+																			sweep_path.points[3*j+2]);
+
+					prev_vert = vec3.fromValues(sweep_path.points[3*(j+2)], 
+																			sweep_path.points[3*(j+2)+1], 
+																			sweep_path.points[3*(j+2)+2]);
+
+					next_vert = vec3.fromValues(sweep_path.points[3*(j+1)], 
+																			sweep_path.points[3*(j+1)+1], 
+																			sweep_path.points[3*(j+1)+2]);
+				}
 
 			}
 			else{
@@ -218,6 +234,9 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 				that.texture_buffer.push(j/that.cols*4);
 			}
 		}
+
+		// debugger
+
 	}
 
 	that._resetState = function() {
