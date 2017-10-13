@@ -47,7 +47,7 @@ function SceneRicky() {
 
   // End shape as a polygon
 
-   var loft = new Loft(shape, sweep_path, textures["checker"], 0.1, basicShaderHandler, light, [0.1, 0.1, 0.1]);
+   var loft = new Loft(shape, sweep_path, textures["checker"], 0, basicShaderHandler, light, [0.1, 0.1, 0.1]);
    loft.init();
 
   
