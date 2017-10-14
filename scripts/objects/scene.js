@@ -34,7 +34,6 @@ function Scene() {
 
     var floor_transformations = mat4.create();
     mat4.scale(floor_transformations,floor_transformations,[200.0,1.0,200.0]);
-    floor.activateShader();
     floor.draw(floor_transformations);
   }
 }

@@ -28,21 +28,27 @@ function Trapezoid3D(rows, cols, shrink_length_factor, shrink_width_factor,textu
   this.childs[1].translate([0.0,1.0,0.0]);
   this.childs[1].scale([shrink_width_factor,1.0,shrink_length_factor]);
 
-  // atan1/(1 - shrink_length_factor)
+  var angle_length = Math.atan(1/(1 - shrink_length_factor));
+  var scale_length = Math.sqrt(1 + (shrink_length_factor*shrink_length_factor));
 
-  // this.childs[2] = new Trapezoid( rows,
-  //                                 cols,
-  //                                 shrink_length_factor,
-  //                                 texture,
-  //                                 shader,
-  //                                 light,
-  //                                 diffuseColor,
-  //                                 repeatTexture
-  //                               );
-  // this.childs[2].init();
-  
-  // this.childs[2].translate([0.0,1.0,0.0]);
+  var angle_width = Math.atan(1/(1 - shrink_width_factor));
 
+  this.childs[2] = new Trapezoid( rows,
+                                  cols,
+                                  shrink_length_factor,
+                                  texture,
+                                  shader,
+                                  light,
+                                  diffuseColor,
+                                  repeatTexture
+                                );
+  this.childs[2].init();
+
+  this.childs[2].translate([1.0,0.0,0.0]);
+  this.childs[2].rotate(-Math.atan(angle_length),[0.0,0.0,1.0]);
+  this.childs[2].scale([scale_length,1.0,scale_length]);
+  this.childs[2].translate([-0.5,0.0,0.0]);
+  this.childs[2].rotate(degToRad(270),[0.0,1.0,0.0]);
     
   // this.childs[2].rotate(degToRad(90),[0.0,0.0,-1.0]);
   // this.childs[2].translate([-0.5,0.5,0.0]);
@@ -63,8 +69,8 @@ function Trapezoid3D(rows, cols, shrink_length_factor, shrink_width_factor,textu
     this.childs[1].activateShader();
     this.childs[1].draw(transformations);
     
-    // this.childs[2].activateShader();
-    // this.childs[2].draw(transformations);
+    this.childs[2].activateShader();
+    this.childs[2].draw(transformations);
     
     // this.childs[3].activateShader();
     // this.childs[3].draw(transformations);

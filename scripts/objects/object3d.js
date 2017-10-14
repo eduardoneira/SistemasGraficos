@@ -151,6 +151,7 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
 
   this.draw = function(transformations_parent) {    
     if (this.drawEnabled) {
+      this.activateShader();
       this.projector.applyProjection();
       var mvMatrix = mat4.create();
       mat4.multiply(mvMatrix,transformations_parent,this.initial_state);
