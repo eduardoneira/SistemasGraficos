@@ -32,22 +32,16 @@ function Cube(rows, cols, texture, shader, light, diffuseColor,repeatTexture) {
   this.childs[5].translate([0.0,1.0,0.0]);
 
   this._drawChilds = function(transformations) {
-    this.childs[0].activateShader();
     this.childs[0].draw(transformations);
     
-    this.childs[1].activateShader();
     this.childs[1].draw(transformations);
     
-    this.childs[2].activateShader();
     this.childs[2].draw(transformations);
     
-    this.childs[3].activateShader();
     this.childs[3].draw(transformations);
     
-    this.childs[4].activateShader();
     this.childs[4].draw(transformations);
     
-    this.childs[5].activateShader();
     this.childs[5].draw(transformations);
   }
 

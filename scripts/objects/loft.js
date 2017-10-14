@@ -1,16 +1,7 @@
-/*
-* shape debe ser un surface
-* sweep_path deber ser un curve
-*/
-
 function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor){
 
 	var rows = shape.positions.length/2;
 	var cols = sweep_path.length/3 + 1;
-
-	// if(sweep_path.closed){
-	// 	cols += 1;
-	// }
 
 	Object3D.call(this,rows,cols,texture, shader, light, diffuseColor);
 	var that = this;
