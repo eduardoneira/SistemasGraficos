@@ -20,6 +20,8 @@ function SceneRicky() {
 
   var shape = new SurfaceCircle(0.3);
   shape.discretize(0.1);
+  // var shape = new Tire1Profile();
+  // shape.travel(0.1);
 
   // console.log("hello");
 
@@ -37,7 +39,6 @@ function SceneRicky() {
     _sweep_path.push(0);
   }
 
-  // debugger;
 
   // var _sweep_path = new SurfaceCircle(1);
   // _sweep_path.discretize(0.1);
@@ -62,7 +63,6 @@ function SceneRicky() {
     // mat4.translate(transformations, transformations, [0.0, -6.5, 0.0]);
     // mat4.scale(transformations, transformations, [5.0,5.0,5.0]);
     
-    projector.applyProjection();
     // debugger;
     loft.draw(transformations);
   }

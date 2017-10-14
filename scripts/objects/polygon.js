@@ -39,7 +39,7 @@ function Polygon(points, closed=false){
 	}
 
 
-	for(var j = 0; j < this.points.length - 2; j+=3){
+	for(var j = 0; j < this.points.length - 5; j+=3){
 
 		var tangent, normal, binormal;
 		var curr_vert, prev_vert, next_vert;
@@ -75,7 +75,6 @@ function Polygon(points, closed=false){
 
 		}
 		else{
-
 			curr_vert = vec3.fromValues(this.points[j], this.points[j+1], this.points[j+2]);
 			prev_vert = vec3.fromValues(this.points[j-3], this.points[j-2], this.points[j-1]);
 			next_vert = vec3.fromValues(this.points[j+3], this.points[j+4], this.points[j+5]);
@@ -88,5 +87,9 @@ function Polygon(points, closed=false){
 		concatVectorElems(this.binormals, binormal);
 
 	}
+
+	concatVectorElems(this.tangents, tangent);
+	concatVectorElems(this.normals, normal);
+	concatVectorElems(this.binormals, binormal);
 
 }
