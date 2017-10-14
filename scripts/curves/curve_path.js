@@ -5,11 +5,7 @@ function CurvePath(control_points){
 	this.normals = [];
 	this.binormals = [];
 
-	var _bezier_curve;
-
-	function _init(){
-		_bezier_curve = new CubicBezierCurve(control_points);
-	}
+	var _bezier_curve = new CubicBezierCurve(control_points);
 
 	this.travel = function(delta){
 		var points = _bezier_curve.travel(delta);
