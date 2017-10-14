@@ -20,9 +20,9 @@ function TriangleSurface() {
   var triangle = new CubicBezierCurve(control_points);
 
   this.discretize = function(delta) {
-    triangle.travel(delta);
-      
-    var polygon = new Polygon(triangle.positions);
+    data = triangle.travel(delta);
+          
+    var polygon = new Polygon(data.positions);
 
     this.positions = polygon.points.filter(
       function(element,index) {

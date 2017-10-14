@@ -1,8 +1,10 @@
-function TriangleLoft(texture) {
-  var line = new CurvePath( [0.0,0.0,0.0],
+function TriangleLoft(texture, shader, light, diffuseColor) {
+  var line = new CurvePath( [[0.0,0.0,0.0],
                             [1.0,0.0,0.0],
                             [3.0,0.0,0.0],
-                            [4.0,0.0,0.0])
+                            [4.0,0.0,0.0]]);
+
+  line.travel(0.01);
 
   var shape = new TriangleSurface();
   shape.discretize(0.01);  
@@ -11,11 +13,16 @@ function TriangleLoft(texture) {
 
   var loft = new Loft(shape, 
                       sweep_path, 
-                      textures["checker"], 
+                      texture, 
                       0, 
-                      basicShaderHandler, 
+                      shader, 
                       light, 
-                      [0.1, 0.1, 0.1]);
+                      diffuseColor);
   loft.init();
+  debugger;
+
+  this.draw = function(transformations) {
+    loft.draw(transformations);
+  }
 
 }
