@@ -1,4 +1,4 @@
-function TriangleSurface() {
+function SemiCircleSurface() {
   this.positions = [];
   this.normals = [];
 
@@ -9,11 +9,7 @@ function TriangleSurface() {
   control_points.push([1.0,0.0,0.0]);
   control_points.push([2.0,0.0,0.0]);
   
-  control_points.push([1.0,1.0,0.0]);
-  control_points.push([1.0,1.0,0.0]);
-  control_points.push([0.0,2.0,0.0]);
-
-  control_points.push([0.0,1.0,0.0]);
+  control_points.push([2.0,1.0,0.0]);
   control_points.push([0.0,1.0,0.0]);
   control_points.push([0.0,0.0,0.0]);
 
@@ -27,18 +23,15 @@ function TriangleSurface() {
         return (index-2) % 3;
       });
 
-    for (var i = 0; i < this.positions.length; i+=2) {
-      if (this.positions[i+1] == 0) {
-        this.normals.push(0);
-        this.normals.push(-1);
-      } else if (this.positions[i] == 0) {
-        this.normals.push(-1);
-        this.normals.push(0);
-      } else {
-        this.normals.push(1);
-        this.normals.push(1);
-      }
-    }
-  }
+    var normals = data.tangents.filter(
+      function(element,index) {
+        return (index-2) % 3;
+      });
 
+    for (var i = 0; i < normals.length; i+=2) {
+      this.normals.push(normals[i+1]);
+      this.normals.push(-normals[i]);
+    }
+
+  }
 }

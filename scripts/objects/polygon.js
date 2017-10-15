@@ -17,8 +17,6 @@ function Polygon(points, closed=false){
 	this.length = this.points.length/3;
 	this.closed = closed;
 
-	// debugger;
-
 	function makeTgNorBi(){
 		//Deben existir:
 		//tangent, normal, binormal, 
@@ -32,6 +30,11 @@ function Polygon(points, closed=false){
 
 		binormal = vec3.create();
 		vec3.cross(binormal, tangent, normal);
+
+		if (vec3.length(binormal) == 0.0) {
+			normal = vec3.fromValues(tangent[1],tangent[2],tangent[0]);
+			vec3.cross(binormal, tangent, normal);
+		}
 
 		vec3.normalize(tangent, tangent);
 		vec3.normalize(normal, normal);

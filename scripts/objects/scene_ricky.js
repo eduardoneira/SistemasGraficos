@@ -58,7 +58,7 @@ function SceneRicky() {
     
     transformations = mat4.create();
     
-    mat4.rotate(transformations, transformations, time, [0.0, 1.0, 0.0]);
+    mat4.rotate(transformations, transformations, time, [1.0, 1.0, 0.0]);
     mat4.rotate(transformations, transformations, 90, [0.0, 0.0, 1.0]);
     // mat4.translate(transformations, transformations, [0.0, -6.5, 0.0]);
     // mat4.scale(transformations, transformations, [5.0,5.0,5.0]);

@@ -1,9 +1,14 @@
-function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor){
+function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor, close = false){
 
 	var rows = shape.positions.length/2;
 	var cols = sweep_path.length;
+	
 	if (sweep_path.closed){
 		cols += 1;
+	}
+
+	if (close) {
+		cols += 2;
 	}
 
 	// debugger;
@@ -13,6 +18,7 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 	that.sweep_path = sweep_path;
 	that.shape = shape;
 	that.twist = twist;
+	that.close = close;
 
 	this._createAttributesBuffers = function(){
 
@@ -58,7 +64,17 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 			}
 		}
 
-			//Empieza el "main"
+		if (that.close) {
+			for(var i = 0; i < that.shape.positions.length/2; i++) {
+				that.position_buffer.push(sweep_path.points[0]); 
+				that.position_buffer.push(sweep_path.points[1]); 
+				that.position_buffer.push(sweep_path.points[2]);
+
+				that.normal_buffer.push(-sweep_path.tangents[0]); 
+				that.normal_buffer.push(-sweep_path.tangents[1]); 
+				that.normal_buffer.push(-sweep_path.tangents[2]); 
+			}
+		}
 
 		// for(var j = 0; j < sweep_path.length - 2; j+=3){
 		for(var j = 0; j < sweep_path.length; j+=1){
@@ -131,24 +147,33 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 			transformShape();
 			transformShapeNormals();
 
-			// debugger;
-
 			new_shape.forEach(function(elem){
 				that.position_buffer.push(elem);
 			})
 
-			// debugger;
-
 			new_shape_normals.forEach(function(elem){
 				that.normal_buffer.push(elem);
 			})
-
 		}
+
+		if (that.close) {
+			for(var i = 0; i < that.shape.positions.length/2; i++) {
+				that.position_buffer.push(sweep_path.points[sweep_path.points.length-3]); 
+				that.position_buffer.push(sweep_path.points[sweep_path.points.length-2]); 
+				that.position_buffer.push(sweep_path.points[sweep_path.points.length-1]);
+
+				that.normal_buffer.push(sweep_path.tangents[sweep_path.points.length-3]); 
+				that.normal_buffer.push(sweep_path.tangents[sweep_path.points.length-2]); 
+				that.normal_buffer.push(sweep_path.tangents[sweep_path.points.length-1]); 
+			}
+		}
+
+		debugger;
 
 		for(j = 0; j < that.cols; j++){
 			for(i = 0; i < that.rows; i++){
 				that.texture_buffer.push(i/that.rows);
-				that.texture_buffer.push(j/(that.cols)*4);
+				that.texture_buffer.push(j/that.cols);
 			}
 		}
 	}

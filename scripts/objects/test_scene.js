@@ -1,26 +1,15 @@
 function TestScene() {
   var light = new Light([0.5, 0.5, 0.5],[-10.0, 10.0, -10.0]);
 
-  // var triangle = new TriangleRectangle( 20,
-  //                                       20,
-  //                                       textures["checker"],
-  //                                       basicShaderHandler,
-  //                                       light,
-  //                                       [0.05,0.05,0.05],
-  //                                       false
-  //                                       );
-  
-  // triangle.init();
-  
-  var triangleLoft = new TriangleLoft(textures["checker"],
-                                      basicShaderHandler,
+  var robot_hand = new RobotBaseHand( textures["checker"],
                                       light,
                                       [0.1, 0.1, 0.1]);
 
   this.draw = function() {
     var transformations = mat4.create();
-    // mat4.scale(transformations,transformations,[20.0,1.0,20.0]);
-    triangleLoft.draw(transformations);
+    // mat4.rotate(transformations,transformations,time,[1.0,1.0,0.0]);
+    mat4.translate(transformations,transformations,[0.0,5.0,0.0]);
+    robot_hand.draw(transformations);
   }
 
 }

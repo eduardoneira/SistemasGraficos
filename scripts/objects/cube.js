@@ -1,4 +1,4 @@
-function Cube(rows, cols, texture, shader, light, diffuseColor,repeatTexture) {
+function Cube(rows, cols, texture, shader, light, diffuseColor, repeatTexture, hollow = false) {
   Object3D.call(this, null, null, null, null, null);
   this.drawEnabled = false;
   var that = this;
@@ -34,14 +34,16 @@ function Cube(rows, cols, texture, shader, light, diffuseColor,repeatTexture) {
   this._drawChilds = function(transformations) {
     this.childs[0].draw(transformations);
     
-    this.childs[1].draw(transformations);
+
     
-    this.childs[2].draw(transformations);
-    
-    this.childs[3].draw(transformations);
-    
+    if (!hollow){
+      this.childs[1].draw(transformations);
+      this.childs[2].draw(transformations);
+    }
+
+    this.childs[3].draw(transformations);      
     this.childs[4].draw(transformations);
-    
+
     this.childs[5].draw(transformations);
   }
 
