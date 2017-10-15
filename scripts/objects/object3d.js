@@ -150,6 +150,7 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
   }
 
   this.draw = function(transformations_parent) {    
+    // debugger;
     if (this.drawEnabled) {
       this.activateShader();
       this.projector.applyProjection();

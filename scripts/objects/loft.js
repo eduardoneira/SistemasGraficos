@@ -1,7 +1,12 @@
 function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor){
 
 	var rows = shape.positions.length/2;
-	var cols = sweep_path.length/3 + 1;
+	var cols = sweep_path.length;
+	if (sweep_path.closed){
+		cols += 1;
+	}
+
+	// debugger;
 
 	Object3D.call(this,rows,cols,texture, shader, light, diffuseColor);
 	var that = this;
@@ -56,7 +61,7 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 			//Empieza el "main"
 
 		// for(var j = 0; j < sweep_path.length - 2; j+=3){
-		for(var j = 0; j < sweep_path.length; j+=3){
+		for(var j = 0; j < sweep_path.length; j+=1){
 			var tangent, normal, binormal;
 			var curr_vert, prev_vert, next_vert;
 
@@ -78,6 +83,9 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
      			                       sweep_path.binormals[3*j+1],
      			                       sweep_path.binormals[3*j+2]);
 
+			// if (j == 100)
+				// debugger;
+
 			transform_matrix = makeTransformMatrix(tangent, normal, binormal, curr_vert);
 
 			var new_shape = [];
@@ -97,10 +105,12 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 
 		// debugger;
 
-		if(true){
+		
+		if(sweep_path.closed){
+			// debugger;
 			curr_vert = vec3.fromValues(sweep_path.points[0],
-														 sweep_path.points[1],
-														 sweep_path.points[2]);
+     			                      sweep_path.points[1],
+     			                      sweep_path.points[2]);
 
 			tangent = vec3.fromValues(sweep_path.tangents[0],
      			                      sweep_path.tangents[1],
@@ -121,10 +131,13 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 			transformShape();
 			transformShapeNormals();
 
+			// debugger;
+
 			new_shape.forEach(function(elem){
 				that.position_buffer.push(elem);
 			})
 
+			// debugger;
 
 			new_shape_normals.forEach(function(elem){
 				that.normal_buffer.push(elem);
