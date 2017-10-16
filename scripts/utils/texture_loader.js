@@ -7,6 +7,8 @@ function loadAllTextures() {
   textures["floor"] = loadTexture("resources/floor_texture.jpg");
   textures["black_wood"] = loadTexture("resources/black_texture.jpg");
   textures["metallic_black"] = loadTexture("resources/metallic_black.jpg");
+  textures["metallic_white"] = loadTexture("resources/metallic_white.jpg");
+  textures["metallic_grey"] = loadTexture("resources/metallic_gery.jpg");
   textures["wood"] = loadTexture("resources/wood.png");
 }
 

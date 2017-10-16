@@ -34,8 +34,6 @@ function Cube(rows, cols, texture, shader, light, diffuseColor, repeatTexture, h
   this._drawChilds = function(transformations) {
     this.childs[0].draw(transformations);
     
-
-    
     if (!hollow){
       this.childs[1].draw(transformations);
       this.childs[2].draw(transformations);
