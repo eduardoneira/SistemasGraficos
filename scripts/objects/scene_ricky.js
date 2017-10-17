@@ -34,7 +34,7 @@ function SceneRicky() {
   var M = 100;
   var r = 1;
   for(var i = 0; i < M+1; i++){
-    _sweep_path.push(r*Math.cos(2*Math.PI*i/M));
+    _sweep_path.push(r*Math.cos(2*Math.PI*i/M)+5);
     _sweep_path.push(r*Math.sin(2*Math.PI*i/M));
     _sweep_path.push(0);
   }
@@ -50,6 +50,7 @@ function SceneRicky() {
 
    var loft = new Loft(shape, sweep_path, textures["checker"], 0, basicShaderHandler, light, [0.1, 0.1, 0.1]);
    loft.init();
+   // loft.translate([2.5,0,0]);
 
   
 

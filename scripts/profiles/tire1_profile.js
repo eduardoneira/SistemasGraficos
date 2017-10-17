@@ -12,7 +12,8 @@ function Tire1Profile(){
                            [0.90610, 0.34393, 0],
                            [0.79371, 0.34309, 0],
                            [0.62871, 0.26935, 0],
-                           [0.62871, 0.19837, 0]];
+                           [0.62871, 0.19837, 0],
+                           [0,0,0,0x]];
 
     _bezier_curve = new CubicBezierCurve(_control_points);
 
