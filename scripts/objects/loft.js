@@ -168,8 +168,6 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 			}
 		}
 
-		debugger;
-
 		for(j = 0; j < that.cols; j++){
 			for(i = 0; i < that.rows; i++){
 				that.texture_buffer.push(i/that.rows);

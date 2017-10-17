@@ -98,7 +98,7 @@ function SideBaseRobotHand(texture, light, diffuseColor) {
   mat4.scale(hand_transformations,hand_transformations,[6,1.5,1/4]);
 
   var hand_angle = 0;
-  var update_angle = do_nothing;
+  var update_angle = open_hand;
 
   this.close = function() {
     update_angle = close_hand;
@@ -111,17 +111,17 @@ function SideBaseRobotHand(texture, light, diffuseColor) {
   function close_hand() {
     if (hand_angle < degToRad(30)) {
       hand_angle += 0.01;
+    } else {
+      update_angle = open_hand;
     }
 
-  }
-
-  function do_nothing() {
-    return hand_angle;
   }
 
   function open_hand() {
     if (hand_angle > -degToRad(15)) {
       hand_angle -= 0.01;
+    } else {
+      update_angle = close_hand;
     }
 
     if (hand_angle < -degToRad(15)) {
@@ -132,7 +132,11 @@ function SideBaseRobotHand(texture, light, diffuseColor) {
   this.draw = function(transformations) {
     var aux = mat4.create();
     mat4.translate(aux,aux,[1.75,-1.25,1]);
-    update_angle();
+    
+    if (update_angle != undefined) {
+      update_angle();
+    }
+    
     mat4.rotate(aux,aux,hand_angle,[1.0,0.0,0.0]);
     mat4.multiply(aux,aux,hand_transformations);
     mat4.multiply(aux,transformations,aux)
