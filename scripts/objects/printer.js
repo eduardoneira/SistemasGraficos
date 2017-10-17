@@ -2,6 +2,7 @@ function Printer(light, texture) {
   Object3D.call(this, null, null, null, null, null, null);
   this.drawEnabled = false;
 
+  this.robot = null;
   var object_to_print = null;
   var printing = false;
   var finished = false;
@@ -17,6 +18,14 @@ function Printer(light, texture) {
   var vertical_scale = 2.0;
   var initial_position_printed_object = [0.0,2*vertical_scale,0.0];
   this.position = [];
+  
+  this.scale_vertical_position =  function(a) {
+    initial_position_printed_object[1] *= a;
+  }
+
+  this.printing = function() {
+    return printing;
+  }
 
   var lathe_contours = [];
   var loft_contours = [];
@@ -64,9 +73,17 @@ function Printer(light, texture) {
   this.discardPrinting = function() {
     object_to_print = null;
     printing = false;
+    finished = false;
     curY = -1;
     curX = 0;
     curZ = 0;
+  }
+
+  this.releaseObject = function() {
+    var object = object_to_print;
+    object_to_print = null; 
+    finished = false;
+    return object;
   }
 
   function head_position() {
@@ -89,6 +106,10 @@ function Printer(light, texture) {
             curY += deltaY;
             if (curY > traveler.maxY + deltaY) {
               finished = true;
+              printing = false;
+              if (robot) {
+                robot.activate();
+              }
             } else {
               current = traveler.square(curY);
               curX = current["minX"];

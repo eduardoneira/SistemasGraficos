@@ -34,7 +34,7 @@ function BSplineCurve(controlPoints = []) {
     return Base0der(u)*positions[0] + Base1der(u)*positions[1] + Base2der(u)*positions[2];
   }
 
-  this.travels = function(delta = 0.01) {
+  this.travel = function(delta = 0.01) {
     var positions = []; 
     var tangents = [];
 

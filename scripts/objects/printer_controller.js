@@ -1,27 +1,21 @@
 function PrinterController(printer) {
   var printer = printer;
-  var printing = false;
 
-  // Comandos
   var _start = function() {
-    if (!printing) {
-      printing = true;
+    if (!printer.printing) {
       printer.startPrinting(app);
     } 
   }
 
   var _resume = function() {
     printer.resumePrinting();
-    printing = true;
   }
 
   var _stop = function() {
-    printing = false;
     printer.stopPrinting();
   }
 
   var _cancel = function() {
-    printing = false;
     printer.discardPrinting();
   }
 
@@ -80,5 +74,3 @@ function PrinterController(printer) {
   commands.add(app,'cancel').name('Discard');  
 
 }
-
-// var panel = Panel();

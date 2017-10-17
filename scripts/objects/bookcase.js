@@ -1,19 +1,24 @@
 function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, shader, light, diffuseColor, withBorders) {
   var that = this;
   var shelves = [];
-  var initial_position = [numberOfHorizontals/2,0.0,0.0];
+  var initial_position = [numberOfHorizontals/2,baseSize,0.0];
+  var delta_horizontal = 1;
+  var delta_vertical = 1;
   this.position = [];
 
   var rows = numberOfHorizontals;
   var cols = numberOfVerticals;
+  var current_row = -1, 
+      current_col = -1;
   var used_spots = new Array(rows);
 
   for (var i = 0; i < rows; i++) {
-    used_spots = new Array(cols);
-    for (var j = 0; j < Things.length; i++) {
+    used_spots[i] = new Array(cols);
+    for (var j = 0; j < cols; j++) {
       used_spots[i][j] = false;
     }
   }
+
 
   for (var i = 0; i < numberOfHorizontals; i++) {
     shelves.push(new Shelve(numberOfVerticals,
@@ -26,9 +31,28 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
     ));
   }
 
+  this.scale_bookcase_position = function(scale_factor) {
+    delta_horizontal *= scale_factor[0];
+    delta_vertical *= scale_factor[1];
+    initial_position[0] *= scale_factor[0];
+    initial_position[1] *= scale_factor[1];
+  }
+
   function calculatePositionShelve(row, col) {
-    // TODO: calcular posta
-    return row + col;
+    var x,y,z;
+    x = delta_horizontal*(row - Math.floor(rows/2));
+
+    if (row % 2 == 0) {
+       x += delta_horizontal/2;
+    }
+
+    x += this.position[0];
+
+    y = delta_vertical*col + this.position[1];
+
+    z = this.position[2];
+    
+    return [x,y,z];
   }
 
   this.randomFreeSpot = function() {
@@ -37,10 +61,16 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
       var col = Math.floor(Math.random() * cols);
 
       if (!used_spots[row][col]) {
+        current_row = row;
+        current_col = col;
         return calculatePositionShelve(row,col);
       }
 
     }    
+  }
+
+  this.store_object = function(printed_object) {
+
   }
 
   this.draw = function(transformations) {
