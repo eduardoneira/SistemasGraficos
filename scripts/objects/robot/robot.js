@@ -26,7 +26,7 @@ function Robot(printer, bookcase) {
   var current_event = "free";
   var current_event_finished = false;
 
-  var path_from_printer_to_bookcase = [];
+  var path_to_travel = [];
 
   this.activate = function() {
     if (busy) {
@@ -76,7 +76,7 @@ function Robot(printer, bookcase) {
 
     var curve = BSplineCurve(control_points);
 
-    path_from_printer_to_bookcase = curve.travel(0.01);
+    path_to_travel = curve.travel(0.01);
   }
 
   function calculate_positions() {
@@ -93,12 +93,14 @@ function Robot(printer, bookcase) {
     if (robot_upper_body.stretch_torso(position)) { //TODO: calcular cuanto tiene que estirarse
       current_event_finished = true;
     }
+    return current_event_finished;
   }
 
   function _adjust_second_trunk(position) {
     if (robot_upper_body.stretch_arm(position)) { //TODO: calcular cuanto tiene que estirarse
       current_event_finished = true;
     }
+    return current_event_finished;
   }
 
   function adjust_main_trunk_printer() {    
@@ -119,6 +121,7 @@ function Robot(printer, bookcase) {
     if (robot_upper_body.rotate_arm(clockwise)) {
       current_event_finished = true;
     }
+    return current_event_finished;
   }
 
   function rotate_arm() {
@@ -143,7 +146,12 @@ function Robot(printer, bookcase) {
   }
 
   function rotate_arm_inverse() {
-    _rotate_arm(false);
+    if (_rotate_arm(false)) {
+      path_to_travel.reverse();
+    }
+  }
+
+  function move_to_printer() {
+    //TODO: ricky mover
   }
 }
-
