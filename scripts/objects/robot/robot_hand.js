@@ -1,5 +1,7 @@
 function RobotHand(texture, light, diffuseColor) {
   this.closed = false;
+  var initial_holding_position = [0.0,0.0,5.5];
+  this.holding_position = [];
 
   var cube = new Cube(10,
                       10,
@@ -16,6 +18,14 @@ function RobotHand(texture, light, diffuseColor) {
   var triangleLoftLeft = new SideBaseRobotHand( texture,
                                                 light,
                                                 diffuseColor);
+
+  var test_cube = new Cube( 10,
+                            10,
+                            textures["checker"],
+                            basicShaderHandler,
+                            light,
+                            diffuseColor,
+                            false);
 
   var left_transformations = mat4.create();
   mat4.translate(left_transformations,left_transformations,[2,0,-1]);
@@ -51,7 +61,10 @@ function RobotHand(texture, light, diffuseColor) {
 
     mat4.identity(aux);
     mat4.multiply(aux, transformations, cube_transformations);
-    cube.draw(aux)
+    cube.draw(aux);
+
+    debugger;
+    vec3.transformMat4(this.holding_position,initial_holding_position,transformations);
   }
 }
 

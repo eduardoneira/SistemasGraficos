@@ -1,4 +1,5 @@
 function RobotUpperBody(texture, light, diffuseColor) {
+  // Cylinder
   var profile = new ConstantRadiusProfile(2,15);
   profile.travel(0.01);
 
@@ -11,8 +12,7 @@ function RobotUpperBody(texture, light, diffuseColor) {
                               );
   main_trunk.init();
 
-  var stretch_factor = 1.0;
-
+  // Base
   var line = new Line(3);
   line.travel(0.05);
 
@@ -30,6 +30,7 @@ function RobotUpperBody(texture, light, diffuseColor) {
   base.init();
   base.rotate(degToRad(90),[0.0,0.0,1.0]);
 
+  // Box
   var cube = new Cube(10,
                       10,
                       textures["metallic_black2"],
@@ -41,18 +42,25 @@ function RobotUpperBody(texture, light, diffuseColor) {
   var cube_transformations = mat4.create();
   mat4.scale(cube_transformations,cube_transformations,[4.5,4.5,4.5]);
 
-  var cube_height = 12.0;
-
+  // Arm
   var robot_arm = new RobotArm( textures["metallic_white_with_holes"],
                                 light,
                                 [0.1, 0.1, 0.1]);
 
   var robot_arm_transformations = mat4.create();
+  mat4.translate(robot_arm_transformations,robot_arm_transformations,[-1.0,0.0,0.0]);
   mat4.rotate(robot_arm_transformations,robot_arm_transformations,degToRad(90),[0.0,0.0,1.0]);
   mat4.rotate(robot_arm_transformations,robot_arm_transformations,degToRad(90),[0.0,1.0,0.0]);
 
+  // Logic
+  var stretch_factor = 1.0;
+  var cube_height = 12.0;
   var update_body = _stretch;
 
+  var angle_arm = 0;
+  var update_arm = _rotate_arm;
+  var clock_wise = true;
+  
   function _stretch() {
     if (stretch_factor < 1.5) {
       cube_height = 12 * stretch_factor;
@@ -78,10 +86,6 @@ function RobotUpperBody(texture, light, diffuseColor) {
   this.shirnk = function() {
     update_body = _shrink;
   }
-
-  var angle_arm = 0;
-  var update_arm = _rotate_arm;
-  var clock_wise = true;
 
   this.rotate_arm = function() {
     update_arm = _rotate_arm;
@@ -121,7 +125,7 @@ function RobotUpperBody(texture, light, diffuseColor) {
     cube.draw(aux);
 
     mat4.identity(aux);
-    mat4.translate(aux,transformations,[-1.0,cube_height+2.5,0.0]);
+    mat4.translate(aux,transformations,[0.0,cube_height+2.5,0.0]);
     mat4.rotate(aux,aux,angle_arm,[0.0,1.0,0.0]);
     mat4.multiply(aux,aux,robot_arm_transformations);
     robot_arm.draw(aux);    
