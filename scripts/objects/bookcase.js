@@ -1,8 +1,19 @@
 function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, shader, light, diffuseColor, withBorders) {
   var that = this;
   var shelves = [];
-  var initial_position = [0.0, numberOfHorizontals/2,0.0];
+  var initial_position = [numberOfHorizontals/2,0.0,0.0];
   this.position = [];
+
+  var rows = numberOfHorizontals;
+  var cols = numberOfVerticals;
+  var used_spots = new Array(rows);
+
+  for (var i = 0; i < rows; i++) {
+    used_spots = new Array(cols);
+    for (var j = 0; j < Things.length; i++) {
+      used_spots[i][j] = false;
+    }
+  }
 
   for (var i = 0; i < numberOfHorizontals; i++) {
     shelves.push(new Shelve(numberOfVerticals,
@@ -13,6 +24,23 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
                             diffuseColor,
                             withBorders
     ));
+  }
+
+  function calculatePositionShelve(row, col) {
+    // TODO: calcular posta
+    return row + col;
+  }
+
+  this.randomFreeSpot = function() {
+    while (true) {
+      var row = Math.floor(Math.random() * rows);
+      var col = Math.floor(Math.random() * cols);
+
+      if (!used_spots[row][col]) {
+        return calculatePositionShelve(row,col);
+      }
+
+    }    
   }
 
   this.draw = function(transformations) {

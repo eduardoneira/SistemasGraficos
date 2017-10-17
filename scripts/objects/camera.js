@@ -62,11 +62,9 @@ function Camera(radius = 15, speed = 0.003) {
   $('#contenedor3d').mousewheel(function(event) {
     that.mouse_wheel_triggered = true;
     if (event.deltaY > 0) {
-      if (that.radius > 0){
-        that.radius -= 0.5;   
-      }
+      that.radius -= 0.5;   
     } else {
-        that.radius += 0.5;   
+      that.radius += 0.5;   
     }
   });
 
