@@ -112,9 +112,11 @@ function Robot(printer, bookcase) {
   }
 
   function hold_object() {
-    printed_object = printer.releaseObject();
-    robot_upper_body.set_printed_object(printed_object);
-    current_event_finished = true;
+    if (robot_upper_body.close_hand()){
+      printed_object = printer.releaseObject();
+      robot_upper_body.set_printed_object(printed_object);
+      current_event_finished = true;
+    }
   }
 
   function _rotate_arm(clockwise) {
@@ -141,8 +143,11 @@ function Robot(printer, bookcase) {
   }
 
   function leave_object() {
-    bookcase.store_object(printed_object);
-    printed_object = null;
+    if (robot_upper_body.open_hand()) {
+      bookcase.store_object(printed_object);
+      current_event_finished = true;
+      printed_object = null;
+    }
   }
 
   function rotate_arm_inverse() {
