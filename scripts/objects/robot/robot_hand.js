@@ -63,7 +63,6 @@ function RobotHand(texture, light, diffuseColor) {
     mat4.multiply(aux, transformations, cube_transformations);
     cube.draw(aux);
 
-    debugger;
     vec3.transformMat4(this.holding_position,initial_holding_position,transformations);
   }
 }

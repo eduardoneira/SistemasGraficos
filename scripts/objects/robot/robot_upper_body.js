@@ -109,10 +109,6 @@ function RobotUpperBody(texture, light, diffuseColor) {
   }
 
   this.draw = function(transformations) {
-    if (update_arm) {
-      update_arm();
-    }
-
     var aux = mat4.create();
     mat4.translate(aux,transformations,[0.0,cube_height,0.0]);
     mat4.rotate(aux,aux,angle_arm,[0.0,1.0,0.0]);
