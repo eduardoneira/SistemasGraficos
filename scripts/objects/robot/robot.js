@@ -8,7 +8,7 @@ function Robot(printer, bookcase) {
 
   var possible_events = {
                           "free": { next: "calculate_positions", algorithm: do_nothing },
-                          "calculate_positions": {next:"adjust_main_trunk_printer", algorithm: do_nothing }
+                          "calculate_positions": {next:"adjust_main_trunk_printer", algorithm: calculate_positions }
                           "adjust_main_trunk_printer": { next: "adjust_second_trunk_printer", algorithm: adjust_main_trunk_printer },
                           "adjust_second_trunk_printer": { next: "hold_object", algorithm: adjust_second_trunk_printer },
                           "hold_object": { next: "rotate_arm", algorithm: hold_object },

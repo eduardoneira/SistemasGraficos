@@ -53,67 +53,62 @@ function RobotUpperBody(texture, light, diffuseColor) {
   mat4.rotate(robot_arm_transformations,robot_arm_transformations,degToRad(90),[0.0,1.0,0.0]);
 
   // Logic
-  var stretch_factor = 1.0;
+  var stretching = false;
+  var current_stretch = 1.0;
+  var stretch_delta = 0;
+  var final_stretch = 0;
+  var speed_stretch = 0.0002;
+  var initial_cube_height = 12.0;
   var cube_height = 12.0;
-  var update_body = _stretch;
 
   var angle_arm = 0;
-  var update_arm = _rotate_arm;
-  var clock_wise = true;
-  
-  function _stretch() {
-    if (stretch_factor < 1.5) {
-      cube_height = 12 * stretch_factor;
-      stretch_factor += 0.001;
-    } else {
-      update_body = _shrink;
+  var angular_speed = 0.01;
+
+  this.stretch_torso = function(position) {
+    if (!stretching) {
+      stretching = true;
+      final_stretch = position[1]/cube_height;
+      stretch_delta = (final_stretch - current_stretch) * speed_stretch;
     }
-  }
 
-  function _shrink() {
-    if (stretch_factor > 1) {
-      cube_height = 12 * stretch_factor; 
-      stretch_factor -= 0.001;
-    } else {
-      update_body =_stretch;
+    current_stretch += stretch_delta;
+    cube_height = initial_cube_height * current_stretch;
+
+    if (Math.abs(final_stretch - stretch_delta - current_stretch) > Math.abs(final_stretch - current_stretch)) {
+      stretching = false;
+      return true;
     }
+
+    return false;
   }
 
-  this.stretch = function() {
-    update_body = _stretch;
-  }
-
-  this.shirnk = function() {
-    update_body = _shrink;
-  }
-
-  this.rotate_arm = function() {
-    update_arm = _rotate_arm;
-  }
-
-  function _rotate_arm() {
+  this.rotate_arm = function(clock_wise) {
     if (clock_wise) {
       angle_arm += 0.01;
     } else{
       angle_arm -= 0.01;
     }
 
-    if (angle_arm > degToRad(180)) {
-      clock_wise = false;
-      update_arm = null;
-    }
+    return (Math.abs(angle_arm) > degToRad(180));
+  }
 
-    if (angle_arm < 0) {
-      clock_wise = true;
-      update_arm = null;
-    }
-  } 
+  this.stretch_arm = function(position) {
+    return robot_arm.stretch_arm(position);
+  }
+
+  this.close_hand = function() {
+    return robot_arm.close_hand();
+  }
+
+  this.open_hand = function() {
+    return robot_arm.open_hand();
+  }
+
+  this.set_printed_object = function(printed_object) {
+    robot_arm.set_printed_object(printed_object);
+  }
 
   this.draw = function(transformations) {
-    if (update_body) {
-      update_body();
-    }
-
     if (update_arm) {
       update_arm();
     }
@@ -133,7 +128,7 @@ function RobotUpperBody(texture, light, diffuseColor) {
     base.draw(transformations);
 
     mat4.identity(aux);
-    mat4.scale(aux,transformations,[1.0,stretch_factor,1.0]);
+    mat4.scale(aux,transformations,[1.0,current_stretch,1.0]);
     main_trunk.draw(aux)
   }
 

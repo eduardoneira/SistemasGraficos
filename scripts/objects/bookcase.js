@@ -47,9 +47,7 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
     }
 
     x += this.position[0];
-
     y = delta_vertical*col + this.position[1];
-
     z = this.position[2];
     
     return [x,y,z];
