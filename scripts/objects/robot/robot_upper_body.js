@@ -69,8 +69,10 @@ function RobotUpperBody(texture, light, diffuseColor) {
   this.stretch_torso = function(position) {
     if (!stretching) {
       stretching = true;
+      // final_stretch = position[1]/robot_arm.robot_hand_position()[1];
       final_stretch = position[1]/world_cube_height;
       stretch_delta = (final_stretch - current_stretch) * speed_stretch;
+      debugger;
     }
 
     current_stretch += stretch_delta;
