@@ -28,6 +28,7 @@ function Robot(printer, bookcase) {
   var current_event_finished = false;
 
   var path_to_travel = [];
+  var current_position = printer.position;
 
   var robot_upper_body = new RobotUpperBody(textures["metallic_white_with_holes"],
                                             light,
@@ -49,7 +50,9 @@ function Robot(printer, bookcase) {
 
     possible_events[current_event].algorithm();
     
-    robot_upper_body.draw(transformations);
+    var aux = mat4.create();
+    mat4.translate(aux,transformations,current_position);
+    robot_upper_body.draw(aux);
   }
 
   function do_nothing() {}
@@ -136,6 +139,7 @@ function Robot(printer, bookcase) {
 
   function move_to_bookcase() {
     //TODO: ricky mover
+    current_position = shelve_position;
   }
 
   function adjust_main_trunk_bookcase() {
@@ -161,5 +165,14 @@ function Robot(printer, bookcase) {
 
   function move_to_printer() {
     //TODO: ricky mover
+    current_position = printed_object_position;
+    current_event_finished = true;
+
+    if (!relax) {
+      current_event = "free";
+    } else {
+      busy = false;
+    }
+
   }
 }

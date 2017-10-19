@@ -33,7 +33,7 @@ function RobotHand(texture, light, diffuseColor) {
   mat4.rotate(right_transformations,right_transformations,degToRad(270),[0,0,1]);
 
   // Logic
-  var current_width = 10;
+  var current_width = 4;
   var length_finger = 6;
   var current_angle = 0;
   var delta_angle = 0.01;
