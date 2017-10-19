@@ -42,3 +42,15 @@ function makeTransformMatrix(tangent, normal, binormal, curr_vert){
 function getPositionMat4(matrix) {
   return matrix.slice(12,15);
 }
+
+function makeFlatCircle(radius, M){
+  var points = [];
+
+  for(var i = 0; i < M; i++){
+    points.push(radius*Math.cos(2*Math.PI*i/M));
+    points.push(radius*Math.sin(2*Math.PI*i/M));
+    points.push(0);
+  }
+
+  return points;
+}

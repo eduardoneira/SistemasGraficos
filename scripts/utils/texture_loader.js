@@ -8,6 +8,8 @@ function loadAllTextures() {
   textures["black_wood"] = loadTexture("resources/black_texture.jpg");
   textures["metallic_black"] = loadTexture("resources/metallic_black.jpg");
   textures["wood"] = loadTexture("resources/wood.png");
+  textures["tire"] = loadTexture("resources/tire.png");
+  textures["brushed_aluminum"] = loadTexture("resources/brushed_aluminum.jpg");
 }
 
 function loadTexture(url) {

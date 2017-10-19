@@ -148,7 +148,7 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 		for(j = 0; j < that.cols; j++){
 			for(i = 0; i < that.rows; i++){
 				that.texture_buffer.push(i/that.rows);
-				that.texture_buffer.push(j/(that.cols)*4);
+				that.texture_buffer.push(j/(that.cols)*10);
 			}
 		}
 	}
