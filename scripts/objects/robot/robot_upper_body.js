@@ -108,7 +108,7 @@ function RobotUpperBody(texture, light, diffuseColor) {
     robot_arm.set_printed_object(printed_object,maxY);
   }
 
-  this..releaseObject = function() {
+  this.releaseObject = function() {
     return robot_arm.releaseObject();
   }
 

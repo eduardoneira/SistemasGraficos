@@ -1,4 +1,4 @@
-function Robot(printer, bookcase) {
+function Robot(printer, bookcase, light) {
   this.printer = printer;
   this.bookcase = bookcase;
   
@@ -9,7 +9,7 @@ function Robot(printer, bookcase) {
 
   var possible_events = {
                           "free": { next: "calculate_positions", algorithm: do_nothing },
-                          "calculate_positions": {next:"adjust_main_trunk_printer", algorithm: calculate_positions }
+                          "calculate_positions": {next:"adjust_main_trunk_printer", algorithm: calculate_positions },
                           "adjust_main_trunk_printer": { next: "adjust_second_trunk_printer", algorithm: adjust_main_trunk_printer },
                           "adjust_second_trunk_printer": { next: "hold_object", algorithm: adjust_second_trunk_printer },
                           "hold_object": { next: "rotate_arm", algorithm: hold_object },
@@ -28,7 +28,7 @@ function Robot(printer, bookcase) {
   var current_event_finished = false;
 
   var path_to_travel = [];
-  var current_position = printer.position;
+  var current_position = null;
 
   var robot_upper_body = new RobotUpperBody(textures["metallic_white_with_holes"],
                                             light,
@@ -38,20 +38,26 @@ function Robot(printer, bookcase) {
     if (busy) {
       relax = false;
     } else {
-      current_event = "calculate_positions"
+      current_event_finished = true;
     }
   }
 
   this.draw = function(transformations) {
     if (current_event_finished) {
+      debugger;
       current_event_finished = false;
       current_event = possible_events[current_event].next
     }
 
     possible_events[current_event].algorithm();
     
+    if (!current_position) {
+      current_position = printer.position.map( function(elem,index) { return (index == 1) ? 0 : elem;});
+    }
+
     var aux = mat4.create();
-    mat4.translate(aux,transformations,current_position);
+    mat4.translate(aux,aux,current_position);
+    mat4.multiply(aux,aux,transformations);
     robot_upper_body.draw(aux);
   }
 
@@ -78,21 +84,21 @@ function Robot(printer, bookcase) {
     control_points.push(p5);
     control_points.push(p5);
 
-    var curve = BSplineCurve(control_points);
-
+    var curve = new CuadraticBSplineCurve(control_points);
     path_to_travel = curve.travel(0.01);
   }
 
   function calculate_positions() {
     printed_object_position =  printer.position;
+    printed_object_position[2] -= 5;
     shelve_position = bookcase.randomFreeSpot();
-    
+    printed_object_position[2] += 5; 
+
     create_path();
 
     width_printer_object = printer.getWidthObject(10);
     max_height_printed_object = printer.getHeightObject();
 
-    printer.unlock();
     busy = true;
     current_event_finished = true;
   }
@@ -122,6 +128,7 @@ function Robot(printer, bookcase) {
   function hold_object() {
     if (robot_upper_body.close_hand(maxWidth)){
       robot_upper_body.set_printed_object(printer.releaseObject(),maxY);
+      printer.unlock();
       current_event_finished = true;
     }
   }
@@ -146,7 +153,7 @@ function Robot(printer, bookcase) {
     _adjust_main_trunk(shelve_position);
   }
 
-  function adjust_main_second_bookcase() {
+  function adjust_second_trunk_bookcase() {
     _adjust_main_second(shelve_position);
   }
 

@@ -27,18 +27,29 @@ function Scene() {
   var scale_bookcase = [2.0,2.0,2.0];
   bookcase.scale_bookcase_position(scale_bookcase);
 
+  var robot = new Robot(printer,bookcase,light);
+  printer.robot = robot;
+
   this.draw = function() {
     var printer_transformations = mat4.create();
+    mat4.translate(printer_transformations, printer_transformations, [0.0,0.0,10.0])
     mat4.scale(printer_transformations,printer_transformations,[2.0,1.0,2.0]);
     printer.draw(printer_transformations);
 
     var bookcase_transformations = mat4.create();
+    mat4.translate(bookcase_transformations,bookcase_transformations,[-5,0.0,-20.0]);
     mat4.scale(bookcase_transformations,bookcase_transformations,scale_bookcase);
-    mat4.translate(bookcase_transformations,bookcase_transformations,[-2.5,0.0,-10.0]);
     bookcase.draw(bookcase_transformations);
 
     var floor_transformations = mat4.create();
     mat4.scale(floor_transformations,floor_transformations,[200.0,1.0,200.0]);
     floor.draw(floor_transformations);
+
+    var robot_transformations = mat4.create();
+    mat4.translate(robot_transformations,robot_transformations,[0.0,0.0,-5.0])
+    mat4.rotate(robot_transformations,robot_transformations,degToRad(90),[0.0,1.0,0.0]);
+    mat4.scale(robot_transformations,robot_transformations,[0.32,0.32,0.32]);
+    robot.draw(robot_transformations);
+    // debugger;
   }
 }

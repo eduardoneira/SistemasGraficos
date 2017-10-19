@@ -1,4 +1,4 @@
-function BSplineCurve(controlPoints = []) {
+function CuadraticBSplineCurve(controlPoints = []) {
 
   this.controlPoints = controlPoints;
 

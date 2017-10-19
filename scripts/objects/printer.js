@@ -2,6 +2,8 @@ function Printer(light, texture) {
   Object3D.call(this, null, null, null, null, null, null);
   this.drawEnabled = false;
 
+  var that = this;
+
   this.robot = null;
   var object_to_print = null;
   var printing = false;
@@ -18,7 +20,7 @@ function Printer(light, texture) {
 
   var vertical_scale = 2.0;
   var initial_position_printed_object = [0.0,2*vertical_scale,0.0];
-  this.position = [];
+  this.position = initial_position_printed_object;
   
   this.scale_vertical_position =  function(a) {
     initial_position_printed_object[1] *= a;
@@ -34,6 +36,10 @@ function Printer(light, texture) {
 
   this.getHeightObject = function() {
     return traveler.maxY;
+  }
+
+  this.unlock = function() {
+    locked = false;
   }
 
   this.releaseObject = function() {
@@ -118,8 +124,8 @@ function Printer(light, texture) {
           if (curX > current["maxX"] + deltaX) {
             curY += deltaY;
             if (curY > traveler.maxY + deltaY) {
-              if (robot) {
-                robot.activate();
+              if (that.robot) {
+                that.robot.activate();
               }
               locked = true;
               finished = true;
@@ -144,6 +150,8 @@ function Printer(light, texture) {
   }
 
   this._drawChilds = function(transformations) {
+    vec3.add(this.position,initial_position_printed_object,getPositionMat4(transformations));
+
     var printer_transformations = mat4.create();
     mat4.scale(printer_transformations,printer_transformations,[1.2,vertical_scale,1.2]);
     mat4.multiply(printer_transformations,transformations,printer_transformations);
@@ -157,7 +165,7 @@ function Printer(light, texture) {
       mat4.scale(object_to_print_transformations,object_to_print_transformations,[1.0/traveler.maxY,1.0/traveler.maxY,1.0/traveler.maxY]);
       mat4.multiply(object_to_print_transformations,transformations,object_to_print_transformations);
       
-      vec3.add(this.position,initial_position_printed_object,getPositionMat4(object_to_print_transformations));
+      vec3.add(this.position,initial_position_printed_object,getPositionMat4(object_to_print_transformations));      
       object_to_print.draw(object_to_print_transformations);
     }
   }

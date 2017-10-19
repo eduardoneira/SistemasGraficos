@@ -22,11 +22,11 @@ function Camera(radius = 15, speed = 0.003) {
   }
 
   function position_printer() {
-    return [20.0,20.0,10.0];
+    return [0.0,4,10.0];
   }
 
   function position_bookcase() {
-    return [-2.5,5.0,-10.0];
+    return [0.0,5.0,-20.0];
   }
 
   //TODO: Add listener to robot position
