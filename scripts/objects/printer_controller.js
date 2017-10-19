@@ -2,7 +2,7 @@ function PrinterController(printer) {
   var printer = printer;
 
   var _start = function() {
-    if (!printer.printing) {
+    if (!printer.busy) {
       printer.startPrinting(app);
     } 
   }

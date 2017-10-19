@@ -68,16 +68,20 @@ function RobotArm(texture, light, diffuseColor) {
     return false;
   }
 
-  this.close_hand = function() {
-    return robot_hand.close_hand();
+  this.close_hand = function(maxWidth) {
+    return robot_hand.close_hand(maxWidth);
   }
 
   this.open_hand = function() {
     return robot_hand.open_hand();
   }
 
-  this.set_printed_object = function(printed_object) {
-    robot_hand.set_printed_object(printed_object);
+  this.set_printed_object = function(printed_object,maxY) {
+    robot_hand.set_printed_object(printed_object,maxY);
+  }
+
+  this.releaseObject = function() {
+    return robot_hand.releaseObject();
   }
 
   this.draw = function(transformations) {

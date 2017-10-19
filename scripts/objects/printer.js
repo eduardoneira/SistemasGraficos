@@ -6,6 +6,7 @@ function Printer(light, texture) {
   var object_to_print = null;
   var printing = false;
   var finished = false;
+  var locked = false;
 
   var curY = -1;
   var curX = 0;
@@ -23,8 +24,24 @@ function Printer(light, texture) {
     initial_position_printed_object[1] *= a;
   }
 
-  this.printing = function() {
-    return printing;
+  this.busy = function() {
+    return printing || locked;
+  }
+
+  this.getWidthObject = function(maxY) {
+    return traveler.maxWidth(maxY);
+  }  
+
+  this.getHeightObject = function() {
+    return traveler.maxY;
+  }
+
+  this.releaseObject = function() {
+    var object = object_to_print;
+    object_to_print = null; 
+    finished = false;
+    locked = false;
+    return object;
   }
 
   var lathe_contours = [];
@@ -58,6 +75,7 @@ function Printer(light, texture) {
     
     traveler = new PrintableTraveler(deltaX,deltaZ,deltaY,object_to_print.position_buffer);
     finished = false;
+    locked = false;
 
     this.resumePrinting();
   }
@@ -71,19 +89,14 @@ function Printer(light, texture) {
   }
 
   this.discardPrinting = function() {
-    object_to_print = null;
-    printing = false;
-    finished = false;
-    curY = -1;
-    curX = 0;
-    curZ = 0;
-  }
-
-  this.releaseObject = function() {
-    var object = object_to_print;
-    object_to_print = null; 
-    finished = false;
-    return object;
+    if (!locked) {  
+      object_to_print = null;
+      printing = false;
+      finished = false;
+      curY = -1;
+      curX = 0;
+      curZ = 0;
+    }
   }
 
   function head_position() {
@@ -105,11 +118,12 @@ function Printer(light, texture) {
           if (curX > current["maxX"] + deltaX) {
             curY += deltaY;
             if (curY > traveler.maxY + deltaY) {
-              finished = true;
-              printing = false;
               if (robot) {
                 robot.activate();
               }
+              locked = true;
+              finished = true;
+              printing = false;
             } else {
               current = traveler.square(curY);
               curX = current["minX"];

@@ -1,8 +1,10 @@
 function RobotHand(texture, light, diffuseColor) {
-  this.closed = false;
   var initial_holding_position = [0.0,0.0,5.5];
   this.holding_position = [];
+  var printed_object = null;
+  var maxYObject = 0;
 
+  // Centre cube
   var cube = new Cube(10,
                       10,
                       texture,
@@ -11,43 +13,70 @@ function RobotHand(texture, light, diffuseColor) {
                       diffuseColor,
                       false,
                       true);
-
   var cube_transformations = mat4.create();
   mat4.scale(cube_transformations,cube_transformations,[4,2,2]);
 
+  // Left finger
   var triangleLoftLeft = new SideBaseRobotHand( texture,
                                                 light,
                                                 diffuseColor);
-
-  var test_cube = new Cube( 10,
-                            10,
-                            textures["checker"],
-                            basicShaderHandler,
-                            light,
-                            diffuseColor,
-                            false);
-
   var left_transformations = mat4.create();
   mat4.translate(left_transformations,left_transformations,[2,0,-1]);
   mat4.rotate(left_transformations,left_transformations,degToRad(90),[0,0,1]);
 
+  // Right finger
   var triangleLoftRight = new SideBaseRobotHand( texture,
                                                  light,
                                                  diffuseColor);
-
-
   var right_transformations = mat4.create();
   mat4.translate(right_transformations,right_transformations,[-2,2,-1]);
   mat4.rotate(right_transformations,right_transformations,degToRad(270),[0,0,1]);
 
-  this.close = function() {
-    triangleLoftRight.close();
-    triangleLoftLeft.close();
+  // Logic
+  var current_width = 10;
+  var length_finger = 6;
+  var current_angle = 0;
+  var delta_angle = 0.01;
+  var open_angle = null;
+
+  this.close_hand = function(maxWidth) {
+    if (current_width > maxWidth) {
+      current_angle += delta_angle;
+      current_width = current_width - (length_finger * Math.cos(angle));
+      triangleLoftRight.setAngle(current_angle);
+      triangleLoftLeft.setAngle(current_angle);
+      return false;
+    }
+
+    return true;
   }
 
-  this.open = function() {
-    triangleLoftRight.open();
-    triangleLoftLeft.open();
+  this.open_hand = function() {
+    if (!open_angle) {
+      open_angle = current_angle - degToRad(10);
+    }
+
+    if (current_angle > open_angle) {
+      current_angle -= delta_angle;
+      triangleLoftRight.setAngle(current_angle);
+      triangleLoftLeft.setAngle(current_angle);
+      return false;
+    }
+
+    open_angle = null;
+    return true;
+  }
+
+  this.set_printed_object = function(obj, maxY) {
+    printed_object = obj;
+    maxYObject = maxY;
+  }
+
+  this.releaseObject = function() {
+    var copy = printed_object;
+    printed_object = null;
+    
+    return copy;
   }
 
   this.draw = function(transformations) {
@@ -64,10 +93,18 @@ function RobotHand(texture, light, diffuseColor) {
     cube.draw(aux);
 
     vec3.transformMat4(this.holding_position,initial_holding_position,transformations);
+    
+    if (printed_object) {
+      mat4.identity(aux);
+      mat4.translate(aux,aux,this.holding_position)
+      mat4.scale(aux,aux,[1.0/maxYObject,1.0/maxYObject,1.0/maxYObject]);
+
+      printed_object.draw(aux);
+    }
   }
 }
 
-function SideBaseRobotHand(texture, light, diffuseColor) {
+function SideBaseRobotHand(texture, light, diffuseColor, delta_angle) {
   var triangleLoft = new TriangleLoft(2,
                                       texture,
                                       basicShaderHandler,
@@ -110,45 +147,14 @@ function SideBaseRobotHand(texture, light, diffuseColor) {
   mat4.scale(hand_transformations,hand_transformations,[6,1.5,1/4]);
 
   var hand_angle = 0;
-  var update_angle = open_hand;
 
-  this.close = function() {
-    update_angle = close_hand;
-  }
-
-  this.open = function() {
-    update_angle = open_hand;
-  }
-
-  function close_hand() {
-    if (hand_angle < degToRad(30)) {
-      hand_angle += 0.01;
-    } else {
-      update_angle = open_hand;
-    }
-
-  }
-
-  function open_hand() {
-    if (hand_angle > -degToRad(15)) {
-      hand_angle -= 0.01;
-    } else {
-      update_angle = close_hand;
-    }
-
-    if (hand_angle < -degToRad(15)) {
-      hand_angle = -degToRad(15);
-    }  
+  function setAngle(angle) {
+    hand_angle = angle;
   }
 
   this.draw = function(transformations) {
     var aux = mat4.create();
     mat4.translate(aux,aux,[1.75,-1.25,1]);
-    
-    if (update_angle != undefined) {
-      update_angle();
-    }
-    
     mat4.rotate(aux,aux,hand_angle,[1.0,0.0,0.0]);
     mat4.multiply(aux,aux,hand_transformations);
     mat4.multiply(aux,transformations,aux)

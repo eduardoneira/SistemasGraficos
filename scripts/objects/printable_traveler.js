@@ -43,6 +43,22 @@ function PrintableTraveler(deltaX, deltaZ, deltaY, positions) {
     }
   }
 
+  this.maxWidth = function(maxY) {
+    var maxWidth = 0;
+
+    for (var level in squareByY) {
+      if (squareByY.hasOwnProperty(level) && level <= maxY) {
+        var cur_width = Math.abs(squareByY[level].maxZ - squareByY[level].minZ);
+        
+        if (cur_width > maxWidth) {
+          maxWidth = cur_width;
+        }
+      }
+    }
+
+    return maxWidth;
+  } 
+
   this.square = function(y) {
     return squareByY[y];
   }

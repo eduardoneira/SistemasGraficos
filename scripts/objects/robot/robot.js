@@ -4,7 +4,8 @@ function Robot(printer, bookcase) {
   
   var printed_object_position = [];
   var shelve_position = [];
-  var printed_object = null;
+  var width_printer_object = 0;
+  var max_height_printed_object = 0;
 
   var possible_events = {
                           "free": { next: "calculate_positions", algorithm: do_nothing },
@@ -28,6 +29,10 @@ function Robot(printer, bookcase) {
 
   var path_to_travel = [];
 
+  var robot_upper_body = new RobotUpperBody(textures["metallic_white_with_holes"],
+                                            light,
+                                            [0.1, 0.1, 0.1]);
+
   this.activate = function() {
     if (busy) {
       relax = false;
@@ -35,10 +40,6 @@ function Robot(printer, bookcase) {
       current_event = "calculate_positions"
     }
   }
-
-  var robot_upper_body = new RobotUpperBody(textures["metallic_white_with_holes"],
-                                            light,
-                                            [0.1, 0.1, 0.1]);
 
   this.draw = function(transformations) {
     if (current_event_finished) {
@@ -85,6 +86,10 @@ function Robot(printer, bookcase) {
     
     create_path();
 
+    width_printer_object = printer.getWidthObject(10);
+    max_height_printed_object = printer.getHeightObject();
+
+    printer.unlock();
     busy = true;
     current_event_finished = true;
   }
@@ -112,9 +117,8 @@ function Robot(printer, bookcase) {
   }
 
   function hold_object() {
-    if (robot_upper_body.close_hand()){
-      printed_object = printer.releaseObject();
-      robot_upper_body.set_printed_object(printed_object);
+    if (robot_upper_body.close_hand(maxWidth)){
+      robot_upper_body.set_printed_object(printer.releaseObject(),maxY);
       current_event_finished = true;
     }
   }
@@ -144,9 +148,8 @@ function Robot(printer, bookcase) {
 
   function leave_object() {
     if (robot_upper_body.open_hand()) {
-      bookcase.store_object(printed_object);
+      bookcase.store_object(robot_upper_body.releaseObject());
       current_event_finished = true;
-      printed_object = null;
     }
   }
 
