@@ -48,12 +48,12 @@ function RobotArm(texture, light, diffuseColor) {
   var speed_stretch = 0.005; 
 
   var initial_hand_height = 10.5
-  var current_hand_height = 10.5;
+  var current_hand_height = initial_hand_height;
 
   this.stretch_arm = function(position) {
     if (!stretching) {
       stretching = true;
-      final_stretch = position[0]/robot_hand.holding_position[0];
+      final_stretch = position[2]/robot_hand.holding_position[2];
       stretch_delta = (final_stretch - current_stretch) * speed_stretch;
     }
 
@@ -82,6 +82,10 @@ function RobotArm(texture, light, diffuseColor) {
 
   this.releaseObject = function() {
     return robot_hand.releaseObject();
+  }
+
+  this.robot_hand_position = function() {
+    return robot_hand.holding_position;
   }
 
   this.draw = function(transformations) {

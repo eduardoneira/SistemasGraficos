@@ -126,8 +126,8 @@ function Robot(printer, bookcase, light) {
   }
 
   function hold_object() {
-    if (robot_upper_body.close_hand(maxWidth)){
-      robot_upper_body.set_printed_object(printer.releaseObject(),maxY);
+    if (robot_upper_body.close_hand(width_printer_object)){
+      robot_upper_body.set_printed_object(printer.releaseObject(),max_height_printed_object);
       printer.unlock();
       current_event_finished = true;
     }
