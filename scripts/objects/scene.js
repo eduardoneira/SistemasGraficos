@@ -13,7 +13,6 @@ function Scene() {
 
   var printer = new Printer(light,textures["metallic_black"]);
   var printer_controller = new PrinterController(printer);
-  printer.scale_vertical_position(1.0) ; 
 
   var bookcase = new BookCase(6,
                               3,

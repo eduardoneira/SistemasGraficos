@@ -19,12 +19,7 @@ function Printer(light, texture) {
   var traveler = null;
 
   var vertical_scale = 2.0;
-  var initial_position_printed_object = [0.0,2*vertical_scale,0.0];
-  this.position = initial_position_printed_object;
-  
-  this.scale_vertical_position =  function(a) {
-    initial_position_printed_object[1] *= a;
-  }
+  this.position = [];
 
   this.busy = function() {
     return printing || locked;
@@ -150,7 +145,9 @@ function Printer(light, texture) {
   }
 
   this._drawChilds = function(transformations) {
-    vec3.add(this.position,initial_position_printed_object,getPositionMat4(transformations));
+    if (this.position.length == 0) {
+      vec3.add(this.position,[0,0,0],getPositionMat4(transformations));
+    }
 
     var printer_transformations = mat4.create();
     mat4.scale(printer_transformations,printer_transformations,[1.2,vertical_scale,1.2]);
@@ -164,8 +161,8 @@ function Printer(light, texture) {
       mat4.translate(object_to_print_transformations,object_to_print_transformations,[0.0,vertical_scale*2,0.0]);
       mat4.scale(object_to_print_transformations,object_to_print_transformations,[1.0/traveler.maxY,1.0/traveler.maxY,1.0/traveler.maxY]);
       mat4.multiply(object_to_print_transformations,transformations,object_to_print_transformations);
-      
-      vec3.add(this.position,initial_position_printed_object,getPositionMat4(object_to_print_transformations));      
+
+      vec3.add(this.position,[0,0,0],getPositionMat4(object_to_print_transformations));      
       object_to_print.draw(object_to_print_transformations);
     }
   }

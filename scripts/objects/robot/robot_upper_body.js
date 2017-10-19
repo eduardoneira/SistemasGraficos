@@ -57,9 +57,11 @@ function RobotUpperBody(texture, light, diffuseColor) {
   var current_stretch = 1.0;
   var stretch_delta = 0;
   var final_stretch = 0;
-  var speed_stretch = 0.0002;
+  var speed_stretch = 0.005;
+  
   var initial_cube_height = 12.0;
-  var cube_height = 12.0;
+  var cube_height = initial_cube_height;
+  var world_cube_height = null;
 
   var angle_arm = 0;
   var angular_speed = 0.01;
@@ -67,7 +69,7 @@ function RobotUpperBody(texture, light, diffuseColor) {
   this.stretch_torso = function(position) {
     if (!stretching) {
       stretching = true;
-      final_stretch = position[1]/cube_height;
+      final_stretch = position[1]/world_cube_height;
       stretch_delta = (final_stretch - current_stretch) * speed_stretch;
     }
 
@@ -113,6 +115,13 @@ function RobotUpperBody(texture, light, diffuseColor) {
   }
 
   this.draw = function(transformations) {
+    var world_cube_pos = [];
+    vec3.transformMat4(world_cube_pos,[0,cube_height,0],transformations);
+    
+    if (!stretching) {
+      world_cube_height = world_cube_pos[1];
+    }
+
     var aux = mat4.create();
     mat4.translate(aux,transformations,[0.0,cube_height,0.0]);
     mat4.rotate(aux,aux,angle_arm,[0.0,1.0,0.0]);
