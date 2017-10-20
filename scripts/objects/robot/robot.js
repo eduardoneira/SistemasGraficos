@@ -98,7 +98,6 @@ function Robot(printer, bookcase, light) {
     shelve_position = bookcase.randomFreeSpot();
 
     create_path();
-    debugger;
     width_printer_object = printer.getWidthObject(20);
     max_height_printed_object = printer.getHeightObject();
 

@@ -6,8 +6,8 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
   var delta_vertical = 1;
   this.position = [];
 
-  var rows = numberOfHorizontals;
-  var cols = numberOfVerticals;
+  var rows = numberOfVerticals;
+  var cols = numberOfHorizontals;
   var current_row = -1, 
       current_col = -1;
   var used_spots = new Array(rows);
@@ -71,6 +71,7 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
 
   this.store_object = function(printed_object, maxY) {
     var pos = calculatePositionShelve(current_row,current_col);
+    debugger;
     pos[0] += (Math.floor(rows/2));
     pos[1] -= baseSize;
     pos[2] = 0;
