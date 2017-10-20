@@ -12,6 +12,8 @@ function loadAllTextures() {
   textures["metallic_white_with_holes"] = loadTexture("resources/english_green.jpg");
   textures["metallic_grey"] = loadTexture("resources/metallic_gery.jpg");
   textures["wood"] = loadTexture("resources/wood.png");
+  textures["tire"] = loadTexture("resources/tire.png");
+  textures["brushed_aluminum"] = loadTexture("resources/brushed_aluminum.jpg");
 }
 
 function loadTexture(url) {

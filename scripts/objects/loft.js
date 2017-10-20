@@ -11,8 +11,6 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 		cols += 2;
 	}
 
-	// debugger;
-
 	Object3D.call(this,rows,cols,texture, shader, light, diffuseColor);
 	var that = this;
 	that.sweep_path = sweep_path;
@@ -119,11 +117,7 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 			})
 		}
 
-		// debugger;
-
-		
 		if(sweep_path.closed){
-			// debugger;
 			curr_vert = vec3.fromValues(sweep_path.points[0],
      			                      sweep_path.points[1],
      			                      sweep_path.points[2]);
@@ -176,9 +170,6 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 		}
 	}
 
-	that._resetState = function() {
-	  // that.rotate(5.0*t, [1.0, 0.0, 0.0]);
-  	}
 }
 
 inheritPrototype(Cylinder, Object3D);
