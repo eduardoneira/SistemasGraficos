@@ -6,12 +6,12 @@ function LowerBody(){
 
   this.wheel1 = new Wheel();
   this.wheel2 = new Wheel();
-  this.pelvis = new Pelvis(0.1, 100, 0.2, light);
+  this.pelvis = new Pelvis(0.1, 100, 6, light);
 
   this.parts = [this.wheel1, this.wheel2, this.pelvis];
   this.wheels = [this.wheel1, this.wheel2];
 
-  var wheel_offset = 4;
+  var wheel_offset = 6;
   // this.wheel1.rotate(Math.PI/2, [0,1,0]);
   // this.wheel2.rotate(Math.PI/2, [0,1,0]);
   // this.pelvis.translate([0,0,-2]);
@@ -26,12 +26,12 @@ function LowerBody(){
 
   var wheel1_transformations = mat4.create();
   var wheel2_transformations = mat4.create();
-  mat4.translate(wheel1_transformations, wheel1_transformations, [0,1,-wheel_offset]);
-  mat4.scale(wheel1_transformations, wheel1_transformations, [2.5, 2.5, 2.5]);
+  mat4.translate(wheel1_transformations, wheel1_transformations, [0,1.3,-wheel_offset]);
+  mat4.scale(wheel1_transformations, wheel1_transformations, [3, 3, 2.5]);
 
-  mat4.translate(wheel2_transformations, wheel2_transformations, [0,1,wheel_offset]);
+  mat4.translate(wheel2_transformations, wheel2_transformations, [0,1.3,wheel_offset]);
   mat4.rotate(wheel2_transformations, wheel2_transformations, Math.PI, [0,1,0]);
-  mat4.scale(wheel2_transformations, wheel2_transformations, [2.5, 2.5, 2.5]);
+  mat4.scale(wheel2_transformations, wheel2_transformations, [3, 3, 2.5]);
 
 
   this.draw = function(transformations){

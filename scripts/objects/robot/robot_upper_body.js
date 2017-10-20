@@ -54,12 +54,12 @@ function RobotUpperBody(texture, light, diffuseColor) {
 
   // Logic
   var stretching = false;
-  var current_stretch = 1.0;
+  var current_stretch = 0.5;
   var stretch_delta = 0;
   var final_stretch = 0;
   var speed_stretch = 0.005;
   
-  var initial_cube_height = 12.0;
+  var initial_cube_height = 6.0;
   var cube_height = initial_cube_height;
   var world_cube_height = null;
 

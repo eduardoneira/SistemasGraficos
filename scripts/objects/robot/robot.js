@@ -36,6 +36,11 @@ function Robot(printer, bookcase, light) {
                                             light,
                                             [0.1, 0.1, 0.1]);
 
+  var robot_lower_body = new LowerBody();
+
+  var offset_upper = [0,2,0];
+  var offset_lower = [0,0.4,0];
+
   this.activate = function() {
     if (busy) {
       relax = false;
@@ -60,8 +65,15 @@ function Robot(printer, bookcase, light) {
 
     var aux = mat4.create();
     mat4.translate(aux,aux,current_position);
+    mat4.translate(aux,aux,offset_upper);
     mat4.multiply(aux,aux,transformations);
     robot_upper_body.draw(aux);
+
+    aux = mat4.create();
+    mat4.translate(aux,aux,current_position);
+    mat4.translate(aux,aux,offset_lower);
+    mat4.multiply(aux,aux,transformations);
+    robot_lower_body.draw(aux);
   }
 
   function do_nothing() {}

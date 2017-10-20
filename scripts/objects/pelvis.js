@@ -5,16 +5,27 @@ function Pelvis(delta, M, radius, light){
   this.offset = [0,0,0];
   this.scale_value = [1,1,1]; 
 
-  var shape = new Pelvis1Profile();
-  shape.travel(delta);
+  var line = new Line(5);
+  line.travel(0.05);
 
-  var sweep_path = new Polygon(makeFlatCircle(radius, M));
-  sweep_path.closed = true;
+  var shape = new SurfaceCircle(radius);
+  shape.discretize(0.05);
 
-  this.loft = new Loft(shape, sweep_path, textures["checker"], 0, basicShaderHandler, light, [0.1, 0.1, 0.1]);
+  this.loft = new Loft(shape, 
+                      line, 
+                      textures["brushed_aluminum_rot"], 
+                      0, 
+                      basicShaderHandler, 
+                      light, 
+                      [0.1, 0.1, 0.1],
+                      true);
   this.loft.init();
-  this.loft.rotate(Math.PI/2, [1,0,0]);
-  this.loft.scale([5,5,5]);
+
+
+  this.loft.init();
+  this.loft.translate([0,-4.3,0]);
+  this.loft.rotate(Math.PI/2, [0,0,1]);
+  // this.loft.scale([10,10,10]);
 
     // rescalo textura:
   for(var i = 1; i < this.loft.texture_buffer.length; i+=2){
