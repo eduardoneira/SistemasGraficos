@@ -59,7 +59,7 @@ function RobotUpperBody(texture, light, diffuseColor) {
   var final_stretch = 0;
   var speed_stretch = 0.005;
   
-  var initial_cube_height = 6.0;
+  var initial_cube_height = 12.0;
   var cube_height = initial_cube_height;
   var world_cube_height = null;
 
@@ -73,7 +73,7 @@ function RobotUpperBody(texture, light, diffuseColor) {
       // final_stretch = position[1]/robot_arm.robot_hand_position()[1];
       final_stretch = position[1]/world_cube_height;
       stretch_delta = (final_stretch - current_stretch) * speed_stretch;
-      debugger;
+      // debugger;
     }
 
     current_stretch += stretch_delta;

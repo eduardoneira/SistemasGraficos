@@ -108,7 +108,7 @@ function Robot(printer, bookcase, light) {
   function calculate_positions() {
     printed_object_position =  printer.position.slice();
     shelve_position = bookcase.randomFreeSpot();
-    debugger;
+    // debugger;
 
     create_path();
     width_printer_object = printer.getWidthObject(20);
@@ -173,7 +173,7 @@ function Robot(printer, bookcase, light) {
   }
 
   function adjust_main_trunk_bookcase() {
-    debugger; 
+    // debugger; 
     _adjust_main_trunk(shelve_position);
   }
 
