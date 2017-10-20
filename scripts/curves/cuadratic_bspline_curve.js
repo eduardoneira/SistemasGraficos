@@ -7,7 +7,7 @@ function CuadraticBSplineCurve(controlPoints = []) {
   }  // (1 -3u +3u2 -u3)/6
 
   function Base1(u) {
-    return (1-u)*u*1/2; 
+    return (-2*u*u+2*u+1)*1/2; 
   }  // (4  -6u2 +3u3)/6
 
   function Base2(u) {
@@ -19,7 +19,7 @@ function CuadraticBSplineCurve(controlPoints = []) {
   }  // (-3 +6u -3u2)/6
 
   function Base1der(u) { 
-    return (u-2*u)*1/2;
+    return (-4*u+2)*1/2;
   }   // (-12u +9u2)  /6
 
   function Base2der(u) { 
@@ -38,7 +38,7 @@ function CuadraticBSplineCurve(controlPoints = []) {
     var positions = []; 
     var tangents = [];
 
-    for (var offset = 0; offset + 3 < this.controlPoints.length; offset++) {
+    for (var offset = 0; offset + 2 < this.controlPoints.length; offset++) {
       x = this.controlPoints.slice(offset,offset+3).map(function(value,index){return value[0]});
       y = this.controlPoints.slice(offset,offset+3).map(function(value,index){return value[1]});
       z = this.controlPoints.slice(offset,offset+3).map(function(value,index){return value[2]});

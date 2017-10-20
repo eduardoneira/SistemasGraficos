@@ -7,6 +7,8 @@ function Robot(printer, bookcase, light) {
   var width_printer_object = 0;
   var max_height_printed_object = 0;
 
+  var path_counter = 0;
+
   var possible_events = {
                           "free": { next: "calculate_positions", algorithm: do_nothing },
                           "calculate_positions": {next:"adjust_main_trunk_printer", algorithm: calculate_positions },
@@ -103,6 +105,8 @@ function Robot(printer, bookcase, light) {
 
     var curve = new CuadraticBSplineCurve(control_points);
     path_to_travel = curve.travel(0.01);
+
+    // debugger;
   }
 
   function calculate_positions() {
@@ -165,11 +169,26 @@ function Robot(printer, bookcase, light) {
   }
 
   function move_to_bookcase() {
+
+    // debugger;
+
+    if(path_counter < path_to_travel.positions.length){
+      current_position[0] = path_to_travel.positions[path_counter];
+      current_position[1] = path_to_travel.positions[path_counter+1];
+      current_position[2] = path_to_travel.positions[path_counter+2];
+
+      path_counter += 3;
+    }
+    else{
+      path_counter = 0;
+      current_position = shelve_position.slice();
+      current_position[1] = 0;
+      current_position[2] += 5;
+      current_event_finished = true;
+    }
+
+
     //TODO: ricky mover
-    current_position = shelve_position.slice();
-    current_position[1] = 0;
-    current_position[2] += 5;
-    current_event_finished = true;
   }
 
   function adjust_main_trunk_bookcase() {
