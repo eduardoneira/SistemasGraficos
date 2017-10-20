@@ -37,6 +37,7 @@ function Printer(light, texture) {
 
   this.unlock = function() {
     locked = false;
+    this.discardPrinting();
   }
 
   this.releaseObject = function() {

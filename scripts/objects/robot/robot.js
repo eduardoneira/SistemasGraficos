@@ -46,7 +46,6 @@ function Robot(printer, bookcase, light) {
 
   this.draw = function(transformations) {
     if (current_event_finished) {
-      // debugger;
       current_event_finished = false;
       current_event = possible_events[current_event].next
     }
@@ -54,7 +53,6 @@ function Robot(printer, bookcase, light) {
     possible_events[current_event].algorithm();
     
     if (!current_position) {
-      debugger;
       current_position = printer.position.slice();
       current_position[1] = 0;
       current_position[2] -= 5;
@@ -100,7 +98,7 @@ function Robot(printer, bookcase, light) {
     shelve_position = bookcase.randomFreeSpot();
 
     create_path();
-
+    debugger;
     width_printer_object = printer.getWidthObject(20);
     max_height_printed_object = printer.getHeightObject();
 
@@ -172,7 +170,7 @@ function Robot(printer, bookcase, light) {
 
   function leave_object() {
     if (robot_upper_body.open_hand()) {
-      bookcase.store_object(robot_upper_body.releaseObject());
+      bookcase.store_object(robot_upper_body.releaseObject(),max_height_printed_object);
       current_event_finished = true;
     }
   }
