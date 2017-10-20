@@ -3,7 +3,8 @@ function Tire(delta, M, radius, light){
   var that = this;
 
   this.offset = [0,0,0];
-  this.scale_value = [1,1,1];
+  this.scale_value = [1,1,1]; 
+  this.rotation = 0; //asumo siempre eje y(?)
 
 
   var shape = new Tire1Profile();
@@ -61,6 +62,11 @@ function Tire(delta, M, radius, light){
                       1/that.scale_value[2]]);
 
      that.scale_value = [1,1,1];
+   }
+
+   this.rotate = function(rad, axis){
+    this.rotation += rad;
+    this.loft.rotate(rad, axis);
    }
 
 }
