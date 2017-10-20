@@ -16,7 +16,7 @@ function Scene() {
 
   var bookcase = new BookCase(6,
                               3,
-                              0.5,
+                              1.5,
                               textures["wood"],
                               basicShaderHandler,
                               light,
@@ -45,10 +45,8 @@ function Scene() {
     floor.draw(floor_transformations);
 
     var robot_transformations = mat4.create();
-    mat4.translate(robot_transformations,robot_transformations,[0.0,0.0,-5.0])
     mat4.rotate(robot_transformations,robot_transformations,degToRad(90),[0.0,1.0,0.0]);
     mat4.scale(robot_transformations,robot_transformations,[0.32,0.32,0.32]);
     robot.draw(robot_transformations);
-    // debugger;
   }
 }

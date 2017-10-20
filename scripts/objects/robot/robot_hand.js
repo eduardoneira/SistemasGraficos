@@ -34,15 +34,16 @@ function RobotHand(texture, light, diffuseColor) {
 
   // Logic
   var current_width = 4;
-  var length_finger = 6;
+  var current_width_world = [];
+  var length_finger = 0.05;
   var current_angle = 0;
   var delta_angle = 0.01;
   var open_angle = null;
 
   this.close_hand = function(maxWidth) {
-    if (current_width > maxWidth) {
-      current_angle += delta_angle;
-      current_width = current_width - (length_finger * Math.cos(angle));
+    if (Math.abs(current_width_world[0]) > maxWidth) {
+      current_angle -= delta_angle;
+      current_width = current_width - (length_finger * Math.cos(delta_angle));
       triangleLoftRight.setAngle(current_angle);
       triangleLoftLeft.setAngle(current_angle);
       return false;
@@ -56,8 +57,9 @@ function RobotHand(texture, light, diffuseColor) {
       open_angle = current_angle - degToRad(10);
     }
 
-    if (current_angle > open_angle) {
-      current_angle -= delta_angle;
+    if (current_angle < open_angle) {
+      current_angle += delta_angle;
+      current_width = current_width + (length_finger * Math.cos(delta_angle));
       triangleLoftRight.setAngle(current_angle);
       triangleLoftLeft.setAngle(current_angle);
       return false;
@@ -93,11 +95,12 @@ function RobotHand(texture, light, diffuseColor) {
     cube.draw(aux);
 
     vec3.transformMat4(this.holding_position,initial_holding_position,transformations);
-    
+    vec3.transformMat4(current_width_world,[current_width,0.0,0.0],transformations);
+
     if (printed_object) {
       mat4.identity(aux);
-      mat4.translate(aux,aux,this.holding_position)
-      mat4.scale(aux,aux,[1.0/maxYObject,1.0/maxYObject,1.0/maxYObject]);
+      mat4.translate(aux,aux,this.holding_position.map( function(elem,index) { return (index == 1) ? elem/1.25 : elem;}));
+      mat4.scale(aux,aux,[2.0/maxYObject,1.0/maxYObject,2.0/maxYObject]);
 
       printed_object.draw(aux);
     }
@@ -148,7 +151,7 @@ function SideBaseRobotHand(texture, light, diffuseColor, delta_angle) {
 
   var hand_angle = 0;
 
-  function setAngle(angle) {
+  this.setAngle = function(angle) {
     hand_angle = angle;
   }
 

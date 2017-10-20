@@ -46,14 +46,15 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
        x += delta_horizontal/2;
     }
 
-    x += this.position[0];
-    y = delta_vertical*col + this.position[1];
-    z = this.position[2];
+    x += that.position[0];
+    y = delta_vertical*col + that.position[1];
+    z = that.position[2];
     
     return [x,y,z];
   }
 
   this.randomFreeSpot = function() {
+    debugger;
     while (true) {
       var row = Math.floor(Math.random() * rows);
       var col = Math.floor(Math.random() * cols);

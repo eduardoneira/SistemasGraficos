@@ -19,6 +19,7 @@ function Printer(light, texture) {
   var traveler = null;
 
   var vertical_scale = 2.0;
+  var object_to_print_transformations = mat4.create();
   this.position = [];
 
   this.busy = function() {
@@ -26,7 +27,8 @@ function Printer(light, texture) {
   }
 
   this.getWidthObject = function(maxY) {
-    return traveler.maxWidth(maxY);
+    var width = [];
+    return traveler.maxWidth(maxY)/traveler.maxY;
   }  
 
   this.getHeightObject = function() {
@@ -157,7 +159,7 @@ function Printer(light, texture) {
     if (object_to_print != null) {
       object_to_print.activateShader();
       head_position();
-      var object_to_print_transformations = mat4.create();
+      object_to_print_transformations = mat4.identity(object_to_print_transformations);
       mat4.translate(object_to_print_transformations,object_to_print_transformations,[0.0,vertical_scale*2,0.0]);
       mat4.scale(object_to_print_transformations,object_to_print_transformations,[1.0/traveler.maxY,1.0/traveler.maxY,1.0/traveler.maxY]);
       mat4.multiply(object_to_print_transformations,transformations,object_to_print_transformations);

@@ -64,6 +64,7 @@ function RobotUpperBody(texture, light, diffuseColor) {
   var world_cube_height = null;
 
   var angle_arm = 0;
+  var initial_angle_arm = angle_arm;
   var angular_speed = 0.01;
 
   this.stretch_torso = function(position) {
@@ -72,7 +73,6 @@ function RobotUpperBody(texture, light, diffuseColor) {
       // final_stretch = position[1]/robot_arm.robot_hand_position()[1];
       final_stretch = position[1]/world_cube_height;
       stretch_delta = (final_stretch - current_stretch) * speed_stretch;
-      debugger;
     }
 
     current_stretch += stretch_delta;
@@ -93,7 +93,12 @@ function RobotUpperBody(texture, light, diffuseColor) {
       angle_arm -= 0.01;
     }
 
-    return (Math.abs(angle_arm) > degToRad(180));
+    if (Math.abs(angle_arm - initial_angle_arm) > degToRad(180)) {
+      initial_angle_arm = angle_arm;
+      return true;
+    }
+    
+    return false;
   }
 
   this.stretch_arm = function(position) {
