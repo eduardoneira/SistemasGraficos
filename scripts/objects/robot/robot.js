@@ -51,6 +51,10 @@ function Robot(printer, bookcase, light) {
     }
   }
 
+  this.position = function() {
+    return current_position;
+  }
+
   this.draw = function(transformations) {
     if (current_event_finished) {
       current_event_finished = false;
@@ -169,9 +173,6 @@ function Robot(printer, bookcase, light) {
   }
 
   function move_to_bookcase() {
-
-    // debugger;
-
     if(path_counter < path_to_travel.positions.length){
       current_position[0] = path_to_travel.positions[path_counter];
       current_position[1] = path_to_travel.positions[path_counter+1];

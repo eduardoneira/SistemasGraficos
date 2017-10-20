@@ -12,6 +12,9 @@ function Camera(radius = 15, speed = 0.003) {
   this.reset_position = true;
   this.switch_mode = true;
 
+  var that = this;
+  this.robot = null;
+
   this.mouse = {
     x: 0,
     y: 0
@@ -31,7 +34,7 @@ function Camera(radius = 15, speed = 0.003) {
 
   //TODO: Add listener to robot position
   function position_robot() {
-    return [10.0,10.0,10.0];
+    return that.robot.position();
   }
 
   this.current_mode = "1";
@@ -88,7 +91,7 @@ function Camera(radius = 15, speed = 0.003) {
   });
 
   this.getViewMatrix = function() {
-    if (this.is_mouse_down || this.mouse_wheel_triggered || this.switch_mode) {
+    if (this.is_mouse_down || this.mouse_wheel_triggered || this.switch_mode || this.current_mode == "4") {
       var deltaX = 0;
       var deltaY = 0;
       

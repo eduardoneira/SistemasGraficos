@@ -41,21 +41,20 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
 
   function calculatePositionShelve(row, col) {
     var x,y,z;
-    x = delta_horizontal*(row - Math.floor(rows/2));
+    x = delta_horizontal*(col - Math.floor(cols/2));
 
-    if (row % 2 == 0) {
+    if (col % 2 == 0) {
        x += delta_horizontal/2;
     }
 
     x += that.position[0];
-    y = delta_vertical*col + that.position[1];
+    y = delta_vertical*row + that.position[1];    
     z = that.position[2];
     
     return [x,y,z];
   }
 
   this.randomFreeSpot = function() {
-    // debugger;
     while (true) {
       var row = Math.floor(Math.random() * rows);
       var col = Math.floor(Math.random() * cols);
@@ -71,10 +70,7 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
 
   this.store_object = function(printed_object, maxY) {
     var pos = calculatePositionShelve(current_row,current_col);
-    debugger;
-    pos[0] += (Math.floor(rows/2));
-    pos[1] -= baseSize;
-    pos[2] = 0;
+
     printed_objects.push({position: pos, 
                           object: printed_object,
                           maxY: maxY});
@@ -87,9 +83,10 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
     vec3.add(this.position,initial_position,getPositionMat4(transformations));
 
     printed_objects.forEach( function(printed_object) {
-      var aux = mat4.clone(transformations);
+      var aux = mat4.create();
+      debugger;
       mat4.translate(aux,aux,printed_object.position);
-      mat4.scale(aux,aux,[1.0/printed_object.maxY,0.5/printed_object.maxY,1.0/printed_object.maxY]);
+      mat4.scale(aux,aux,[2.0/printed_object.maxY,1.0/printed_object.maxY,2.0/printed_object.maxY]);
       printed_object.object.draw(aux);
     });
     

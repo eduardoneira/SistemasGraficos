@@ -28,6 +28,7 @@ function Scene() {
 
   var robot = new Robot(printer,bookcase,light);
   printer.robot = robot;
+  camera.robot = robot;
 
   this.draw = function() {
     var printer_transformations = mat4.create();
