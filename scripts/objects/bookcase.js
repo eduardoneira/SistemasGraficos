@@ -47,7 +47,7 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
        x += delta_horizontal/2;
     }
 
-    // x += that.position[0];
+    x += that.position[0];
     y = delta_vertical*col + that.position[1];
     z = that.position[2];
     
@@ -89,7 +89,7 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
     printed_objects.forEach( function(printed_object) {
       var aux = mat4.clone(transformations);
       mat4.translate(aux,aux,printed_object.position);
-      mat4.scale(aux,aux,[2.0/printed_object.maxY,1.0/printed_object.maxY,2.0/printed_object.maxY]);
+      mat4.scale(aux,aux,[1.0/printed_object.maxY,0.5/printed_object.maxY,1.0/printed_object.maxY]);
       printed_object.object.draw(aux);
     });
     
