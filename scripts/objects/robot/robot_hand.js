@@ -54,7 +54,7 @@ function RobotHand(texture, light, diffuseColor) {
 
   this.open_hand = function() {
     if (!open_angle) {
-      open_angle = current_angle - degToRad(10);
+      open_angle = current_angle + degToRad(10);
     }
 
     if (current_angle < open_angle) {

@@ -1,6 +1,6 @@
 function RobotUpperBody(texture, light, diffuseColor) {
   // Cylinder
-  var profile = new ConstantRadiusProfile(2,15);
+  var profile = new ConstantRadiusProfile(2,12);
   profile.travel(0.01);
 
   var main_trunk = new Lathe( profile,
@@ -73,6 +73,7 @@ function RobotUpperBody(texture, light, diffuseColor) {
       // final_stretch = position[1]/robot_arm.robot_hand_position()[1];
       final_stretch = position[1]/world_cube_height;
       stretch_delta = (final_stretch - current_stretch) * speed_stretch;
+      debugger;
     }
 
     current_stretch += stretch_delta;
