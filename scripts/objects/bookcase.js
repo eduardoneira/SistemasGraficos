@@ -43,9 +43,9 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
     var x,y,z;
     x = delta_horizontal*(col - Math.floor(cols/2));
 
-    if (col % 2 == 0) {
-       x += delta_horizontal/2;
-    }
+    // if (col % 2 == 0) {
+    //    x += delta_horizontal/2;
+    // }
 
     x += that.position[0];
     y = delta_vertical*row + that.position[1];    
@@ -64,11 +64,11 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
         current_col = col;
         return calculatePositionShelve(row,col);
       }
-
     }    
   }
 
   this.store_object = function(printed_object, maxY) {
+    debugger;
     var pos = calculatePositionShelve(current_row,current_col);
 
     printed_objects.push({position: pos, 

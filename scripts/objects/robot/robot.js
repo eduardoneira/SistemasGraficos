@@ -109,14 +109,11 @@ function Robot(printer, bookcase, light) {
 
     var curve = new CuadraticBSplineCurve(control_points);
     path_to_travel = curve.travel(0.01);
-
-    // debugger;
   }
 
   function calculate_positions() {
     printed_object_position =  printer.position.slice();
     shelve_position = bookcase.randomFreeSpot();
-    // debugger;
 
     create_path();
     width_printer_object = printer.getWidthObject(20);
@@ -187,13 +184,10 @@ function Robot(printer, bookcase, light) {
       current_position[2] += 5;
       current_event_finished = true;
     }
-
-
-    //TODO: ricky mover
   }
 
   function adjust_main_trunk_bookcase() {
-    // debugger; 
+    debugger;
     _adjust_main_trunk(shelve_position);
   }
 
