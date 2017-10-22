@@ -62,6 +62,7 @@ function RobotUpperBody(texture, light, diffuseColor) {
   var initial_cube_height = 12.0;
   var cube_height = initial_cube_height * current_stretch;
   var world_cube_height = null;
+  var world_cube_initial_height = null;
 
   var angle_arm = 0;
   var initial_angle_arm = angle_arm;
@@ -70,16 +71,16 @@ function RobotUpperBody(texture, light, diffuseColor) {
   this.stretch_torso = function(position) {
     if (!stretching) {
       stretching = true;
-      // final_stretch = position[1]/robot_arm.robot_hand_position()[1];
-      final_stretch = position[1]/(world_cube_height*2);
+      final_stretch = (position[1] - (2*0.32))/(world_cube_initial_height - (2*0.32)); // resto el y del lower body
       stretch_delta = (final_stretch - current_stretch) * speed_stretch;
-      // debugger;
+      debugger;
     }
 
     current_stretch += stretch_delta;
     cube_height = initial_cube_height * current_stretch;
 
-    if (Math.abs(final_stretch - stretch_delta - current_stretch) > Math.abs(final_stretch - current_stretch)) {
+    if (Math.abs(final_stretch - stretch_delta - current_stretch) >= Math.abs(final_stretch - current_stretch)) {
+      debugger;
       stretching = false;
       return true;
     }
@@ -128,6 +129,9 @@ function RobotUpperBody(texture, light, diffuseColor) {
     
     if (!stretching) {
       world_cube_height = world_cube_pos[1];
+      if (!world_cube_initial_height) {
+        world_cube_initial_height = world_cube_pos[1] * 2;
+      }
     }
 
     var aux = mat4.create();
