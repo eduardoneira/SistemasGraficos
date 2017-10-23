@@ -47,7 +47,7 @@ function RobotArm(texture, light, diffuseColor) {
   var final_stretch = 0;
   var speed_stretch = 0.005; 
 
-  var initial_hand_height = 10.5
+  var initial_hand_height = 10.5;
   var current_hand_height = initial_hand_height;
 
   this.stretch_arm = function(position) {
@@ -78,6 +78,10 @@ function RobotArm(texture, light, diffuseColor) {
 
   this.set_printed_object = function(printed_object,maxY) {
     robot_hand.set_printed_object(printed_object,maxY);
+  }
+
+  this.set_height_printed_object = function(world_height) {
+    robot_hand.set_height_printed_object(world_height);
   }
 
   this.releaseObject = function() {

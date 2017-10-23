@@ -1,5 +1,5 @@
 function RobotHand(texture, light, diffuseColor) {
-  var initial_holding_position = [0.0,0.0,5.5];
+  var initial_holding_position = [0.0,0.0,6];
   this.holding_position = [];
   var printed_object = null;
   var maxYObject = 0;
@@ -33,19 +33,16 @@ function RobotHand(texture, light, diffuseColor) {
   mat4.rotate(right_transformations,right_transformations,degToRad(270),[0,0,1]);
 
   // Logic
-  var current_width = 4;
-  var current_width_world = [];
-  var length_finger = 0.05;
-  var current_angle = 0;
+  // var current_width = 4;
+  // var current_width_world = [];
+  
+  // var length_finger = 6;
+  var current_angle = degToRad(10);
   var delta_angle = 0.01;
-  var open_angle = null;
 
   this.close_hand = function(maxWidth) {
-    if (Math.abs(current_width_world[0]) > maxWidth) {
+    if (current_angle > -degToRad(5)) {
       current_angle -= delta_angle;
-      current_width = current_width - (length_finger * Math.cos(delta_angle));
-      triangleLoftRight.setAngle(current_angle);
-      triangleLoftLeft.setAngle(current_angle);
       return false;
     }
 
@@ -53,25 +50,23 @@ function RobotHand(texture, light, diffuseColor) {
   }
 
   this.open_hand = function() {
-    if (!open_angle) {
-      open_angle = current_angle + degToRad(10);
-    }
-
-    if (current_angle < open_angle) {
+    if (current_angle < degToRad(10)) {
       current_angle += delta_angle;
-      current_width = current_width + (length_finger * Math.cos(delta_angle));
-      triangleLoftRight.setAngle(current_angle);
-      triangleLoftLeft.setAngle(current_angle);
       return false;
     }
 
-    open_angle = null;
     return true;
   }
 
   this.set_printed_object = function(obj, maxY) {
     printed_object = obj;
     maxYObject = maxY;
+  }
+
+  var printed_object_world_height = 0;
+
+  this.set_height_printed_object = function(world_height) {
+    printed_object_world_height = world_height;
   }
 
   this.releaseObject = function() {
@@ -83,11 +78,13 @@ function RobotHand(texture, light, diffuseColor) {
 
   this.draw = function(transformations) {
     var aux = mat4.create();
-    mat4.multiply(aux, transformations, right_transformations);
+    mat4.multiply(aux, transformations, right_transformations);      
+    triangleLoftRight.setAngle(current_angle);
     triangleLoftRight.draw(aux);
 
     mat4.identity(aux);
     mat4.multiply(aux, transformations, left_transformations);
+    triangleLoftLeft.setAngle(current_angle);
     triangleLoftLeft.draw(aux);
 
     mat4.identity(aux);
@@ -95,11 +92,12 @@ function RobotHand(texture, light, diffuseColor) {
     cube.draw(aux);
 
     vec3.transformMat4(this.holding_position,initial_holding_position,transformations);
-    vec3.transformMat4(current_width_world,[current_width,0.0,0.0],transformations);
 
     if (printed_object) {
       mat4.identity(aux);
-      mat4.translate(aux,aux,this.holding_position.map( function(elem,index) { return (index == 1) ? elem/1.25 : elem;}));
+      var pos = this.holding_position.slice();
+      pos[1] = printed_object_world_height;
+      mat4.translate(aux,aux,pos);
       mat4.scale(aux,aux,[2.0/maxYObject,1.0/maxYObject,2.0/maxYObject]);
 
       printed_object.draw(aux);

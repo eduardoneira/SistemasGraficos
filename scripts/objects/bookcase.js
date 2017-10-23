@@ -64,7 +64,6 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
   }
 
   this.store_object = function(printed_object, maxY) {
-    debugger;
     var pos = calculatePositionShelve(current_row,current_col);
 
     printed_objects.push({position: pos, 

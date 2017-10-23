@@ -121,6 +121,8 @@ function RobotUpperBody(texture, light, diffuseColor) {
     vec3.transformMat4(world_cube_pos,[0,0,0],aux);
     world_cube_height = world_cube_pos[1];
 
+    robot_arm.set_height_printed_object(world_cube_pos[1]);
+
     mat4.identity(aux);
     mat4.translate(aux,transformations,[0.0,cube_height+2.5,0.0]);
     mat4.rotate(aux,aux,angle_arm,[0.0,1.0,0.0]);
