@@ -1,6 +1,6 @@
 function RobotUpperBody(texture, light, diffuseColor) {
   // Cylinder
-  var profile = new ConstantRadiusProfile(2,12);
+  var profile = new ConstantRadiusProfile(2,6);
   profile.travel(0.01);
 
   var main_trunk = new Lathe( profile,
@@ -53,38 +53,25 @@ function RobotUpperBody(texture, light, diffuseColor) {
   mat4.rotate(robot_arm_transformations,robot_arm_transformations,degToRad(90),[0.0,1.0,0.0]);
 
   // Logic
-  var stretching = false;
-  var current_stretch = 0.5;
-  var stretch_delta = 0;
-  var final_stretch = 0;
-  var speed_stretch = 0.005;
+  var current_stretch = 1;
+  var delta_strech = 0.005;
   
-  var initial_cube_height = 12.0;
+  var initial_cube_height = 6;
   var cube_height = initial_cube_height * current_stretch;
   var world_cube_height = null;
-  var world_cube_initial_height = null;
 
   var angle_arm = 0;
   var initial_angle_arm = angle_arm;
   var angular_speed = 0.01;
 
   this.stretch_torso = function(position) {
-    if (!stretching) {
-      stretching = true;
-      final_stretch = (position[1] - (2*0.32))/(world_cube_initial_height - (2*0.32)); // resto el y del lower body
-      stretch_delta = (final_stretch - current_stretch) * speed_stretch;
+    if (Math.abs(position[1] - world_cube_height) <= Math.abs(delta_strech)) {
       debugger;
-    }
-
-    current_stretch += stretch_delta;
-    cube_height = initial_cube_height * current_stretch;
-
-    if (Math.abs(final_stretch - stretch_delta - current_stretch) >= Math.abs(final_stretch - current_stretch)) {
-      debugger;
-      stretching = false;
       return true;
     }
 
+    current_stretch += Math.sign(position[1] - world_cube_height) * delta_strech; // resto el y del lower body
+    cube_height = initial_cube_height * current_stretch;
     return false;
   }
 
@@ -124,21 +111,15 @@ function RobotUpperBody(texture, light, diffuseColor) {
   }
 
   this.draw = function(transformations) {
-    var world_cube_pos = [];
-    vec3.transformMat4(world_cube_pos,[0,cube_height,0],transformations);
-    
-    if (!stretching) {
-      world_cube_height = world_cube_pos[1];
-      if (!world_cube_initial_height) {
-        world_cube_initial_height = world_cube_pos[1] * 2;
-      }
-    }
-
     var aux = mat4.create();
     mat4.translate(aux,transformations,[0.0,cube_height,0.0]);
     mat4.rotate(aux,aux,angle_arm,[0.0,1.0,0.0]);
     mat4.multiply(aux,aux,cube_transformations);
     cube.draw(aux);
+
+    var world_cube_pos = [];
+    vec3.transformMat4(world_cube_pos,[0,0,0],aux);
+    world_cube_height = world_cube_pos[1];
 
     mat4.identity(aux);
     mat4.translate(aux,transformations,[0.0,cube_height+2.5,0.0]);
