@@ -49,7 +49,13 @@ function Printer(light, texture) {
     return object;
   }
 
-  var lathe_contours = [];
+  var profile1 = new ConstantRadiusProfile(2,10);
+  profile1.travel(0.01);
+
+  var profile2 = new Base1Profile();
+  profile2.travel(0.01);
+
+  var lathe_contours = [profile1, profile2];
   var loft_contours = [];
 
   var light = light;
@@ -63,10 +69,7 @@ function Printer(light, texture) {
 
   this.startPrinting = function(config) {
     if (config.mode == "Lathe") {
-      var profile = new ConstantRadiusProfile(2,10);
-      profile.travel(0.01);
-
-      object_to_print = new Lathe(profile,
+      object_to_print = new Lathe(lathe_contours[config.contour - 1],
                                   Math.PI/36.0,
                                   textures["checker"],
                                   printableObjectShaderHandler,
@@ -122,7 +125,7 @@ function Printer(light, texture) {
           curX += deltaX;
           if (curX > current["maxX"] + deltaX) {
             curY += deltaY;
-            if (curY > traveler.maxY + deltaY) {
+            if (curY >= traveler.maxY + deltaY) {
               if (that.robot) {
                 that.robot.activate();
               }

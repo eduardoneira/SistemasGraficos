@@ -47,7 +47,7 @@ function Base1Profile() {
     });
 
     bezier_curve.tangents.forEach(function(elem,index){
-      if ((index + 2) % 3 == 0) {
+      if ((index + 1) % 3 == 0) {
         that.normals.push(elem);
       }
     });
