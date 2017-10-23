@@ -42,6 +42,7 @@ function Printer(light, texture) {
 
   this.releaseObject = function() {
     var object = object_to_print;
+    object.setShader(basicShaderHandler);
     object_to_print = null; 
     finished = false;
     locked = false;

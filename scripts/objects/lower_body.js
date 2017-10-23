@@ -12,17 +12,11 @@ function LowerBody(){
   this.wheels = [this.wheel1, this.wheel2];
 
   var wheel_offset = 6;
-  // this.wheel1.rotate(Math.PI/2, [0,1,0]);
-  // this.wheel2.rotate(Math.PI/2, [0,1,0]);
-  // this.pelvis.translate([0,0,-2]);
   var pelvis_transformations = mat4.create();
   mat4.scale(pelvis_transformations, pelvis_transformations,
               [0.8, 0.8, 0.8]);
   mat4.translate(pelvis_transformations, pelvis_transformations,
                  [0,6,0]);
-
-  // this.wheel1.translate([0, 0, wheel_offset]);
-  // this.wheel2.translate([0, 0, -wheel_offset]);
 
   var wheel1_transformations = mat4.create();
   var wheel2_transformations = mat4.create();
@@ -46,9 +40,6 @@ function LowerBody(){
     aux = mat4.create();
     mat4.multiply(aux, transformations, wheel2_transformations);
     that.wheel2.draw(aux);
-    // this.parts.forEach(function(elem){
-    //   elem.draw(transformations);
-    // });
   }
 
 }

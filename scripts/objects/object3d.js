@@ -119,7 +119,11 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
 
   this.activateShader = function() {
     this.shader.activateShader();
-  } 
+  }
+
+  this.setShader = function(shader) {
+    this.shader = shader;
+  }
 
   this._draw = function(mvMatrix) {
     setUpLighting();
