@@ -68,6 +68,8 @@ function Printer(light, texture) {
                           false);
 
   this.startPrinting = function(config) {
+    var object_to_print = null;
+
     if (config.mode == "Lathe") {
       object_to_print = new Lathe(lathe_contours[config.contour - 1],
                                   Math.PI/36.0,
@@ -84,6 +86,10 @@ function Printer(light, texture) {
     traveler = new PrintableTraveler(deltaX,deltaZ,deltaY,object_to_print.position_buffer);
     finished = false;
     locked = false;
+
+    object_to_print = new PrintedObject(object_to_print,
+                                        ,        
+                                        traveler.maxY);
 
     this.resumePrinting();
   }
