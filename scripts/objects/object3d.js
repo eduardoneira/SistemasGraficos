@@ -122,6 +122,7 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
   }
 
   this.setShader = function(shader) {
+    this.projector.setShader(shader);
     this.shader = shader;
   }
 

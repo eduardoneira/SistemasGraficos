@@ -3,6 +3,10 @@ function Projector(shader) {
   var shader = shader;
 
   mat4.perspective(pMatrix, 1, canvas.width/canvas.height, 0.1, 1000.0);
+
+  this.setShader = function(_shader) {
+    shader = _shader;
+  }
   
   this.applyProjection = function() {
     gl.uniformMatrix4fv(shader.pMatrixUniform, false, pMatrix);

@@ -66,7 +66,6 @@ function RobotUpperBody(texture, light, diffuseColor) {
 
   this.stretch_torso = function(position) {
     if (Math.abs(position[1] - world_cube_height) <= Math.abs(delta_strech)) {
-      debugger;
       return true;
     }
 

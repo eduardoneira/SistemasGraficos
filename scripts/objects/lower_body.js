@@ -8,9 +8,6 @@ function LowerBody(){
   this.wheel2 = new Wheel();
   this.pelvis = new Pelvis(0.1, 100, 6, light);
 
-  this.parts = [this.wheel1, this.wheel2, this.pelvis];
-  this.wheels = [this.wheel1, this.wheel2];
-
   var wheel_offset = 6;
   var pelvis_transformations = mat4.create();
   mat4.scale(pelvis_transformations, pelvis_transformations,
@@ -27,6 +24,12 @@ function LowerBody(){
   mat4.rotate(wheel2_transformations, wheel2_transformations, Math.PI, [0,1,0]);
   mat4.scale(wheel2_transformations, wheel2_transformations, [3, 3, 2.5]);
 
+  var angle = 0.0;
+  var radius = 0.32 * 3 * this.wheel1.radius();
+
+  this.rotateWheel = function(length_travelled, clockwise) {
+    angle += clockwise * length_travelled / radius; 
+  }
 
   this.draw = function(transformations){
     var aux = mat4.create();
@@ -34,11 +37,13 @@ function LowerBody(){
     that.pelvis.draw(aux);
 
     aux = mat4.create();
-    mat4.multiply(aux, transformations, wheel1_transformations);
+    mat4.rotate(aux, wheel1_transformations, angle, [0.0,0.0,-1.0]);
+    mat4.multiply(aux, transformations, aux);
     that.wheel1.draw(aux);
 
     aux = mat4.create();
-    mat4.multiply(aux, transformations, wheel2_transformations);
+    mat4.rotate(aux, wheel2_transformations, angle, [0.0,0.0,1.0]);
+    mat4.multiply(aux, transformations, aux);
     that.wheel2.draw(aux);
   }
 

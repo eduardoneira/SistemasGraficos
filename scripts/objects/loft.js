@@ -97,9 +97,6 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
      			                       sweep_path.binormals[3*j+1],
      			                       sweep_path.binormals[3*j+2]);
 
-			// if (j == 100)
-				// debugger;
-
 			transform_matrix = makeTransformMatrix(tangent, normal, binormal, curr_vert);
 
 			var new_shape = [];

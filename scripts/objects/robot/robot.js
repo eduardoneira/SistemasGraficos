@@ -33,6 +33,7 @@ function Robot(printer, bookcase, light) {
 
   var path_to_travel = [];
   var current_position = null;
+  var previous_current_position = null;
 
   var robot_upper_body = new RobotUpperBody(textures["metallic_white_with_holes"],
                                             light,
@@ -170,14 +171,17 @@ function Robot(printer, bookcase, light) {
   }
 
   function move_to_bookcase() {
-    if(path_counter < path_to_travel.positions.length){
+    if(path_counter < path_to_travel.positions.length) {
+      previous_current_position = current_position.slice();
+
       current_position[0] = path_to_travel.positions[path_counter];
       current_position[1] = path_to_travel.positions[path_counter+1];
       current_position[2] = path_to_travel.positions[path_counter+2];
 
+      robot_lower_body.rotateWheel(vec3.distance(previous_current_position,current_position), 1.0);
+
       path_counter += 3;
-    }
-    else{
+    } else{
       path_counter = 0;
       current_position = shelve_position.slice();
       current_position[1] = 0;
