@@ -69,9 +69,10 @@ function RobotHand(texture, light, diffuseColor) {
     printed_object_world_height = world_height;
   }
 
+  var one_more_tick = false
   this.releaseObject = function() {
     var copy = printed_object;
-    printed_object = null;
+    one_more_tick = true;
     
     return copy;
   }
@@ -93,11 +94,16 @@ function RobotHand(texture, light, diffuseColor) {
 
     vec3.transformMat4(this.holding_position,initial_holding_position,transformations);
 
-    if (printed_object) {
+    if (printed_object || one_more_tick) {
       mat4.identity(aux);
       var pos = this.holding_position.slice();
       pos[1] = printed_object_world_height;
       printed_object.draw(pos);
+
+      if (one_more_tick) {
+        printed_object = false;
+        one_more_tick = false;
+      }
     }
   }
 }

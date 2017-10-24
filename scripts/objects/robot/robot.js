@@ -139,16 +139,17 @@ function Robot(printer, bookcase, light) {
   }
 
   function adjust_main_trunk_printer() {    
-    _adjust_main_trunk(printed_object_position);
+    _adjust_main_trunk(printed_object_position.slice());
   }
 
   function adjust_second_trunk_printer() {
-    _adjust_second_trunk(printed_object_position);
+    _adjust_second_trunk(printed_object_position.slice());
   }
 
   function retract_second_trunk_printer() {
-    printed_object_position[2] -= 5;
-    _adjust_second_trunk(printed_object_position)
+    var copy = printed_object_position.slice();
+    copy[2] -= 1.75;
+    _adjust_second_trunk(copy)
   }
 
   function hold_object() {
@@ -191,11 +192,11 @@ function Robot(printer, bookcase, light) {
   }
 
   function adjust_main_trunk_bookcase() {
-    _adjust_main_trunk(shelve_position);
+    _adjust_main_trunk(shelve_position.slice());
   }
 
   function adjust_second_trunk_bookcase() {
-    _adjust_second_trunk(shelve_position);
+    _adjust_second_trunk(shelve_position.slice());
   }
 
   function leave_object() {
@@ -206,8 +207,9 @@ function Robot(printer, bookcase, light) {
   }
 
   function retract_second_trunk_bookcase() {
-    shelve_position[2] += 5;
-    _adjust_second_trunk(shelve_position)
+    var copy = shelve_position.slice();
+    copy[2] += 1.75;
+    _adjust_second_trunk(copy)
   }
 
 

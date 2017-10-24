@@ -44,7 +44,7 @@ function Printer(light, texture) {
     object_to_print = null; 
     finished = false;
     locked = false;
-    object.activateShader();
+    object.stop_printing();
     return object;
   }
 
@@ -54,7 +54,7 @@ function Printer(light, texture) {
   var profile2 = new Base1Profile();
   profile2.travel(0.01);
 
-  var lathe_contours = [{profile: profile1, scale: [1.5,1.2,1.5]}, 
+  var lathe_contours = [{profile: profile1, scale: [2,1.5,2]}, 
                         {profile: profile2, scale: [1.0,1.0,1.0]}];
 
   var loft_contours = [];

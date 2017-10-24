@@ -41,29 +41,19 @@ function RobotArm(texture, light, diffuseColor) {
   mat4.scale(robot_hand_transformations,robot_hand_transformations,[1/2,1.3,1/2]);
 
   // Logic
-  var stretching = false;
   var current_stretch = 1.0;
-  var stretch_delta = 0;
-  var final_stretch = 0;
-  var speed_stretch = 0.005; 
+  var delta_strech = 0.001; 
 
   var initial_hand_height = 10.5;
-  var current_hand_height = initial_hand_height;
+  var current_hand_height = initial_hand_height * current_stretch;
 
   this.stretch_arm = function(position) {
-    if (!stretching) {
-      stretching = true;
-      final_stretch = position[2]/robot_hand.holding_position[2];
-      stretch_delta = (final_stretch - current_stretch) * speed_stretch;
-    }
-
-    current_stretch += stretch_delta;
-    current_hand_height =  initial_hand_height * current_stretch;
-
-    if (Math.abs(final_stretch - stretch_delta - current_stretch) > Math.abs(final_stretch - current_stretch)) {
-      stretching = false;
+    if (Math.abs(position[2] - robot_hand.holding_position[2]) <= Math.abs(1.5*delta_strech)) {
       return true;
     }
+
+    current_stretch += Math.sign(Math.abs(position[2]) - Math.abs(robot_hand.holding_position[2])) * delta_strech;
+    current_hand_height =  initial_hand_height * current_stretch;
 
     return false;
   }
