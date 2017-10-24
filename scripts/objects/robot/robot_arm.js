@@ -76,8 +76,8 @@ function RobotArm(texture, light, diffuseColor) {
     return robot_hand.open_hand();
   }
 
-  this.set_printed_object = function(printed_object,maxY) {
-    robot_hand.set_printed_object(printed_object,maxY);
+  this.set_printed_object = function(printed_object) {
+    robot_hand.set_printed_object(printed_object);
   }
 
   this.set_height_printed_object = function(world_height) {

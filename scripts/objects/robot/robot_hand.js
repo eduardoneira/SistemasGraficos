@@ -97,10 +97,7 @@ function RobotHand(texture, light, diffuseColor) {
       mat4.identity(aux);
       var pos = this.holding_position.slice();
       pos[1] = printed_object_world_height;
-      mat4.translate(aux,aux,pos);
-      mat4.scale(aux,aux,[2.0/maxYObject,1.0/maxYObject,2.0/maxYObject]);
-
-      printed_object.draw(aux);
+      printed_object.draw(pos);
     }
   }
 }

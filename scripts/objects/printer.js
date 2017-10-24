@@ -19,7 +19,6 @@ function Printer(light, texture) {
   var traveler = null;
 
   var vertical_scale = 2.0;
-  var object_to_print_transformations = mat4.create();
   this.position = [];
 
   this.busy = function() {
@@ -42,10 +41,10 @@ function Printer(light, texture) {
 
   this.releaseObject = function() {
     var object = object_to_print;
-    object.setShader(basicShaderHandler);
     object_to_print = null; 
     finished = false;
     locked = false;
+    object.activateShader();
     return object;
   }
 
@@ -55,7 +54,9 @@ function Printer(light, texture) {
   var profile2 = new Base1Profile();
   profile2.travel(0.01);
 
-  var lathe_contours = [profile1, profile2];
+  var lathe_contours = [{profile: profile1, scale: [1.5,1.2,1.5]}, 
+                        {profile: profile2, scale: [1.0,1.0,1.0]}];
+
   var loft_contours = [];
 
   var light = light;
@@ -68,27 +69,27 @@ function Printer(light, texture) {
                           false);
 
   this.startPrinting = function(config) {
-    var object_to_print = null;
+    var object = null;
 
     if (config.mode == "Lathe") {
-      object_to_print = new Lathe(lathe_contours[config.contour - 1],
-                                  Math.PI/36.0,
-                                  textures["checker"],
-                                  printableObjectShaderHandler,
-                                  light,
-                                  [0.1, 0.1, 0.1]
-                                  );
-      object_to_print.init();
+      object = new Lathe( lathe_contours[config.contour - 1].profile,
+                          Math.PI/36.0,
+                          textures["checker"],
+                          printableObjectShaderHandler,
+                          light,
+                          [0.1, 0.1, 0.1]
+                          );
+      object.init();
     } else if (config.mode == "Loft") {
       //TODO: ricky
     }
     
-    traveler = new PrintableTraveler(deltaX,deltaZ,deltaY,object_to_print.position_buffer);
+    traveler = new PrintableTraveler(deltaX,deltaZ,deltaY,object.position_buffer);
     finished = false;
     locked = false;
 
-    object_to_print = new PrintedObject(object_to_print,
-                                        ,        
+    object_to_print = new PrintedObject(object,
+                                        lathe_contours[config.contour - 1].scale,        
                                         traveler.maxY);
 
     this.resumePrinting();
@@ -167,16 +168,11 @@ function Printer(light, texture) {
     mat4.multiply(printer_transformations,transformations,printer_transformations);
     shelve.draw(printer_transformations);
     
-    if (object_to_print != null) {
+    if (object_to_print) {
       object_to_print.activateShader();
       head_position();
-      object_to_print_transformations = mat4.identity(object_to_print_transformations);
-      mat4.translate(object_to_print_transformations,object_to_print_transformations,[0.0,vertical_scale*2,0.0]);
-      mat4.scale(object_to_print_transformations,object_to_print_transformations,[1.0/traveler.maxY,1.0/traveler.maxY,1.0/traveler.maxY]);
-      mat4.multiply(object_to_print_transformations,transformations,object_to_print_transformations);
-
-      vec3.add(this.position,[0,0,0],getPositionMat4(object_to_print_transformations));      
-      object_to_print.draw(object_to_print_transformations);
+      vec3.add(this.position,getPositionMat4(transformations),[0.0,vertical_scale*2,0.0]);    
+      object_to_print.draw(this.position);
     }
   }
 

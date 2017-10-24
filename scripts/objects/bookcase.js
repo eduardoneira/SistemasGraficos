@@ -63,25 +63,20 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
     }    
   }
 
-  this.store_object = function(printed_object, maxY) {
+  this.store_object = function(printed_object) {
     var pos = calculatePositionShelve(current_row,current_col);
 
-    printed_objects.push({position: pos, 
-                          object: printed_object,
-                          maxY: maxY});
+    printed_objects.push({ position: pos, 
+                           object: printed_object });
 
     used_spots[current_row][current_col] = true;
   }
 
   this.draw = function(transformations) {
-    var x = 0.0;
     vec3.add(this.position,initial_position,getPositionMat4(transformations));
 
     printed_objects.forEach( function(printed_object) {
-      var aux = mat4.create();
-      mat4.translate(aux,aux,printed_object.position);
-      mat4.scale(aux,aux,[2.0/printed_object.maxY,1.0/printed_object.maxY,2.0/printed_object.maxY]);
-      printed_object.object.draw(aux);
+      printed_object.object.draw(printed_object.position);
     });
     
     shelves.forEach( function(shelve, index) {

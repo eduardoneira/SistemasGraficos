@@ -9,6 +9,10 @@ function PrintedObject(object, scale, maxY) {
     this.printed_object.setShader(basicShaderHandler);
   }
 
+  this.activateShader = function() {
+    this.printed_object.activateShader();
+  }
+
   this.draw = function(position) {
     var transformations = mat4.create();
     mat4.translate(transformations, transformations, position);
