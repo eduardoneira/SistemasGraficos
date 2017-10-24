@@ -37,7 +37,10 @@ function Base1Profile() {
 
   this.travel = function(delta) {
     var bezier_curve = _bezier_curve.travel(delta);
-
+    
+    this.radius.push(0);
+    this.axis.push(0);
+    
     bezier_curve.positions.forEach(function(elem,index) {
       if (index % 3 == 0) {
         that.radius.push(elem);
@@ -45,6 +48,8 @@ function Base1Profile() {
         that.axis.push(elem);
       }
     });
+
+    this.normals.push(-1.0);
 
     bezier_curve.tangents.forEach(function(elem,index){
       if ((index + 1) % 3 == 0) {

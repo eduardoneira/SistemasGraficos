@@ -15,6 +15,10 @@ function loadAllTextures() {
   textures["tire"] = loadTexture("resources/tire.png");
   textures["brushed_aluminum"] = loadTexture("resources/brushed_aluminum.jpg");
   textures["brushed_aluminum_rot"] = loadTexture("resources/brushed_aluminum_rot.png");
+  textures["marble1"] = loadTexture("resources/marble1.jpeg");
+  textures["marble2"] = loadTexture("resources/marble2.jpeg");
+  textures["marble3"] = loadTexture("resources/marble3.jpg");
+  textures["marble4"] = loadTexture("resources/marble4.jpg");
 }
 
 function loadTexture(url) {

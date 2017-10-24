@@ -54,8 +54,16 @@ function Printer(light, texture) {
   var profile2 = new Base1Profile();
   profile2.travel(0.01);
 
-  var lathe_contours = [{profile: profile1, scale: [2,1.5,2]}, 
-                        {profile: profile2, scale: [1.0,1.0,1.0]}];
+  var profile3 = new GobletProfile();
+  profile3.travel(0.01);
+
+  var profile4 = new GreenLanternProfile();
+  profile4.travel(0.01);
+
+  var lathe_contours = [{profile: profile1, scale: [2.0,1.5,2.0]}, 
+                        {profile: profile2, scale: [1.2,1.4,1.2]},
+                        {profile: profile3, scale: [1.2,1.2,1.2]},
+                        {profile: profile4, scale: [1.4,1.4,1.4]}];
 
   var loft_contours = [];
 
@@ -68,13 +76,22 @@ function Printer(light, texture) {
                           [0.1,0.1,0.1],
                           false);
 
+  var printed_object_textures = [ textures["marble1"],
+                                  textures["marble2"],
+                                  textures["marble3"],
+                                  textures["marble4"]];
+  function randomTexture() {
+    var rnd_number = Math.floor(Math.random() * 4);
+    return printed_object_textures[rnd_number];
+  }
+
   this.startPrinting = function(config) {
     var object = null;
 
     if (config.mode == "Lathe") {
       object = new Lathe( lathe_contours[config.contour - 1].profile,
                           Math.PI/36.0,
-                          textures["checker"],
+                          randomTexture(),
                           printableObjectShaderHandler,
                           light,
                           [0.1, 0.1, 0.1]

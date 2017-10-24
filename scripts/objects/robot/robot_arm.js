@@ -42,14 +42,23 @@ function RobotArm(texture, light, diffuseColor) {
 
   // Logic
   var current_stretch = 1.0;
-  var delta_strech = 0.001; 
+  var delta_strech = 0.001;
+  var initial_delta_stretch = 0.002;
+  var first_time = true; 
 
   var initial_hand_height = 10.5;
   var current_hand_height = initial_hand_height * current_stretch;
 
   this.stretch_arm = function(position) {
     if (Math.abs(position[2] - robot_hand.holding_position[2]) <= Math.abs(1.5*delta_strech)) {
-      return true;
+      if (first_time) {
+        delta_strech = delta_strech / 2.0;
+        first_time = false;
+      } else {
+        delta_strech = initial_delta_stretch;
+        first_time = true;
+        return true;
+      }
     }
 
     current_stretch += Math.sign(Math.abs(position[2]) - Math.abs(robot_hand.holding_position[2])) * delta_strech;
