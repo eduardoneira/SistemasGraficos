@@ -143,9 +143,7 @@ function RobotUpperBody(texture, light, diffuseColor) {
     mat4.identity(aux);
     mat4.translate(aux,transformations,[0.0,cube_height+2.5,0.0]);
     mat4.rotate(aux,aux,angle_arm,[0.0,1.0,0.0]);
-    var align_rot2 = align_rot.slice();
-    // mat4.rotate(align_rot2, align_rot2, Math.PI, [0,1,0]);
-    mat4.multiply(aux, aux, align_rot2);
+    mat4.multiply(aux, aux, align_rot);
     mat4.multiply(aux,aux,robot_arm_transformations);
     robot_arm.draw(aux);    
 
