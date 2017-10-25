@@ -27,23 +27,45 @@ function LowerBody(){
   var angle = 0.0;
   var radius = 0.32 * 3 * this.wheel1.radius();
 
+  var dir = vec3.fromValues(0,0,1);
+  var dir_angle = 0.0;
+
+  this.alignBody = function(path_tangent){
+    vec3.normalize(path_tangent, path_tangent);
+    dir_angle = Math.acos(vec3.dot(dir, path_tangent));
+
+    if(path_tangent[0] > 0){
+      dir_angle *= -1;
+    }
+  }
+
   this.rotateWheel = function(length_travelled, clockwise) {
     angle += clockwise * length_travelled / radius; 
   }
 
   this.draw = function(transformations){
+    var align_rot = mat4.create();
+    mat4.rotate(align_rot, align_rot, -dir_angle, [0, 1, 0]);
+
     var aux = mat4.create();
+    mat4.multiply(aux, align_rot, aux);
     mat4.multiply(aux, transformations, pelvis_transformations);
+    // dir_angle = Math.PI/2;
+    // mat4.rotate(aux, aux, dir_angle, [0, 1, 0]);
     that.pelvis.draw(aux);
 
     aux = mat4.create();
+    // mat4.rotate(aux, aux, dir_angle, [0, 1, 0]);
     mat4.rotate(aux, wheel1_transformations, angle, [0.0,0.0,-1.0]);
+    mat4.multiply(aux, align_rot, aux);
     mat4.multiply(aux, transformations, aux);
     that.wheel1.draw(aux);
 
     aux = mat4.create();
     mat4.rotate(aux, wheel2_transformations, angle, [0.0,0.0,1.0]);
+    mat4.multiply(aux, align_rot, aux);
     mat4.multiply(aux, transformations, aux);
+    // mat4.rotate(aux, aux, dir_angle, [0, 1, 0]);
     that.wheel2.draw(aux);
   }
 

@@ -54,3 +54,11 @@ function makeFlatCircle(radius, M){
 
   return points;
 }
+
+function print3DPos(vect_array){
+  for(var i = 0; i < vect_array.length; i++){
+    console.log(vect_array[i],   ", ",
+                vect_array[i+1], ", ",
+                vect_array[i+2], ";");
+  }
+}

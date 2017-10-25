@@ -34,6 +34,7 @@ function Robot(printer, bookcase, light) {
   var path_to_travel = [];
   var current_position = null;
   var previous_current_position = null;
+  var current_tangent = null;
 
   var robot_upper_body = new RobotUpperBody(textures["metallic_white_with_holes"],
                                             light,
@@ -43,6 +44,8 @@ function Robot(printer, bookcase, light) {
 
   var offset_upper = [0,2,0];
   var offset_lower = [0,0.4,0];
+
+  var is_first = true;
 
   this.activate = function() {
     if (busy) {
@@ -98,18 +101,31 @@ function Robot(printer, bookcase, light) {
     control_points.push(p1);
     control_points.push(p1);
 
+    p2 = p1.slice();
+    p2[2] -= 5;
+    control_points.push(p2);
+
     var p3 = p1.slice();
     p3[0] = (p1[0] + p5[0])/2.0;
-    control_points.push(p3);
+    // control_points.push(p3);
 
     p3[2] = (p1[2] + p5[2])/2.0;
     control_points.push(p3);
+    // control_points.push(p3);
+
+    p4 = p5.slice();
+    p4[2] += 5;
+    control_points.push(p4);
 
     control_points.push(p5);
     control_points.push(p5);
+
+    // debugger;
 
     var curve = new CuadraticBSplineCurve(control_points);
     path_to_travel = curve.travel(0.01);
+    path_to_travel2 = curve.travel(0.01);
+    // debugger;
   }
 
   function calculate_positions() {
@@ -179,15 +195,29 @@ function Robot(printer, bookcase, light) {
       current_position[1] = path_to_travel.positions[path_counter+1];
       current_position[2] = path_to_travel.positions[path_counter+2];
 
+      current_tangent = vec3.create();
+      current_tangent = vec3.fromValues(path_to_travel.tangents[path_counter],
+                                        path_to_travel.tangents[path_counter+1],
+                                        path_to_travel.tangents[path_counter+2]);                         
+      vec3.normalize(current_tangent, current_tangent);
+
+      if(!is_first){
+        robot_lower_body.alignBody(current_tangent);
+      } else{
+        is_first = false;
+      }
+
       robot_lower_body.rotateWheel(vec3.distance(previous_current_position,current_position), 1.0);
 
       path_counter += 3;
     } else{
-      path_counter = 0;
+      // path_counter = 0;
+      // debugger;
       current_position = shelve_position.slice();
       current_position[1] = 0;
       current_position[2] += 5;
       current_event_finished = true;
+      is_first = true;
     }
   }
 
@@ -222,13 +252,53 @@ function Robot(printer, bookcase, light) {
 
   function move_to_printer() {
     //TODO: ricky mover
-    current_position = null;
-    current_event_finished = true;
+    // if(path_counter < path_to_travel.positions.length){
+    if(path_counter > 0){
+      if(is_first){
+        is_first = false;
+      } else{
+        previous_current_position = current_position.slice();
+
+        current_position[0] = path_to_travel2.positions[path_counter];
+        current_position[1] = path_to_travel2.positions[path_counter+1];
+        current_position[2] = path_to_travel2.positions[path_counter+2];
+
+        current_tangent = vec3.create();
+        current_tangent = vec3.fromValues(path_to_travel2.tangents[path_counter],
+                                          path_to_travel2.tangents[path_counter+1],
+                                          path_to_travel2.tangents[path_counter+2]);                         
+        vec3.normalize(current_tangent, current_tangent);
+
+        robot_lower_body.alignBody(current_tangent);
+
+
+        // console.log(previous_current_position, ", ", current_position);
+        robot_lower_body.rotateWheel(vec3.distance(previous_current_position,current_position), -1.0);
+      }
+
+
+      path_counter -= 3;
+    } else{
+      // debugger;
+      current_position = null;
+      current_event_finished = true;
+      is_first = true;
+      if(!relax){
+        current_event = "free";
+      } else{
+        busy = false;
+      }
+    }
+
+    // current_position = null;
+    // current_event_finished = true;
+
+
 
     if (!relax) {
-      current_event = "free";
+      // current_event = "free";
     } else {
-      busy = false;
+      // busy = false;
     }
 
   }
