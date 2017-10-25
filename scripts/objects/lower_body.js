@@ -33,6 +33,7 @@ function LowerBody(){
   this.alignBody = function(path_tangent){
     vec3.normalize(path_tangent, path_tangent);
     dir_angle = Math.acos(vec3.dot(dir, path_tangent));
+    dir_angle += Math.PI;
 
     if(path_tangent[0] > 0){
       dir_angle *= -1;
@@ -48,8 +49,10 @@ function LowerBody(){
     mat4.rotate(align_rot, align_rot, -dir_angle, [0, 1, 0]);
 
     var aux = mat4.create();
-    mat4.multiply(aux, align_rot, aux);
+    // var aux2 = mat4.create();
+    // mat4.multiply(aux2, align_rot, aux);
     mat4.multiply(aux, transformations, pelvis_transformations);
+    mat4.multiply(aux, aux, align_rot);
     // dir_angle = Math.PI/2;
     // mat4.rotate(aux, aux, dir_angle, [0, 1, 0]);
     that.pelvis.draw(aux);

@@ -203,6 +203,7 @@ function Robot(printer, bookcase, light) {
 
       if(!is_first){
         robot_lower_body.alignBody(current_tangent);
+        robot_upper_body.alignBody(current_tangent);
       } else{
         is_first = false;
       }
@@ -270,6 +271,7 @@ function Robot(printer, bookcase, light) {
         vec3.normalize(current_tangent, current_tangent);
 
         robot_lower_body.alignBody(current_tangent);
+        robot_upper_body.alignBody(current_tangent);
 
 
         // console.log(previous_current_position, ", ", current_position);

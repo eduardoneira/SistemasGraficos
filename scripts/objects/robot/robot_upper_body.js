@@ -109,29 +109,53 @@ function RobotUpperBody(texture, light, diffuseColor) {
     return robot_arm.releaseObject();
   }
 
+  var dir = vec3.fromValues(0,0,1);
+  var dir_angle = 0.0;
+
+  this.alignBody = function(path_tangent){
+    vec3.normalize(path_tangent, path_tangent);
+    dir_angle = Math.acos(vec3.dot(dir, path_tangent));
+    dir_angle += Math.PI;
+
+    if(path_tangent[0] > 0){
+      dir_angle *= -1;
+    }
+  }
+
   this.draw = function(transformations) {
+    var align_rot = mat4.create();
+    mat4.rotate(align_rot, align_rot, -dir_angle, [0, 1, 0]);
+
     var aux = mat4.create();
     mat4.translate(aux,transformations,[0.0,cube_height,0.0]);
     mat4.rotate(aux,aux,angle_arm,[0.0,1.0,0.0]);
     mat4.multiply(aux,aux,cube_transformations);
+    mat4.multiply(aux, aux, align_rot);
     cube.draw(aux);
 
     var world_cube_pos = [];
     vec3.transformMat4(world_cube_pos,[0,0,0],aux);
     world_cube_height = world_cube_pos[1];
 
+
     robot_arm.set_height_printed_object(world_cube_pos[1]);
 
     mat4.identity(aux);
     mat4.translate(aux,transformations,[0.0,cube_height+2.5,0.0]);
     mat4.rotate(aux,aux,angle_arm,[0.0,1.0,0.0]);
+    var align_rot2 = align_rot.slice();
+    // mat4.rotate(align_rot2, align_rot2, Math.PI, [0,1,0]);
+    mat4.multiply(aux, aux, align_rot2);
     mat4.multiply(aux,aux,robot_arm_transformations);
     robot_arm.draw(aux);    
 
-    base.draw(transformations);
+    mat4.identity(aux);
+    mat4.multiply(aux, transformations, align_rot);
+    base.draw(aux);
 
     mat4.identity(aux);
     mat4.scale(aux,transformations,[1.0,current_stretch,1.0]);
+    mat4.multiply(aux, aux, align_rot);
     main_trunk.draw(aux)
   }
 
