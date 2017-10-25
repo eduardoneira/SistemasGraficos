@@ -74,7 +74,7 @@ function RobotHand(texture, light, diffuseColor) {
     var copy = printed_object;
     one_more_tick = true;
     
-    return copy;
+    return {object: copy, position: this.holding_position.slice()};
   }
 
   this.draw = function(transformations) {
