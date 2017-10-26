@@ -60,12 +60,21 @@ function Printer(light, texture) {
   var profile4 = new GreenLanternProfile();
   profile4.travel(0.01);
 
+  var crossB1 = new CrossB1Shape();
+  crossB1.travel(0.01);
+  var crossB2 = new CrossB2Shape();
+  crossB2.travel(0.01);
+  var crossB3 = new CrossB3Shape();
+  crossB3.travel(0.01);
+
   var lathe_contours = [{profile: profile1, scale: [2.0,1.5,2.0]}, 
                         {profile: profile2, scale: [1.2,1.4,1.2]},
                         {profile: profile3, scale: [1.2,1.2,1.2]},
                         {profile: profile4, scale: [1.4,1.4,1.4]}];
 
-  var loft_contours = [];
+  var loft_contours = [{shape: crossB1, scale: [0.9,0.9,0.9]},
+                       {shape: crossB2, scale: [1,1,1]},
+                       {shape: crossB3, scale: [1,1,1]}];
 
   var light = light;
   var shelve = new Shelve(1,
@@ -97,16 +106,33 @@ function Printer(light, texture) {
                           [0.1, 0.1, 0.1]
                           );
       object.init();
+      var contours = lathe_contours;
     } else if (config.mode == "Loft") {
       //TODO: ricky
+      var sweep_path = new StraightLineSweep();
+      var twist = 0.0;
+      object = new Loft( loft_contours[config.contour - 1].shape,
+                         sweep_path,
+                         randomTexture(),
+                         twist,
+                         printableObjectShaderHandler,
+                         light,
+                         [0.1, 0.1, 0.1]
+                         );
+      object.init();
+      var contours = loft_contours;
+      // debugger;
     }
     
     traveler = new PrintableTraveler(deltaX,deltaZ,deltaY,object.position_buffer);
     finished = false;
     locked = false;
 
+    // debugger;
+
+
     object_to_print = new PrintedObject(object,
-                                        lathe_contours[config.contour - 1].scale,        
+                                        contours[config.contour - 1].scale,        
                                         traveler.maxY);
 
     this.resumePrinting();
@@ -187,7 +213,9 @@ function Printer(light, texture) {
     
     if (object_to_print) {
       object_to_print.activateShader();
+      // debugger;
       head_position();
+      // debugger;
       vec3.add(this.position,getPositionMat4(transformations),[0.0,vertical_scale*2,0.0]);    
       object_to_print.draw(this.position);
     }

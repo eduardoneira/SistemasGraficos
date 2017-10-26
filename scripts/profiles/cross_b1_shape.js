@@ -76,8 +76,6 @@ function CrossB1Shape(){
                           puntas[1],
                           puntas[2]]);
 
-    debugger;
-
     _bezier_curve = new CubicBezierCurve(_control_points);
 
   }

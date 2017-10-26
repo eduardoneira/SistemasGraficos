@@ -3,7 +3,7 @@ function SceneRicky() {
 
   var delta = 0.01;
 
-  var shape = new CrossB3Shape();
+  var shape = new CrossB2Shape();
   shape.travel(0.1);
 
   // debugger;
@@ -24,12 +24,13 @@ function SceneRicky() {
     _sweep_path.push(0);
   }
 
-  var sweep_path = new Polygon(_sweep_path);
+  // var sweep_path = new Polygon(_sweep_path);
+  var sweep_path = new StraightLineSweep();
   // sweep_path.closed = true;
 
   var spoke = new Loft(shape, sweep_path, textures["checker"], 0.05, basicShaderHandler, light, [0.1, 0.1, 0.1]);
   spoke.init();
-  spoke.translate([0,5,1.8]);
+  spoke.translate([0,5,1.8,0]);
   // spoke.scale([1.3,1.3,1.3]);
 
 
