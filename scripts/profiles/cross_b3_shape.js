@@ -12,44 +12,35 @@ function CrossB3Shape(){
   function _init(){
     var _control_points = [];
 
-    var circulo = makeFlatCircle(_radius, M);
-
-    for(var i = 0; i < Math.floor(circulo.length/2)+1; i+=3){
-      _control_points.push([circulo[i],
-                            circulo[i+1],
-                            circulo[i+2]]);
-    }
-
-    var i_xmax = i - 3;
-
-    for(var i = 0; i < 4; i++){
-      _control_points.push([circulo[i_xmax],
-                            circulo[i_xmax+1] - offset/4*i,
-                            circulo[i_xmax+2]]);
-    }
-
-    for(var i = i_xmax; i < circulo.length; i+=3){
-      _control_points.push([circulo[i],
-                            circulo[i+1] - offset,
-                            circulo[i+2]]);
-    }
-
-    _control_points.push([circulo[0],
-                         circulo[1] - offset,
-                         circulo[2]]);
-
-    for(var i = 4; i >= 0; i--){
-      _control_points.push([circulo[0],
-                            circulo[1] - offset/4*i,
-                            circulo[2]]);
-    }
-
-    debugger;
+    _control_points.push([1,0,0]);
+    _control_points.push([1,1,0]);
+    _control_points.push([0,1,0]);
+    _control_points.push([0,0,0]);
+    _control_points.push([0,-0.25,0]);
+    _control_points.push([0,-0.75,0]);
+    _control_points.push([0,-1,0]);
+    _control_points.push([0,-2,0]);
+    _control_points.push([1,-2,0]);
+    _control_points.push([1,-1,0]);
+    _control_points.push([1,-0.75,0]);
+    _control_points.push([1,-0.25,0]);
+    _control_points.push([1,0,0]);
+    
+    _bezier_curve = new CubicBezierCurve(_control_points);
+    
+    // debugger;
   }
 
   _init();
-  this.travel(delta){
-    
+  this.travel = function(delta){
+    var bezier_curve = _bezier_curve.travel(delta);
+
+    for(var i = 0; i < bezier_curve.positions.length; i+=3){
+      that.positions.push(bezier_curve.positions[i]);
+      that.positions.push(bezier_curve.positions[i+1]);
+    }
+
+    that.normals = that.positions.slice();
   }
 
 }
