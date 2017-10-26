@@ -73,8 +73,8 @@ function Printer(light, texture) {
                         {profile: profile4, scale: [1.4,1.4,1.4]}];
 
   var loft_contours = [{shape: crossB1, scale: [0.9,0.9,0.9]},
-                       {shape: crossB2, scale: [1,1,1]},
-                       {shape: crossB3, scale: [1,1,1]}];
+                       {shape: crossB2, scale: [0.9,0.9,0.9]},
+                       {shape: crossB3, scale: [0.9,0.9,0.9]}];
 
   var light = light;
   var shelve = new Shelve(1,
@@ -110,7 +110,7 @@ function Printer(light, texture) {
     } else if (config.mode == "Loft") {
       //TODO: ricky
       var sweep_path = new StraightLineSweep();
-      var twist = 0.0;
+      var twist = config.angle_torsion/360;
       object = new Loft( loft_contours[config.contour - 1].shape,
                          sweep_path,
                          randomTexture(),
@@ -128,7 +128,7 @@ function Printer(light, texture) {
     finished = false;
     locked = false;
 
-    // debugger;
+    debugger;
 
 
     object_to_print = new PrintedObject(object,
