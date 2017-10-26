@@ -1,4 +1,4 @@
-function CrossB1Shape(){
+function CrossB2Shape(){
   this.normals = [];
   this.positions = [];
 
@@ -6,8 +6,8 @@ function CrossB1Shape(){
   var that = this;
 
   var _radius = 1;
-  var M = 7;
-  var inset = 0.4;
+  var M = 8;
+  var inset = 0.6;
 
   function _init(){
     var _control_points = [];
@@ -17,11 +17,10 @@ function CrossB1Shape(){
     var rotFW = mat4.create();
     var rotBW = mat4.create();
     var scale_inward = mat4.create();
-    var goFW = true;
     var is_first = true;
 
-    mat4.rotate(rotFW, rotFW, Math.PI*2/M*0.3, [0,0,1]);    
-    mat4.rotate(rotBW, rotBW, -Math.PI*2/M*0.3, [0,0,1]);    
+    mat4.rotate(rotFW, rotFW, Math.PI*2/M*0.2, [0,0,1]);    
+    mat4.rotate(rotBW, rotBW, -Math.PI*2/M*0.2, [0,0,1]);    
     mat4.scale(scale_inward, scale_inward, [inset, inset, inset]);
 
     for(var i = 0; i < puntas.length; i+=3){
@@ -30,7 +29,7 @@ function CrossB1Shape(){
         aux = vec3.fromValues(puntas[i],
                               puntas[i+1],
                               puntas[i+2]);
-        
+
         vec3.transformMat4(aux, aux, rotBW);
         vec3.transformMat4(aux, aux, scale_inward);
 
@@ -40,13 +39,28 @@ function CrossB1Shape(){
 
       }
 
-      _control_points.push([puntas[i],
-                            puntas[i+1],
-                            puntas[i+2]]);
 
       var aux = vec3.fromValues(puntas[i],
                                 puntas[i+1],
                                 puntas[i+2]);
+
+      vec3.transformMat4(aux, aux, rotFW);
+
+      _control_points.push([puntas[i],
+                            puntas[i+1],
+                            puntas[i+2]]);
+
+      _control_points.push([0.2*aux[0] + 0.8*puntas[i],
+                            0.2*aux[1] + 0.8*puntas[i+1],
+                            0.2*aux[2] + 0.8*puntas[i+2]]);
+
+      _control_points.push([0.8*aux[0] + 0.2*puntas[i],
+                            0.8*aux[1] + 0.2*puntas[i+1],
+                            0.8*aux[2] + 0.2*puntas[i+2]]);
+
+      _control_points.push([aux[0],
+                            aux[1],
+                            aux[2]]);
 
       vec3.transformMat4(aux, aux, rotFW);
       vec3.transformMat4(aux, aux, scale_inward);
@@ -75,9 +89,7 @@ function CrossB1Shape(){
     _control_points.push([puntas[0],
                           puntas[1],
                           puntas[2]]);
-
-    debugger;
-
+    
     _bezier_curve = new CubicBezierCurve(_control_points);
 
   }
