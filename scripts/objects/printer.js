@@ -72,7 +72,7 @@ function Printer(light, texture) {
                         {profile: profile3, scale: [1.2,1.2,1.2]},
                         {profile: profile4, scale: [1.4,1.4,1.4]}];
 
-  var loft_contours = [{shape: crossB1, scale: [0.9,0.9,0.9]},
+  var loft_contours = [{shape: crossB1, scale: [0.8,0.8,0.8]},
                        {shape: crossB2, scale: [0.9,0.9,0.9]},
                        {shape: crossB3, scale: [0.9,0.9,0.9]}];
 
@@ -98,6 +98,10 @@ function Printer(light, texture) {
     var object = null;
 
     if (config.mode == "Lathe") {
+      deltaX = 1;
+      deltaY = 1;
+      deltaZ = 1;
+
       object = new Lathe( lathe_contours[config.contour - 1].profile,
                           Math.PI/36.0,
                           randomTexture(),
@@ -109,6 +113,10 @@ function Printer(light, texture) {
       var contours = lathe_contours;
     } else if (config.mode == "Loft") {
       //TODO: ricky
+      deltaX = 0.25;
+      deltaY = 0.25;
+      deltaZ = 0.25;
+
       var sweep_path = new StraightLineSweep();
       var twist = config.angle_torsion/360;
       object = new Loft( loft_contours[config.contour - 1].shape,
@@ -120,16 +128,42 @@ function Printer(light, texture) {
                          [0.1, 0.1, 0.1]
                          );
       object.init();
+      // (function(){
+      //   var xmin = null;
+      //   var ymin = null;
+      //   var zmin = null;
+
+      //   for(var i = 0; i < object.position_buffer.length; i++){
+      //     object.position_buffer[i] /= 2;
+      //   }
+
+      //   // debugger;
+
+      //   for(var i = 0; i < object.position_buffer.length; i+=3){
+
+      //     if(xmin === null || xmin > object.position_buffer[i]){
+      //       xmin = object.position_buffer[i];
+      //     }
+      //     if(ymin === null || ymin > object.position_buffer[i+1]){
+      //       ymin = object.position_buffer[i+1];
+      //     }
+      //     if(zmin === null || zmin > object.position_buffer[i+2]){
+      //       zmin = object.position_buffer[i+2];
+      //     }
+      //   }
+
+      //   for(var i = 0; i < object.position_buffer.length; i+=3){
+      //     // object.position_buffer[i] -= xmin;
+      //     object.position_buffer[i+1] -= ymin;
+      //     // object.position_buffer[i+2] -= zmin;
+      //   }
+      // }());
       var contours = loft_contours;
-      // debugger;
     }
     
     traveler = new PrintableTraveler(deltaX,deltaZ,deltaY,object.position_buffer);
     finished = false;
     locked = false;
-
-    debugger;
-
 
     object_to_print = new PrintedObject(object,
                                         contours[config.contour - 1].scale,        

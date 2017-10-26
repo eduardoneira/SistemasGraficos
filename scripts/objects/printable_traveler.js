@@ -41,8 +41,11 @@ function PrintableTraveler(deltaX, deltaZ, deltaY, positions) {
         minZ: z
       };      
     }
+
   }
 
+  // debugger;
+  
   this.maxWidth = function(maxY) {
     var maxWidth = 0;
 
