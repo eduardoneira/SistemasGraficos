@@ -89,6 +89,11 @@ function CrossB2Shape(){
     _control_points.push([puntas[0],
                           puntas[1],
                           puntas[2]]);
+
+    for(var i = 0; i < _control_points.length; i++){
+      _control_points[i][0] /= 2;
+      _control_points[i][1] /= 2;
+    }
     
     _bezier_curve = new CubicBezierCurve(_control_points);
 

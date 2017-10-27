@@ -41,7 +41,6 @@ function PrintableTraveler(deltaX, deltaZ, deltaY, positions) {
         minZ: z
       };      
     }
-
   }
 
   // debugger;

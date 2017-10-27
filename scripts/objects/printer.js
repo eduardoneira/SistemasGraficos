@@ -27,7 +27,9 @@ function Printer(light, texture) {
 
   this.getWidthObject = function(maxY) {
     var width = [];
+    // debugger;
     return traveler.maxWidth(maxY)/traveler.maxY;
+    // return traveler.maxWidth(maxY);
   }  
 
   this.getHeightObject = function() {
@@ -72,9 +74,9 @@ function Printer(light, texture) {
                         {profile: profile3, scale: [1.2,1.2,1.2]},
                         {profile: profile4, scale: [1.4,1.4,1.4]}];
 
-  var loft_contours = [{shape: crossB1, scale: [0.8,0.8,0.8]},
-                       {shape: crossB2, scale: [0.9,0.9,0.9]},
-                       {shape: crossB3, scale: [0.5,0.7,0.5]}];
+  var loft_contours = [{shape: crossB1, scale: [0.5,1.2,0.5]},
+                       {shape: crossB2, scale: [0.8,1.25,0.8]},
+                       {shape: crossB3, scale: [0.7,1.4,0.7]}];
 
   var light = light;
   var shelve = new Shelve(1,

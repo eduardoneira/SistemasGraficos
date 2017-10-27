@@ -76,6 +76,25 @@ function CrossB1Shape(){
                           puntas[1],
                           puntas[2]]);
 
+    var centerx = 0;
+    var centery = 0;
+
+    for(var i = 0; i < _control_points.length; i++){
+      centerx += _control_points[i][0];
+      centery += _control_points[i][1]; 
+    }
+
+    centerx /= _control_points.length;
+    centery /= _control_points.length;
+
+    for(var i = 0; i < _control_points.length; i++){
+      _control_points[i][0] -= centerx;
+      _control_points[i][1] -= centery;
+
+      _control_points[i][0] *= 0.8;
+      _control_points[i][1] *= 0.8;
+    }
+
     _bezier_curve = new CubicBezierCurve(_control_points);
 
   }

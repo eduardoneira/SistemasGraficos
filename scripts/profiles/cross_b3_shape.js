@@ -12,19 +12,36 @@ function CrossB3Shape(){
   function _init(){
     var _control_points = [];
 
+    // _control_points.push([1,0,0]);
+    // _control_points.push([1,1,0]);
+    // _control_points.push([0,1,0]);
+    // _control_points.push([0,0,0]);
+    // _control_points.push([0,-0.25,0]);
+    // _control_points.push([0,-0.75,0]);
+    // _control_points.push([0,-1,0]);
+    // _control_points.push([0,-2,0]);
+    // _control_points.push([1,-2,0]);
+    // _control_points.push([1,-1,0]);
+    // _control_points.push([1,-0.75,0]);
+    // _control_points.push([1,-0.25,0]);
+    // _control_points.push([1,0,0]);
+
+
     _control_points.push([1,0,0]);
     _control_points.push([1,1,0]);
     _control_points.push([0,1,0]);
     _control_points.push([0,0,0]);
-    _control_points.push([0,-0.25,0]);
-    _control_points.push([0,-0.75,0]);
-    _control_points.push([0,-1,0]);
-    _control_points.push([0,-2,0]);
-    _control_points.push([1,-2,0]);
-    _control_points.push([1,-1,0]);
-    _control_points.push([1,-0.75,0]);
-    _control_points.push([1,-0.25,0]);
+    _control_points.push([0,-0.15,0]);
+    _control_points.push([0,-0.45,0]);
+    _control_points.push([0,-0.6,0]);
+    _control_points.push([0,-1.6,0]);
+    _control_points.push([1,-1.6,0]);
+    _control_points.push([1,-0.6,0]);
+    _control_points.push([1,-0.45,0]);
+    _control_points.push([1,-0.15,0]);
     _control_points.push([1,0,0]);
+
+
 
     var centerx = 0;
     var centery = 0;
@@ -43,6 +60,11 @@ function CrossB3Shape(){
     for(var i = 0; i < _control_points.length; i++){
       _control_points[i][0] -= centerx;
       _control_points[i][1] -= centery;
+      _control_points[i][2] -= centerz;
+
+      _control_points[i][0]*=0.6;
+      _control_points[i][1]*=0.6;
+      _control_points[i][2]*=0.6;
     }
 
     _bezier_curve = new CubicBezierCurve(_control_points);
