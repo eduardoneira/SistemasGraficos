@@ -74,7 +74,7 @@ function Printer(light, texture) {
 
   var loft_contours = [{shape: crossB1, scale: [0.8,0.8,0.8]},
                        {shape: crossB2, scale: [0.9,0.9,0.9]},
-                       {shape: crossB3, scale: [0.9,0.9,0.9]}];
+                       {shape: crossB3, scale: [0.5,0.7,0.5]}];
 
   var light = light;
   var shelve = new Shelve(1,

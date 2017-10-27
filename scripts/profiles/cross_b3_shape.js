@@ -25,9 +25,28 @@ function CrossB3Shape(){
     _control_points.push([1,-0.75,0]);
     _control_points.push([1,-0.25,0]);
     _control_points.push([1,0,0]);
-    
+
+    var centerx = 0;
+    var centery = 0;
+    var centerz = 0;
+
+    for(var i = 0; i < _control_points.length; i++){
+      centerx += _control_points[i][0];
+      centery += _control_points[i][1];
+      centerz += _control_points[i][2];
+    }
+
+    centerx /= _control_points.length;
+    centery /= _control_points.length;
+    centerz /= _control_points.length;
+
+    for(var i = 0; i < _control_points.length; i++){
+      _control_points[i][0] -= centerx;
+      _control_points[i][1] -= centery;
+    }
+
     _bezier_curve = new CubicBezierCurve(_control_points);
-    
+
     // debugger;
   }
 
