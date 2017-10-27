@@ -120,12 +120,9 @@ function Robot(printer, bookcase, light) {
     control_points.push(p5);
     control_points.push(p5);
 
-    // debugger;
-
     var curve = new CuadraticBSplineCurve(control_points);
     path_to_travel = curve.travel(0.01);
     path_to_travel2 = curve.travel(0.01);
-    // debugger;
   }
 
   function calculate_positions() {
@@ -252,8 +249,6 @@ function Robot(printer, bookcase, light) {
   }
 
   function move_to_printer() {
-    //TODO: ricky mover
-    // if(path_counter < path_to_travel.positions.length){
     if(path_counter > 0){
       if(is_first){
         is_first = false;
@@ -274,14 +269,11 @@ function Robot(printer, bookcase, light) {
         robot_upper_body.alignBody(current_tangent);
 
 
-        // console.log(previous_current_position, ", ", current_position);
         robot_lower_body.rotateWheel(vec3.distance(previous_current_position,current_position), -1.0);
       }
 
-
       path_counter -= 3;
     } else{
-      // debugger;
       current_position = null;
       current_event_finished = true;
       is_first = true;
@@ -291,17 +283,5 @@ function Robot(printer, bookcase, light) {
         busy = false;
       }
     }
-
-    // current_position = null;
-    // current_event_finished = true;
-
-
-
-    if (!relax) {
-      // current_event = "free";
-    } else {
-      // busy = false;
-    }
-
   }
 }

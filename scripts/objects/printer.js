@@ -27,9 +27,7 @@ function Printer(light, texture) {
 
   this.getWidthObject = function(maxY) {
     var width = [];
-    // debugger;
     return traveler.maxWidth(maxY)/traveler.maxY;
-    // return traveler.maxWidth(maxY);
   }  
 
   this.getHeightObject = function() {
@@ -114,7 +112,6 @@ function Printer(light, texture) {
       object.init();
       var contours = lathe_contours;
     } else if (config.mode == "Loft") {
-      //TODO: ricky
       deltaX = 0.25;
       deltaY = 0.25;
       deltaZ = 0.25;
@@ -130,36 +127,6 @@ function Printer(light, texture) {
                          [0.1, 0.1, 0.1]
                          );
       object.init();
-      // (function(){
-      //   var xmin = null;
-      //   var ymin = null;
-      //   var zmin = null;
-
-      //   for(var i = 0; i < object.position_buffer.length; i++){
-      //     object.position_buffer[i] /= 2;
-      //   }
-
-      //   // debugger;
-
-      //   for(var i = 0; i < object.position_buffer.length; i+=3){
-
-      //     if(xmin === null || xmin > object.position_buffer[i]){
-      //       xmin = object.position_buffer[i];
-      //     }
-      //     if(ymin === null || ymin > object.position_buffer[i+1]){
-      //       ymin = object.position_buffer[i+1];
-      //     }
-      //     if(zmin === null || zmin > object.position_buffer[i+2]){
-      //       zmin = object.position_buffer[i+2];
-      //     }
-      //   }
-
-      //   for(var i = 0; i < object.position_buffer.length; i+=3){
-      //     // object.position_buffer[i] -= xmin;
-      //     object.position_buffer[i+1] -= ymin;
-      //     // object.position_buffer[i+2] -= zmin;
-      //   }
-      // }());
       var contours = loft_contours;
     }
     
@@ -249,9 +216,7 @@ function Printer(light, texture) {
     
     if (object_to_print) {
       object_to_print.activateShader();
-      // debugger;
       head_position();
-      // debugger;
       vec3.add(this.position,getPositionMat4(transformations),[0.0,vertical_scale*2,0.0]);    
       object_to_print.draw(this.position);
     }
