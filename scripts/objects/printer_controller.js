@@ -32,7 +32,7 @@ function PrinterController(printer) {
     if (app.mode == "Lathe") {
       return generateArrayAlpha(printer.number_of_lathe_contours);
     } else if (app.mode == "Loft") {
-      return generateArrayAlpha(5);
+      return generateArrayAlpha(printer.number_of_loft_contours);
     } else {
       return generateArrayAlpha(1);
     }
