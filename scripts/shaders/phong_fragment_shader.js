@@ -1,14 +1,14 @@
 // Phong Fragment Shader Configuration
-const phong_fragment_shader = `#version 300
+const phong_fragment_shader = `
 
   precision mediump float; //???
 
-  in vec3 oNormal;
-  in vec3 oToLight;
-  in vec3 oToCamera;
-  in vec2 oTexCoords;
+  varying vec3 oNormal;
+  varying vec3 oToLight;
+  varying vec3 oToCamera;
+  varying vec2 oTexCoords;
 
-  varying vec2 vTextureCoord;
+  // varying vec2 vTextureCoord;
   uniform sampler2D uSampler; //diffuse texture
 
   varying vec4 resultingColor; //distinto de FragColor?
@@ -35,17 +35,23 @@ const phong_fragment_shader = `#version 300
 
   vec3 diffuseLightning(in vec3 N, in vec3 L){
     //Lambertian reflection
-    float diffuseTerm = clamp(dot(N, L), 0, 1);
+    float diffuseTerm = dot(N, L);
+    if(diffuseTerm < 0.0){
+      diffuseTerm = 0.0;
+    }
+    if(diffuseTerm > 1.0){
+      diffuseTerm = 1.0;
+    }
     return uMaterialDiffuseRefl * uLightDiffuseIntensities * diffuseTerm;
   }
 
   vec3 specularLightning(in vec3 N, in vec3 L, in vec3 V){
-    float specularTerm = 0;
+    float specularTerm = 0.0;
 
     //calculate specular reflection only if
     //the surface is oriented to the light source
 
-    if(dot(N, L) > 0){
+    if(dot(N, L) > 0.0){
       //half vector
       vec3 H = normalize(L + V); //(!) Probar que pasa si lo hago con Phong puro
       specularTerm = pow(dot(N, H), uMaterialShininess);
@@ -65,18 +71,21 @@ const phong_fragment_shader = `#version 300
 
 
     //get Blinn-Phong reflectance components
-    float Iamb = ambientLightning();
-    float Idiff = diffuseLightning(N, L);
-    float Ispec = specularLightning(N, L, V);
+    float Iamb = ambientLightning().r;
+    float Idiff = diffuseLightning(N, L).r;
+    float Ispec = specularLightning(N, L, V).r;
 
     //diffuse color of the object from texture
-    vec3 diffuseColor = texture(uSampler, oTexCoords).rgb;
+    // vec3 diffuseColor = texture(uSampler, oTexCoords).rgb;
+    vec4 textureColor = texture2D(uSampler, vec2(oTexCoords.s, oTexCoords.t));
 
     //combination of all components and diffuse color of the object
-    resultingColor.xyz = diffuseColor * (Iamb + Idiff + Ispec);
-    resultingColor.a = 1;
+    // resultingColor.xyz = vec3(textureColor) * (Iamb + Idiff + Ispec);
+    // resultingColor.a = 1.0;
 
-    gl_FragColor = vec4(resultingColor); //???
+    gl_FragColor = vec4(vec3(textureColor)* (Iamb + Idiff + Ispec), 1.0);
+
+    // gl_FragColor = vec4(resultingColor); //???
 
 
     // vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));

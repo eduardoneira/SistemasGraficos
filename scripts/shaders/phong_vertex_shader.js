@@ -1,5 +1,5 @@
 // Phong Vertex Shader configuration
-const phong_vertex_shader = `#version 300
+const phong_vertex_shader = `
 
 
 
@@ -45,6 +45,7 @@ const phong_vertex_shader = `#version 300
 
 
     //direction to light
+    // oToLight = normalize(uLightPosition - vec3(pos_camera_view)); //tmb: pos_camera_view.xyz
     oToLight = normalize(uLightPosition - vec3(pos_camera_view)); //tmb: pos_camera_view.xyz
 
     //direction to camera
