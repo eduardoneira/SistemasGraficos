@@ -5,6 +5,7 @@ var canvas = null;
 // Shaders
 var basicShaderHandler = null;
 var printableObjectShaderHandler = null;
+var phongShaderHandler = null;
 
 // Global time variables
 var time = 0;
@@ -21,6 +22,9 @@ function initShaders() {
   
   printableObjectShaderHandler = new PrintableObjectShaderHandler(printable_object_vertex_shader,
                                                                   printable_object_fragment_shader);
+
+  phongShaderHandler = new PhongShaderHandler(phong_vertex_shader,
+                                              phong_fragment_shader);
 }
 
 function initScene() {

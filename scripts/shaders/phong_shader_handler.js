@@ -1,4 +1,4 @@
-function BasicShaderHandler(vertex_shader_src,fragment_shader_src) {
+function PhongShaderHandler(vertex_shader_src,fragment_shader_src) {
   this.vertexShaderSrc = vertex_shader_src;
   this.fragmentShaderSrc = fragment_shader_src;
   
@@ -12,7 +12,8 @@ function BasicShaderHandler(vertex_shader_src,fragment_shader_src) {
   this.lightingDirectionUniform = gl.getUniformLocation(this.glProgram, "uLightPosition");
   this.directionalColorUniform = gl.getUniformLocation(this.glProgram, "uDirectionalColor");
   this.samplerUniform = gl.getUniformLocation(this.glProgram, "uSampler");
-  this.cameraPositionUniform = null;
+
+  this.cameraPosition = gl.getUniformLocation(this.glProgram, "uCameraPosition");
 
   // Attributes
   this.vertexPositionAttribute = gl.getAttribLocation(this.glProgram, "aVertexPosition");

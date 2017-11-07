@@ -112,9 +112,15 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
   function setUpLighting() {
     var light_position = vec3.create();
     vec3.transformMat4(light_position,that.light.directional_light,camera.prev_look_at);
+    // debugger;
     gl.uniform3fv(that.shader.lightingDirectionUniform, light_position);
     gl.uniform3fv(that.shader.ambientColorUniform, that.light.ambient_light);
     gl.uniform3fv(that.shader.directionalColorUniform, that.diffuseColor);
+  }
+
+  function setUpCamera(){
+    var camera_position = vec3.create();
+
   }
 
   this.activateShader = function() {
