@@ -45,7 +45,6 @@ const phong_vertex_shader = `
 
 
     //direction to light
-    // oToLight = normalize(uLightPosition - vec3(pos_camera_view)); //tmb: pos_camera_view.xyz
     oToLight = normalize(uLightPosition - vec3(pos_camera_view)); //tmb: pos_camera_view.xyz
 
     //direction to camera
