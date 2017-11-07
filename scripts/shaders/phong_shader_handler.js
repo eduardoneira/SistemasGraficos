@@ -23,6 +23,7 @@ function PhongShaderHandler(vertex_shader_src,fragment_shader_src) {
   gl.enableVertexAttribArray(this.textureCoordAttribute);
 
   this.vertexNormalAttribute = gl.getAttribLocation(this.glProgram, "aVertexNormal");
+  // debugger;
   gl.enableVertexAttribArray(this.vertexNormalAttribute);
 
   this.activateShader = function() {

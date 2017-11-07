@@ -51,6 +51,8 @@ const phong_vertex_shader = `
     //direction to camera
     oToCamera = normalize(uCameraPosition - vec3(pos_camera_view)); //(!) el handler tiene que obtener pos de camara
 
+    oNormal = normalize(uNMatrix * aVertexNormal);
+
     // vec3 light_dir =  uLightPosition - vec3(pos_camera_view);
     // normalize(light_dir);
     // vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);

@@ -28,7 +28,7 @@ function SceneRicky() {
   var sweep_path = new StraightLineSweep();
   // sweep_path.closed = true;
 
-  var spoke = new Loft(shape, sweep_path, textures["checker"], 0.05, basicShaderHandler, light, [0.1, 0.1, 0.1]);
+  var spoke = new Loft(shape, sweep_path, textures["checker"], 0.05, phongShaderHandler, light, [0.1, 0.1, 0.1]);
   spoke.init();
   spoke.translate([0,5,1.8,0]);
   // spoke.scale([1.3,1.3,1.3]);

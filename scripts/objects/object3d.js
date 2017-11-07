@@ -121,6 +121,9 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
   function setUpCamera(){
     var camera_position = vec3.create();
 
+    if(that.shader.cameraPosition !== null){
+      camera_position = vec3.fromValues(1,0,0);
+    }
   }
 
   this.activateShader = function() {
@@ -134,6 +137,7 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
 
   this._draw = function(mvMatrix) {
     setUpLighting();
+    setUpCamera();
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D,this.texture);
