@@ -27,6 +27,18 @@ const test_fragment_shader = `
     return uMaterialAmbientRefl * uLightAmbientIntensities;
   }
 
+  vec3 diffuseLightning(in vec3 N, in vec3 L){
+    //Lambertian reflection
+    float diffuseTerm = dot(N, L);
+    if(diffuseTerm < 0.0){
+      diffuseTerm = 0.0;
+    }
+    if(diffuseTerm > 1.0){
+      diffuseTerm = 1.0;
+    }
+    return uMaterialDiffuseRefl * uLightDiffuseIntensities * diffuseTerm;
+  }
+
   void main(void) {
 
     vec3 L = normalize(oToLight);

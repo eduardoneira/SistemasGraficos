@@ -62,8 +62,7 @@ const phong_fragment_shader = `
 
   void main(void) {
 
-    //normalize vectors after interpolation (se supone que el mismo pipeline 
-    // me interpolo las normales?)
+    //normalize vectors after interpolation
 
     vec3 L = normalize(oToLight);
     vec3 V = normalize(oToCamera);
@@ -76,27 +75,11 @@ const phong_fragment_shader = `
     vec3 Ispec = specularLightning(N, L, V);
 
     //diffuse color of the object from texture
-    // vec3 diffuseColor = texture(uSampler, oTexCoords).rgb;
     vec4 textureColor = texture2D(uSampler, vec2(oTexCoords.s, oTexCoords.t));
 
     //combination of all components and diffuse color of the object
-    // resultingColor.xyz = vec3(textureColor) * (Iamb + Idiff + Ispec);
-    // resultingColor.a = 1.0;
-
     vec3 resultingColor = vec3(textureColor) * (Iamb + Idiff + Ispec);
-    // float red = textureColor.r * (Iamb.r + Idiff.r + Ispec.r);
-    // float green = textureColor.g * (Iamb.g + Idiff.g + Ispec.g);
-    // float blue = textureColor.b * (Iamb.b + Idiff.b + Ispec.b);
 
-    // gl_FragColor = vec4(vec3(textureColor)* (Iamb + Idiff + Ispec), 1.0);
-    
     gl_FragColor = vec4(resultingColor.rgb, 1.0);
-    // gl_FragColor = vec4(red, green, blue, 1.0);
-
-    // gl_FragColor = vec4(resultingColor); //???
-
-
-    // vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-    // gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
   }
 `;
