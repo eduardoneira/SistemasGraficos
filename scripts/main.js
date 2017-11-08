@@ -24,7 +24,7 @@ function initShaders() {
                                                                   printable_object_fragment_shader);
 
   phongShaderHandler = new PhongShaderHandler(phong_vertex_shader,
-                                              test_fragment_shader);
+                                              phong_fragment_shader);
 }
 
 function initScene() {

@@ -15,6 +15,15 @@ function PhongShaderHandler(vertex_shader_src,fragment_shader_src) {
 
   this.cameraPosition = gl.getUniformLocation(this.glProgram, "uCameraPosition");
 
+  this.lightAmbientIntensities = gl.getUniformLocation(this.glProgram, "uLightAmbientIntensities");  
+  this.lightDiffuseIntensities = gl.getUniformLocation(this.glProgram, "uLightDiffuseIntensities");  
+  this.lightSpecularIntensities = gl.getUniformLocation(this.glProgram, "uLightSpecularIntensities");  
+
+  this.materialAmbientRefl = gl.getUniformLocation(this.glProgram, "uMaterialAmbientRefl");
+  this.materialDiffuseRefl = gl.getUniformLocation(this.glProgram, "uMaterialDiffuseRefl");
+  this.materialSpecularRefl = gl.getUniformLocation(this.glProgram, "uMaterialSpecularRefl");
+  this.materialShininess = gl.getUniformLocation(this.glProgram, "uMaterialShininess");
+
   // Attributes
   this.vertexPositionAttribute = gl.getAttribLocation(this.glProgram, "aVertexPosition");
   gl.enableVertexAttribArray(this.vertexPositionAttribute);

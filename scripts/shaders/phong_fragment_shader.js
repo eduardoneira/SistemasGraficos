@@ -82,10 +82,16 @@ const phong_fragment_shader = `
     //combination of all components and diffuse color of the object
     // resultingColor.xyz = vec3(textureColor) * (Iamb + Idiff + Ispec);
     // resultingColor.a = 1.0;
+
     vec3 resultingColor = vec3(textureColor) * (Iamb + Idiff + Ispec);
+    // float red = textureColor.r * (Iamb.r + Idiff.r + Ispec.r);
+    // float green = textureColor.g * (Iamb.g + Idiff.g + Ispec.g);
+    // float blue = textureColor.b * (Iamb.b + Idiff.b + Ispec.b);
 
     // gl_FragColor = vec4(vec3(textureColor)* (Iamb + Idiff + Ispec), 1.0);
+    
     gl_FragColor = vec4(resultingColor.rgb, 1.0);
+    // gl_FragColor = vec4(red, green, blue, 1.0);
 
     // gl_FragColor = vec4(resultingColor); //???
 
