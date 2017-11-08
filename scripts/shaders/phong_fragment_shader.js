@@ -11,7 +11,7 @@ const phong_fragment_shader = `
   // varying vec2 vTextureCoord;
   uniform sampler2D uSampler; //diffuse texture
 
-  varying vec4 resultingColor; //distinto de FragColor?
+  // varying vec4 resultingColor; //distinto de FragColor?
 
   ////////////////////////////////////////////////////////////////
 
@@ -71,9 +71,9 @@ const phong_fragment_shader = `
 
 
     //get Blinn-Phong reflectance components
-    float Iamb = ambientLightning().r;
-    float Idiff = diffuseLightning(N, L).r;
-    float Ispec = specularLightning(N, L, V).r;
+    vec3 Iamb = ambientLightning();
+    vec3 Idiff = diffuseLightning(N, L);
+    vec3 Ispec = specularLightning(N, L, V);
 
     //diffuse color of the object from texture
     // vec3 diffuseColor = texture(uSampler, oTexCoords).rgb;
@@ -82,8 +82,10 @@ const phong_fragment_shader = `
     //combination of all components and diffuse color of the object
     // resultingColor.xyz = vec3(textureColor) * (Iamb + Idiff + Ispec);
     // resultingColor.a = 1.0;
+    vec3 resultingColor = vec3(textureColor) * (Iamb + Idiff + Ispec);
 
-    gl_FragColor = vec4(vec3(textureColor)* (Iamb + Idiff + Ispec), 1.0);
+    // gl_FragColor = vec4(vec3(textureColor)* (Iamb + Idiff + Ispec), 1.0);
+    gl_FragColor = vec4(resultingColor.rgb, 1.0);
 
     // gl_FragColor = vec4(resultingColor); //???
 

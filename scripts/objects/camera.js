@@ -7,6 +7,8 @@ function Camera(radius = 15, speed = 0.003) {
   this.speed = speed;
   this.prev_look_at = mat4.create();
 
+  this.position = vec3.create();
+
   this.is_mouse_down = false;
   this.mouse_wheel_triggered = false;
   this.reset_position = true;
@@ -130,7 +132,14 @@ function Camera(radius = 15, speed = 0.003) {
       this.prev_look_at = mat4.lookAt(this.prev_look_at,
                                       eye,
                                       center,
-                                      [0.0,1.0,0.0]); 
+                                      [0.0,1.0,0.0]);
+      this.position = vec3.fromValues(eye[0],
+                                      eye[1],
+                                      eye[2]);     
+                                                                        
+      // console.log("pos: [", this.position[0], ", ",
+      //                       this.position[1], ", ",
+      //                       this.position[2], "];");
     }
 
     return this.prev_look_at;

@@ -122,9 +122,9 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor){
     var camera_position = vec3.create();
 
     if(that.shader.cameraPosition !== null){
-      camera_position = vec3.fromValues(1,0,0);
-
-      gl.uniform3fv(that.shader.cameraPosition, camera_position);
+      // camera_position = vec3.fromValues(1,0,0);
+      // debugger;
+      gl.uniform3fv(that.shader.cameraPosition, camera.position);
     }
   }
 
