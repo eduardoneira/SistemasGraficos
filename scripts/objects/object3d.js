@@ -132,14 +132,14 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor, materialS
     if(that.shader.cameraPosition !== null){ // (!) Cambiar despues
       // this.materialSpecs = specs;
       specs = { lightIntensities: { ambient:  [0.1, 0.1, 0.6],
-                                    diffuse:  [1.0, 0.5, 0.0],
-                                    specular: [0.0, 1.0, 0.0] },
+                                    diffuse:  [1.0, 1.0, 0.0],
+                                    specular: [1.0, 1.0, 1.0] },
 
                 materialReflectances: { ambient:  [1.0, 1.0, 1.0],
                                         diffuse:  [1.0, 1.0, 1.0],
                                         specular: [1.0, 1.0, 1.0] },
 
-                materialShininess: 64 };
+                materialShininess: 128 };
 
       this.material = { lightIntensities: { ambient:  specs.lightIntensities.ambient,
                                             diffuse:  specs.lightIntensities.diffuse,
