@@ -19,6 +19,7 @@ function loadAllTextures() {
   textures["marble2"] = loadTexture("resources/marble2.jpeg");
   textures["marble3"] = loadTexture("resources/marble3.jpg");
   textures["marble4"] = loadTexture("resources/marble4.jpg");
+  textures["blank"] = loadTexture("resources/blank.jpg");
 }
 
 function loadTexture(url) {

@@ -8,7 +8,7 @@ function SceneRicky() {
 
   var sweep_path = new StraightLineSweep();
 
-  var spoke = new Loft(shape, sweep_path, textures["checker"], 0.05, phongShaderHandler, light, [0.1, 0.1, 0.1]);
+  var spoke = new Loft(shape, sweep_path, textures["blank"], 0.05, phongShaderHandler, light, [0.1, 0.1, 0.1]);
   spoke.init();
   spoke.translate([0,0,0]);
   // spoke.translate([0,5,1.8,0]);
