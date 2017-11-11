@@ -14,7 +14,7 @@ function Spoke(delta, M, radius, light){
   var sweep_path = new Polygon(makeFlatCircle(radius, M));
   sweep_path.closed = true;
 
-  this.loft = new Loft(shape, sweep_path, textures["brushed_aluminum"], 0, basicShaderHandler, light, [0.1, 0.1, 0.1]);
+  this.loft = new Loft(shape, sweep_path, textures["checker"], 0, basicShaderHandler, light, [0.1, 0.1, 0.1]);
   this.loft.init();
 
   for(var i = 0; i < this.loft.position_buffer.length; i+=3){

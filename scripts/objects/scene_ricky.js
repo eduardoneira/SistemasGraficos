@@ -6,32 +6,13 @@ function SceneRicky() {
   var shape = new CrossB2Shape();
   shape.travel(0.1);
 
-  // debugger;
-
-  var _sweep_path = [];
-
-  var M = 20;
-  // var r = 1;
-  //  for(i = 0; i < M; i++){
-  //   _sweep_path.push(r*Math.cos(2*Math.PI*i/M));
-  //   _sweep_path.push(r*Math.sin(2*Math.PI*i/M));
-  //   _sweep_path.push(0);
-  //  }
-
-  for(var i = 0; i < M; i++){
-    _sweep_path.push(0);
-    _sweep_path.push(1/M*i);
-    _sweep_path.push(0);
-  }
-
-  // var sweep_path = new Polygon(_sweep_path);
   var sweep_path = new StraightLineSweep();
-  // sweep_path.closed = true;
 
-  var spoke = new Loft(shape, sweep_path, textures["checker"], 0.05, basicShaderHandler, light, [0.1, 0.1, 0.1]);
+  var spoke = new Loft(shape, sweep_path, textures["blank"], 0.05, phongShaderHandler, light, [0.1, 0.1, 0.1]);
   spoke.init();
-  spoke.translate([0,5,1.8,0]);
-  // spoke.scale([1.3,1.3,1.3]);
+  spoke.translate([0,0,0]);
+  // spoke.translate([0,5,1.8,0]);
+  spoke.scale([5,5,5]);
 
 
   this.draw = function() {
@@ -39,8 +20,8 @@ function SceneRicky() {
     
     transformations = mat4.create();
     
-    mat4.rotate(transformations, transformations, time, [1.0, 1.0, 0.0]);
-    mat4.rotate(transformations, transformations, 90, [0.0, 0.0, 1.0]);
+    mat4.rotate(transformations, transformations, time, [0.0, 1.0, 0.0]);
+    // mat4.rotate(transformations, transformations, 90, [0.0, 0.0, 1.0]);
     // mat4.translate(transformations, transformations, [0.0, -6.5, 0.0]);
     // mat4.scale(transformations, transformations, [5.0,5.0,5.0]);
     
