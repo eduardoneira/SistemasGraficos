@@ -29,8 +29,16 @@ function SemiCircleSurface() {
       });
 
     for (var i = 0; i < normals.length; i+=2) {
-      this.normals.push(normals[i+1]);
-      this.normals.push(-normals[i]);
+      if (this.positions[i] == 0.0 && this.positions[i+1] == 0.0) {
+        this.normals.push(0); 
+        this.normals.push(0); 
+      } else if (this.positions[i] == 2.0 && this.positions[i+1] == 0.0) {
+        this.normals.push(0); 
+        this.normals.push(0);
+      } else {
+        this.normals.push(normals[i+1]);
+        this.normals.push(-normals[i]);
+      }
     }
 
   }

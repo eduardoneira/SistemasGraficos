@@ -22,7 +22,7 @@ const basic_vertex_shader = `
     
     vTextureCoord = aTextureCoord;
 
-    vec3 light_dir =  uLightPosition - vec3(pos_camera_view);
+    vec3 light_dir =  uLightPosition;
     normalize(light_dir);
     vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
     float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);

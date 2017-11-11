@@ -28,7 +28,16 @@ function TriangleSurface() {
       });
 
     for (var i = 0; i < this.positions.length; i+=2) {
-      if (this.positions[i+1] == 0) {
+      if (this.positions[i] == 2.0 && this.positions[i+1] == 0.0) {
+        this.normals.push(1);
+        this.normals.push(0);
+      } else if (this.positions[i] == 0.0 && this.positions[i+1] == 2.0) {
+        this.normals.push(0);
+        this.normals.push(1);
+      } else if (this.positions[i] == 0.0 && this.positions[i+1] == 0.0) {
+        this.normals.push(-1);
+        this.normals.push(-1);
+      } else if (this.positions[i+1] == 0) {
         this.normals.push(0);
         this.normals.push(-1);
       } else if (this.positions[i] == 0) {
