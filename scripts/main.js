@@ -28,7 +28,7 @@ function initShaders() {
 
 function initScene() {
   camera = new Camera();
-  scene = new SceneRicky();
+  scene = new TestScene();
 }
 
 function main() { 

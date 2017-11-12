@@ -6,7 +6,8 @@ function PhongShaderHandler(vertex_shader_src,fragment_shader_src) {
 
   // Uniforms
   this.pMatrixUniform = gl.getUniformLocation(this.glProgram, "uPMatrix");
-  this.vmMatrixUniform = gl.getUniformLocation(this.glProgram, "uVMMatrix");
+  this.vMatrixUniform = gl.getUniformLocation(this.glProgram, "uVMatrix");
+  this.mMatrixUniform = gl.getUniformLocation(this.glProgram, "uMMatrix");
   this.nMatrixUniform = gl.getUniformLocation(this.glProgram, "uNMatrix");
 
   this.lightPositions = gl.getUniformLocation(this.glProgram,"uLightPositions")

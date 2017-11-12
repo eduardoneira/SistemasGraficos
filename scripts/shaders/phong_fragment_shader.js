@@ -1,18 +1,18 @@
 // Phong Fragment Shader Configuration
 const phong_fragment_shader = `
   precision mediump float; 
+  const int NUM_LIGHTS = 4;
 
   varying vec3 vNormal;
-  varying vec3 vToLight[4];
+  varying vec3 vToLight[NUM_LIGHTS];
   varying vec3 vToCamera;
-  varying vec2 vTexCoords;
 
   varying vec2 vTextureCoord;
   uniform sampler2D uSampler;
 
-  uniform vec3 uLightAmbientIntensities;
-  uniform vec3 uLightDiffuseIntensities;
-  uniform vec3 uLightSpecularIntensities;
+  uniform vec3 uLightAmbientIntensity;
+  uniform vec3 uLightDiffuseIntensity;
+  uniform vec3 uLightSpecularIntensity;
 
   uniform vec3 uMaterialAmbientRefl;
   uniform vec3 uMaterialDiffuseRefl;
@@ -20,12 +20,21 @@ const phong_fragment_shader = `
   uniform float uMaterialShininess;
 
   vec3 ambientLightning(){
-    return uMaterialAmbientRefl * uLightAmbientIntensities;
+    return uMaterialAmbientRefl * uLightAmbientIntensity;
   }
 
   vec3 diffuseLightning(in vec3 N, in vec3 L){
-    float diffuseTerm = clamp(dot(N, L), 0, 1);
-    return uMaterialDiffuseRefl * uLightDiffuseIntensities * diffuseTerm;
+    float diffuseTerm = dot(N, L);
+    
+    if(diffuseTerm < 0.0){
+      diffuseTerm = 0.0;
+    }
+
+    if(diffuseTerm > 1.0){
+      diffuseTerm = 1.0;
+    }
+
+    return uMaterialDiffuseRefl * uLightDiffuseIntensity * diffuseTerm;
   }
 
   vec3 specularLightning(in vec3 N, in vec3 L, in vec3 V){
@@ -36,33 +45,32 @@ const phong_fragment_shader = `
       specularTerm = pow(dot(N, H), uMaterialShininess);
     }
 
-    return uMaterialSpecularRefl * uLightSpecularIntensities * specularTerm;
+    return uMaterialSpecularRefl * uLightSpecularIntensity * specularTerm;
   }
 
   void main(void) {
-    vec3 L[4];
-    float D[4];
+    vec3 L[NUM_LIGHTS];
+    float D[NUM_LIGHTS];
 
-    for (int i = 0; i < 4; ++i) {
-      D[i] = length(L[i]); 
-      L[i] = normalize(vToLight);
+    for (int i = 0; i < NUM_LIGHTS; ++i) {
+      D[i] = length(vToLight[i]); 
+      L[i] = normalize(vToLight[i]);
     }
 
     vec3 V = normalize(vToCamera);
     vec3 N = normalize(vNormal);
 
-    vec3 Iamb = ambientLightning();
-    vec3 resultingLight = Iamb;
+    vec3 resultingLight = ambientLightning();
 
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < NUM_LIGHTS; ++i) {
       vec3 Idiff = diffuseLightning(N, L[i]);
       vec3 Ispec = specularLightning(N, L[i], V);
       float decay = 1.0 + 2.0*D[i] + 4.0*D[i]*D[i];
       decay = 1.0 / decay;
-      resultingLight = decay * (Idiff + Ispec);
+      resultingLight = 1.0 * (Idiff + Ispec);
     }
 
-    vec4 textureColor = texture2D(uSampler, vec2(oTexCoords.s, oTexCoords.t));
+    vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
     gl_FragColor = vec4(textureColor.rgb * resultingLight, 1.0);
   }
 `;

@@ -109,38 +109,30 @@ function Object3D(_rows, _cols, _texture, shader, light, material_specs = null){
   }
 
   function setUpLighting() {
-    var light_positions[12];
-    var view_matrix = mat3.create();
-    mat3.fromMat4(view_matrix, camera.prev_look_at);
+    var light_positions = [];
     
     for (var i = 0; i < that.light.point_lights.length; i++) {
-      var light_position = vec3.create();
-      vec3.transformMat3(light_position,that.light.point_lights[i],view_matrix);
-      light_positions.push(light_position[0]);
-      light_positions.push(light_position[1]);
-      light_positions.push(light_position[2]);
+      light_positions.push(that.light.point_lights[i][0]);
+      light_positions.push(that.light.point_lights[i][1]);
+      light_positions.push(that.light.point_lights[i][2]);
     }
 
     gl.uniform3fv(that.shader.lightPositions,light_positions);
   }
 
   function setUpCamera(){
-    var camera_position = vec3.create();
-    var view_matrix = mat3.create();
-    mat3.fromMat4(view_matrix, camera.prev_look_at);
-    vec3.transformMat3(camera_position, camera_position, view_matrix);
-    gl.uniform3fv(that.shader.cameraPosition, camera_position);
+    gl.uniform3fv(that.shader.cameraPosition, camera.position);
   }
 
   function setUpMaterial(){
-    gl.uniform3fv(that.shader.lightAmbientIntensities, this.material_specs.lightIntensities.ambient);
-    gl.uniform3fv(that.shader.lightDiffuseIntensities, this.material_specs.lightIntensities.diffuse);
-    gl.uniform3fv(that.shader.lightSpecularIntensities, this.material_specs.lightIntensities.specular);
+    gl.uniform3fv(that.shader.lightAmbientIntensity, that.material_specs.lightIntensities.ambient);
+    gl.uniform3fv(that.shader.lightDiffuseIntensity, that.material_specs.lightIntensities.diffuse);
+    gl.uniform3fv(that.shader.lightSpecularIntensity, that.material_specs.lightIntensities.specular);
 
-    gl.uniform3fv(that.shader.materialAmbientRefl, this.material_specs.materialReflectances.ambient);
-    gl.uniform3fv(that.shader.materialDiffuseRefl, this.material_specs.materialReflectances.diffuse);
-    gl.uniform3fv(that.shader.materialSpecularRefl, this.material_specs.materialReflectances.specular);
-    gl.uniform1f(that.shader.materialShininess, this.material_specs.materialShininess);
+    gl.uniform3fv(that.shader.materialAmbientRefl, that.material_specs.materialReflectances.ambient);
+    gl.uniform3fv(that.shader.materialDiffuseRefl, that.material_specs.materialReflectances.diffuse);
+    gl.uniform3fv(that.shader.materialSpecularRefl, that.material_specs.materialReflectances.specular);
+    gl.uniform1f(that.shader.materialShininess, that.material_specs.materialShininess);
   }
 
   this.activateShader = function() {
@@ -152,7 +144,7 @@ function Object3D(_rows, _cols, _texture, shader, light, material_specs = null){
     this.shader = shader;
   }
 
-  this._draw = function(mvMatrix) {
+  this._draw = function(vMatrix,mMatrix) {
     setUpLighting();
     setUpCamera();
     setUpMaterial();
@@ -170,10 +162,13 @@ function Object3D(_rows, _cols, _texture, shader, light, material_specs = null){
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
     gl.vertexAttribPointer(this.shader.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
 
-    gl.uniformMatrix4fv(this.shader.vmMatrixUniform, false, mvMatrix);
+    gl.uniformMatrix4fv(this.shader.vMatrixUniform, false, vMatrix);
+    gl.uniformMatrix4fv(this.shader.mMatrixUniform, false, mMatrix);
 
     var nMatrix = mat3.create();
-    mat3.fromMat4(nMatrix, mvMatrix);
+    var vmMatrix = mat4.create();
+    mat4.multiply(vmMatrix, vMatrix, mMatrix)
+    mat3.fromMat4(nMatrix, vmMatrix);
     mat3.invert(nMatrix, nMatrix);
     mat3.transpose(nMatrix, nMatrix);
     gl.uniformMatrix3fv(this.shader.nMatrixUniform, false, nMatrix);
@@ -186,10 +181,9 @@ function Object3D(_rows, _cols, _texture, shader, light, material_specs = null){
     if (this.drawEnabled) {
       this.activateShader();
       this.projector.applyProjection();
-      var mvMatrix = mat4.create();
-      mat4.multiply(mvMatrix,transformations_parent,this.initial_state);
-      mat4.multiply(mvMatrix,camera.getViewMatrix(),mvMatrix);
-      this._draw(mvMatrix);
+      var mMatrix = mat4.create();
+      mat4.multiply(mMatrix,transformations_parent,this.initial_state);
+      this._draw(camera.getViewMatrix(),mMatrix);
     }
     this._drawChilds(transformations_parent);
   }

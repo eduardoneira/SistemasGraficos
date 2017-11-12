@@ -1,13 +1,13 @@
 function TestScene() {
   var light = new Light([0.25, 0.25, 0.25],
-                        [[-5.0, 5.0, -5.0],
-                         [-5.0, 5.0,  5.0],
-                         [ 5.0, 5.0, -5.0],
-                         [ 5.0, 5.0,  5.0]]);
+                        [[-2.0, 2.0, -2.0],
+                         [-2.0, 2.0,  2.0],
+                         [ 2.0, 2.0, -2.0],
+                         [ 2.0, 2.0,  2.0]]);
 
-  var specs = { lightIntensities: { ambient:  [0.1, 0.1, 0.1],
-                                    diffuse:  [1.0, 1.0, 1.0],
-                                    specular: [1.0, 1.0, 1.0]},
+  var specs = { lightIntensities: { ambient:  [0.6, 0.3, 0.0],
+                                    diffuse:  [1.0, 0.5, 0.0],
+                                    specular: [0.0, 1.0, 0.0]},
                 materialReflectances: { ambient:  [1.0, 1.0, 1.0],
                                         diffuse:  [1.0, 1.0, 1.0],
                                         specular: [1.0, 1.0, 1.0]},

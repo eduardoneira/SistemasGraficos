@@ -4,27 +4,31 @@ const phong_vertex_shader = `
   attribute vec3 aVertexNormal;
   attribute vec2 aTextureCoord;
 
-  uniform mat4 uVMMatrix;
+  uniform mat4 uMMatrix;
+  uniform mat4 uVMatrix;
   uniform mat4 uPMatrix;
   uniform mat3 uNMatrix;
 
+  const int NUM_LIGHTS = 4;
+  uniform vec3 uLightPositions[NUM_LIGHTS];
   uniform vec3 uCameraPosition;
-  uniform vec3 uLightPositions[4];
 
   varying vec3 vNormal;
   varying vec3 vToCamera;
-  varying vec3 vToLight[4];
+  varying vec3 vToLight[NUM_LIGHTS];
   varying vec2 vTextureCoord;
 
   void main(void) {
-    vec4 pos_camera_view = uVMMatrix * vec4(aVertexPosition, 1.0);
-    gl_Position = uPMatrix * pos_camera_view;
+    vec4 position_world = uMMatrix * vec4(aVertexPosition, 1.0);
+    gl_Position = uPMatrix * uVMatrix * position_world;
     
     vTextureCoord = aTextureCoord;
-    for (int i = 0; i < 4; ++i) {
-      vToLight[i] = normalize(uLightPositions[i] - pos_camera_view); 
+    
+    for (int i = 0; i < NUM_LIGHTS; ++i) {
+      vToLight[i] = normalize(uLightPositions[i] - vec3(position_world)); 
     }
-    vToCamera = normalize(uCameraPosition - pos_camera_view);
+
+    vToCamera = normalize(uCameraPosition - vec3(position_world));
     vNormal = normalize(uNMatrix * aVertexNormal);
   }
 `;
