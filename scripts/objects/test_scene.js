@@ -1,9 +1,8 @@
 function TestScene() {
-  var light = new Light([0.25, 0.25, 0.25],
-                        [[-2.0, 2.0, -2.0],
-                         [-2.0, 2.0,  2.0],
-                         [ 2.0, 2.0, -2.0],
-                         [ 2.0, 2.0,  2.0]]);
+  var lights = new Light([[-3.0, 3.0, -3.0],
+                         [-3.0, 3.0,  3.0],
+                         [ 3.0, 3.0, -3.0],
+                         [ 3.0, 3.0,  3.0]]);
 
   var specs = { lightIntensities: { ambient:  [0.6, 0.3, 0.0],
                                     diffuse:  [1.0, 0.5, 0.0],
@@ -20,7 +19,7 @@ function TestScene() {
                               Math.PI/36.0,
                               textures["metallic_white_with_holes"],
                               phongShaderHandler,
-                              light,
+                              lights,
                               specs
                               );
   main_trunk.init();

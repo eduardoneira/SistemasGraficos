@@ -65,9 +65,9 @@ const phong_fragment_shader = `
     for (int i = 0; i < NUM_LIGHTS; ++i) {
       vec3 Idiff = diffuseLightning(N, L[i]);
       vec3 Ispec = specularLightning(N, L[i], V);
-      float decay = 1.0 + 2.0*D[i] + 4.0*D[i]*D[i];
+      float decay =  0.05 * D[i]*D[i];
       decay = 1.0 / decay;
-      resultingLight = 1.0 * (Idiff + Ispec);
+      resultingLight = decay * (Idiff + Ispec);
     }
 
     vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));

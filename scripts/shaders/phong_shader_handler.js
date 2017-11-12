@@ -10,7 +10,6 @@ function PhongShaderHandler(vertex_shader_src,fragment_shader_src) {
   this.mMatrixUniform = gl.getUniformLocation(this.glProgram, "uMMatrix");
   this.nMatrixUniform = gl.getUniformLocation(this.glProgram, "uNMatrix");
 
-  this.lightPositions = gl.getUniformLocation(this.glProgram,"uLightPositions")
   this.cameraPosition = gl.getUniformLocation(this.glProgram, "uCameraPosition");
 
   this.lightAmbientIntensity = gl.getUniformLocation(this.glProgram, "uLightAmbientIntensity");  
@@ -23,6 +22,9 @@ function PhongShaderHandler(vertex_shader_src,fragment_shader_src) {
   this.materialShininess = gl.getUniformLocation(this.glProgram, "uMaterialShininess");
 
   this.samplerUniform = gl.getUniformLocation(this.glProgram, "uSampler");
+  
+  // Point Lights
+  this.lightPositions = gl.getUniformLocation(this.glProgram,"uLightPositions")
   
   // Attributes
   this.vertexPositionAttribute = gl.getAttribLocation(this.glProgram, "aVertexPosition");

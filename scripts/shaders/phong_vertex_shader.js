@@ -25,7 +25,7 @@ const phong_vertex_shader = `
     vTextureCoord = aTextureCoord;
     
     for (int i = 0; i < NUM_LIGHTS; ++i) {
-      vToLight[i] = normalize(uLightPositions[i] - vec3(position_world)); 
+      vToLight[i] = uLightPositions[i] - vec3(position_world); 
     }
 
     vToCamera = normalize(uCameraPosition - vec3(position_world));
