@@ -24,7 +24,7 @@ const phong_vertex_shader = `
     
     vTextureCoord = aTextureCoord;
     
-    for (int i = 0; i < NUM_LIGHTS; ++i) {
+    for (int i = 0; i < NUM_LIGHTS; i++) {
       vToLight[i] = uLightPositions[i] - vec3(position_world); 
     }
 

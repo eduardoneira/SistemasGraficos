@@ -1,16 +1,16 @@
 function TestScene() {
-  var lights = new Light([[-3.0, 3.0, -3.0],
-                         [-3.0, 3.0,  3.0],
-                         [ 3.0, 3.0, -3.0],
-                         [ 3.0, 3.0,  3.0]]);
+  var lights = [  new Light([-5.0, 5.0, -5.0], 50.0),
+                  new Light([-5.0, 5.0,  5.0], 50.0),
+                  new Light([ 5.0, 5.0, -5.0], 50.0),
+                  new Light([ 5.0, 5.0,  5.0], 50.0)];
 
-  var specs = { lightIntensities: { ambient:  [0.6, 0.3, 0.0],
+  var specs = { lightIntensities: { ambient:  [0.6, 0.3, 0.3],
                                     diffuse:  [1.0, 0.5, 0.0],
                                     specular: [0.0, 1.0, 0.0]},
                 materialReflectances: { ambient:  [1.0, 1.0, 1.0],
                                         diffuse:  [1.0, 1.0, 1.0],
                                         specular: [1.0, 1.0, 1.0]},
-                materialShininess: 64 };
+                materialShininess: 32 };
 
   var profile = new ConstantRadiusProfile(1.2,10);
   profile.travel(0.01);

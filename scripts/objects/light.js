@@ -1,3 +1,4 @@
-function Light(point_lights) {
-  this.point_lights = point_lights;
+function Light(position, intensity) {
+  this.position = position;
+  this.intensity = intensity;
 }

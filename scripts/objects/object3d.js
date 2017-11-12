@@ -1,4 +1,4 @@
-function Object3D(_rows, _cols, _texture, shader, light, material_specs = null){
+function Object3D(_rows, _cols, _texture, shader, lights, material_specs = null){
   this.texture = _texture;
   this.rows = _rows;
   this.cols = _cols;
@@ -15,7 +15,7 @@ function Object3D(_rows, _cols, _texture, shader, light, material_specs = null){
   this.webgl_normal_buffer = null;
 
   this.projector = new Projector(shader);
-  this.light = light;
+  this.lights = lights;
   this.material_specs = material_specs;
 
   this.shader = shader;
@@ -110,14 +110,17 @@ function Object3D(_rows, _cols, _texture, shader, light, material_specs = null){
 
   function setUpLighting() {
     var light_positions = [];
-    
-    for (var i = 0; i < that.light.point_lights.length; i++) {
-      light_positions.push(that.light.point_lights[i][0]);
-      light_positions.push(that.light.point_lights[i][1]);
-      light_positions.push(that.light.point_lights[i][2]);
+    var light_intensities = [];
+
+    for (var i = 0; i < that.lights.length; i++) {
+      light_positions.push(that.lights[i].position[0]);
+      light_positions.push(that.lights[i].position[1]);
+      light_positions.push(that.lights[i].position[2]);
+      light_intensities.push(that.lights[i].intensity);
     }
 
-    gl.uniform3fv(that.shader.lightPositions,light_positions);
+    gl.uniform3fv(that.shader.pointLightPositions,light_positions);
+    gl.uniform1fv(that.shader.pointLightIntensities,light_intensities);
   }
 
   function setUpCamera(){
@@ -166,9 +169,7 @@ function Object3D(_rows, _cols, _texture, shader, light, material_specs = null){
     gl.uniformMatrix4fv(this.shader.mMatrixUniform, false, mMatrix);
 
     var nMatrix = mat3.create();
-    var vmMatrix = mat4.create();
-    mat4.multiply(vmMatrix, vMatrix, mMatrix)
-    mat3.fromMat4(nMatrix, vmMatrix);
+    mat3.fromMat4(nMatrix, mMatrix);
     mat3.invert(nMatrix, nMatrix);
     mat3.transpose(nMatrix, nMatrix);
     gl.uniformMatrix3fv(this.shader.nMatrixUniform, false, nMatrix);

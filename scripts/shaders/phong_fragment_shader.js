@@ -4,8 +4,9 @@ const phong_fragment_shader = `
   const int NUM_LIGHTS = 4;
 
   varying vec3 vNormal;
-  varying vec3 vToLight[NUM_LIGHTS];
   varying vec3 vToCamera;
+  varying vec3 vToLight[NUM_LIGHTS];
+  uniform float uLightIntensities[NUM_LIGHTS];
 
   varying vec2 vTextureCoord;
   uniform sampler2D uSampler;
@@ -52,7 +53,7 @@ const phong_fragment_shader = `
     vec3 L[NUM_LIGHTS];
     float D[NUM_LIGHTS];
 
-    for (int i = 0; i < NUM_LIGHTS; ++i) {
+    for (int i = 0; i < NUM_LIGHTS; i++) {
       D[i] = length(vToLight[i]); 
       L[i] = normalize(vToLight[i]);
     }
@@ -62,11 +63,11 @@ const phong_fragment_shader = `
 
     vec3 resultingLight = ambientLightning();
 
-    for (int i = 0; i < NUM_LIGHTS; ++i) {
+    for (int i = 0; i < NUM_LIGHTS; i++) {
       vec3 Idiff = diffuseLightning(N, L[i]);
       vec3 Ispec = specularLightning(N, L[i], V);
-      float decay =  0.05 * D[i]*D[i];
-      decay = 1.0 / decay;
+      float decay = D[i]*D[i];
+      decay = uLightIntensities[i] / decay;
       resultingLight = decay * (Idiff + Ispec);
     }
 
