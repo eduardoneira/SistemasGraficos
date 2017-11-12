@@ -1,8 +1,8 @@
-function Lathe(profile_curve, theta, texture, shader, light, diffuseColor) {
+function Lathe(profile_curve, theta, texture, shader, light, spec) {
   var rows = profile_curve.axis.length;
   var cols = 2*Math.PI / theta + 1;
 
-  Object3D.call(this, rows, cols, texture, shader, light, diffuseColor);
+  Object3D.call(this, rows, cols, texture, shader, light, spec);
   
   var that = this;
   

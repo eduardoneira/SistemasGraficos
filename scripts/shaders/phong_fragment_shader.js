@@ -1,59 +1,38 @@
 // Phong Fragment Shader Configuration
 const phong_fragment_shader = `
+  precision mediump float; 
 
-  precision mediump float; //???
+  varying vec3 vNormal;
+  varying vec3 vToLight[4];
+  varying vec3 vToCamera;
+  varying vec2 vTexCoords;
 
-  varying vec3 oNormal;
-  varying vec3 oToLight;
-  varying vec3 oToCamera;
-  varying vec2 oTexCoords;
+  varying vec2 vTextureCoord;
+  uniform sampler2D uSampler;
 
-  // varying vec2 vTextureCoord;
-  uniform sampler2D uSampler; //diffuse texture
-
-  // varying vec4 resultingColor; //distinto de FragColor?
-
-  ////////////////////////////////////////////////////////////////
-
-  //parameters of the light
   uniform vec3 uLightAmbientIntensities;
   uniform vec3 uLightDiffuseIntensities;
   uniform vec3 uLightSpecularIntensities;
 
-  //parameters of the material
   uniform vec3 uMaterialAmbientRefl;
   uniform vec3 uMaterialDiffuseRefl;
   uniform vec3 uMaterialSpecularRefl;
   uniform float uMaterialShininess;
-
-  ////////////////////////////////////////////////////////////////
-
 
   vec3 ambientLightning(){
     return uMaterialAmbientRefl * uLightAmbientIntensities;
   }
 
   vec3 diffuseLightning(in vec3 N, in vec3 L){
-    //Lambertian reflection
-    float diffuseTerm = dot(N, L);
-    if(diffuseTerm < 0.0){
-      diffuseTerm = 0.0;
-    }
-    if(diffuseTerm > 1.0){
-      diffuseTerm = 1.0;
-    }
+    float diffuseTerm = clamp(dot(N, L), 0, 1);
     return uMaterialDiffuseRefl * uLightDiffuseIntensities * diffuseTerm;
   }
 
   vec3 specularLightning(in vec3 N, in vec3 L, in vec3 V){
     float specularTerm = 0.0;
 
-    //calculate specular reflection only if
-    //the surface is oriented to the light source
-
     if(dot(N, L) > 0.0){
-      //half vector
-      vec3 H = normalize(L + V); //(!) Probar que pasa si lo hago con Phong puro
+      vec3 H = normalize(L + V);
       specularTerm = pow(dot(N, H), uMaterialShininess);
     }
 
@@ -61,25 +40,29 @@ const phong_fragment_shader = `
   }
 
   void main(void) {
+    vec3 L[4];
+    float D[4];
 
-    //normalize vectors after interpolation
+    for (int i = 0; i < 4; ++i) {
+      D[i] = length(L[i]); 
+      L[i] = normalize(vToLight);
+    }
 
-    vec3 L = normalize(oToLight);
-    vec3 V = normalize(oToCamera);
-    vec3 N = normalize(oNormal);
+    vec3 V = normalize(vToCamera);
+    vec3 N = normalize(vNormal);
 
-
-    //get Blinn-Phong reflectance components
     vec3 Iamb = ambientLightning();
-    vec3 Idiff = diffuseLightning(N, L);
-    vec3 Ispec = specularLightning(N, L, V);
+    vec3 resultingLight = Iamb;
 
-    //diffuse color of the object from texture
+    for (int i = 0; i < 4; ++i) {
+      vec3 Idiff = diffuseLightning(N, L[i]);
+      vec3 Ispec = specularLightning(N, L[i], V);
+      float decay = 1.0 + 2.0*D[i] + 4.0*D[i]*D[i];
+      decay = 1.0 / decay;
+      resultingLight = decay * (Idiff + Ispec);
+    }
+
     vec4 textureColor = texture2D(uSampler, vec2(oTexCoords.s, oTexCoords.t));
-
-    //combination of all components and diffuse color of the object
-    vec3 resultingColor = vec3(textureColor) * (Iamb + Idiff + Ispec);
-
-    gl_FragColor = vec4(resultingColor.rgb, 1.0);
+    gl_FragColor = vec4(textureColor.rgb * resultingLight, 1.0);
   }
 `;

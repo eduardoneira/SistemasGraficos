@@ -1,4 +1,4 @@
-function Object3D(_rows, _cols, _texture, shader, light, diffuseColor, materialSpecs = null){
+function Object3D(_rows, _cols, _texture, shader, light, material_specs = null){
   this.texture = _texture;
   this.rows = _rows;
   this.cols = _cols;
@@ -14,10 +14,9 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor, materialS
   this.webgl_index_buffer = null;
   this.webgl_normal_buffer = null;
 
-  this.light = light;
-  this.diffuseColor = diffuseColor;
-
   this.projector = new Projector(shader);
+  this.light = light;
+  this.material_specs = material_specs;
 
   this.shader = shader;
 
@@ -106,61 +105,42 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor, materialS
   }
 
   this._drawChilds = function(transformations_parent) {
-    // Stub. Do nothing by default
+    // Stub. Do nothing, by default
   }
 
   function setUpLighting() {
-    var light_position = vec3.create();
-    var view_matrix = mat4.clone(camera.prev_look_at);
-    view_matrix[12] = 0;
-    view_matrix[13] = 0;
-    view_matrix[14] = 0;
-    vec3.transformMat4(light_position,that.light.directional_light,view_matrix);
-    gl.uniform3fv(that.shader.lightingDirectionUniform, light_position);
-    gl.uniform3fv(that.shader.ambientColorUniform, that.light.ambient_light);
-    gl.uniform3fv(that.shader.directionalColorUniform, that.diffuseColor);
+    var light_positions[12];
+    var view_matrix = mat3.create();
+    mat3.fromMat4(view_matrix, camera.prev_look_at);
+    
+    for (var i = 0; i < that.light.point_lights.length; i++) {
+      var light_position = vec3.create();
+      vec3.transformMat3(light_position,that.light.point_lights[i],view_matrix);
+      light_positions.push(light_position[0]);
+      light_positions.push(light_position[1]);
+      light_positions.push(light_position[2]);
+    }
+
+    gl.uniform3fv(that.shader.lightPositions,light_positions);
   }
 
   function setUpCamera(){
     var camera_position = vec3.create();
-
-    if(that.shader.cameraPosition !== null){
-      gl.uniform3fv(that.shader.cameraPosition, camera.position);
-    }
+    var view_matrix = mat3.create();
+    mat3.fromMat4(view_matrix, camera.prev_look_at);
+    vec3.transformMat3(camera_position, camera_position, view_matrix);
+    gl.uniform3fv(that.shader.cameraPosition, camera_position);
   }
 
-  function setUpMaterial(specs){
-    if(that.shader.cameraPosition !== null){ // (!) Cambiar despues
-      // this.materialSpecs = specs;
-      specs = { lightIntensities: { ambient:  [0.1, 0.1, 0.6],
-                                    diffuse:  [1.0, 1.0, 0.0],
-                                    specular: [1.0, 1.0, 1.0] },
+  function setUpMaterial(){
+    gl.uniform3fv(that.shader.lightAmbientIntensities, this.material_specs.lightIntensities.ambient);
+    gl.uniform3fv(that.shader.lightDiffuseIntensities, this.material_specs.lightIntensities.diffuse);
+    gl.uniform3fv(that.shader.lightSpecularIntensities, this.material_specs.lightIntensities.specular);
 
-                materialReflectances: { ambient:  [1.0, 1.0, 1.0],
-                                        diffuse:  [1.0, 1.0, 1.0],
-                                        specular: [1.0, 1.0, 1.0] },
-
-                materialShininess: 128 };
-
-      this.material = { lightIntensities: { ambient:  specs.lightIntensities.ambient,
-                                            diffuse:  specs.lightIntensities.diffuse,
-                                            specular: specs.lightIntensities.specular },
-
-                        materialReflectances: { ambient:  specs.materialReflectances.ambient,
-                                                diffuse:  specs.materialReflectances.diffuse,
-                                                specular: specs.materialReflectances.specular },
-
-                        materialShininess: specs.materialShininess };
-    }
-
-    gl.uniform3fv(that.shader.lightAmbientIntensities, this.material.lightIntensities.ambient);
-    gl.uniform3fv(that.shader.lightDiffuseIntensities, this.material.lightIntensities.diffuse);
-    gl.uniform3fv(that.shader.lightSpecularIntensities, this.material.lightIntensities.specular);
-
-    gl.uniform3fv(that.shader.materialAmbientRefl, this.material.materialReflectances.ambient);
-    gl.uniform3fv(that.shader.materialDiffuseRefl, this.material.materialReflectances.diffuse);
-    gl.uniform3fv(that.shader.materialSpecularRefl, this.material.materialReflectances.specular);
-    gl.uniform1f(that.shader.materialShininess, this.material.materialShininess);
+    gl.uniform3fv(that.shader.materialAmbientRefl, this.material_specs.materialReflectances.ambient);
+    gl.uniform3fv(that.shader.materialDiffuseRefl, this.material_specs.materialReflectances.diffuse);
+    gl.uniform3fv(that.shader.materialSpecularRefl, this.material_specs.materialReflectances.specular);
+    gl.uniform1f(that.shader.materialShininess, this.material_specs.materialShininess);
   }
 
   this.activateShader = function() {
@@ -175,7 +155,7 @@ function Object3D(_rows, _cols, _texture, shader, light, diffuseColor, materialS
   this._draw = function(mvMatrix) {
     setUpLighting();
     setUpCamera();
-    setUpMaterial(materialSpecs);
+    setUpMaterial();
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D,this.texture);

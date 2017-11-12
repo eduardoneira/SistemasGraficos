@@ -12,7 +12,6 @@ var time = 0;
 var deltaTime = 10;
 
 // Objects
-// var scene = new Scene();  //Usar para la escene posta
 var scene = null;
 var camera = null;
 
@@ -30,7 +29,6 @@ function initShaders() {
 function initScene() {
   camera = new Camera();
   scene = new SceneRicky();
-  // scene = new SceneRicky4();
 }
 
 function main() { 
