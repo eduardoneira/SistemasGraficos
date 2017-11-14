@@ -154,11 +154,9 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs=null, n
   }
 
   function setUpNormalMap() {
-    if (that.normal_map) {
-      gl.activeTexture(gl.TEXTURE1);
-      gl.bindTexture(gl.TEXTURE_2D,that.normal_map);
-      gl.uniform1i(this.shader.normalMapSamplerUniform, 1);
-    }
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D,that.normal_map);
+    gl.uniform1i(that.shader.normalMapSamplerUniform, 1);
   }
 
   this.activateShader = function() {
@@ -178,6 +176,8 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs=null, n
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D,this.texture);
     gl.uniform1i(this.shader.samplerUniform, 0);
+
+    setUpNormalMap();
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
     gl.vertexAttribPointer(this.shader.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);

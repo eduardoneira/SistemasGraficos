@@ -1,6 +1,6 @@
 // Phong Fragment Shader Configuration
 const phong_fragment_shader = `
-  precision mediump float; 
+  precision highp float; 
   const int NUM_LIGHTS = 4;
 
   varying vec2 vTextureCoord;

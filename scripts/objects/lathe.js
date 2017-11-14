@@ -1,8 +1,8 @@
-function Lathe(profile_curve, theta, texture, shader, light, spec) {
+function Lathe(profile_curve, theta, texture, shader, light, spec, normal_map) {
   var rows = profile_curve.axis.length;
   var cols = 2*Math.PI / theta + 1;
 
-  Object3D.call(this, rows, cols, texture, shader, light, spec);
+  Object3D.call(this, rows, cols, texture, shader, light, spec, normal_map);
   
   var that = this;
   
@@ -43,11 +43,10 @@ function Lathe(profile_curve, theta, texture, shader, light, spec) {
 
         var binormal_vector = []
         vec3.cross(binormal_vector,normal_vector,tangent_vector)
-
+        // vec3.scale(binormal_vector,binormal_vector,-1.0);
         this.binormal_buffer.push(binormal_vector[0]);
         this.binormal_buffer.push(binormal_vector[1]);
         this.binormal_buffer.push(binormal_vector[2]);
-
       }
     }
 
