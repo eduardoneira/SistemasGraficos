@@ -2,6 +2,8 @@
 const phong_vertex_shader = `
   attribute vec3 aVertexPosition;
   attribute vec3 aVertexNormal;
+  attribute vec3 aVertexTangent;
+  attribute vec3 aVertexBinormal;
   attribute vec2 aTextureCoord;
 
   uniform mat4 uMMatrix;
@@ -14,6 +16,8 @@ const phong_vertex_shader = `
   uniform vec3 uCameraPosition;
 
   varying vec3 vNormal;
+  varying vec3 vTangent;
+  varying vec3 vBinormal;
   varying vec3 vToCamera;
   varying vec3 vToLight[NUM_LIGHTS];
   varying vec2 vTextureCoord;
@@ -23,13 +27,15 @@ const phong_vertex_shader = `
     gl_Position = uPMatrix * uVMatrix * position_world;
     
     vTextureCoord = aTextureCoord;
-    
+
     for (int i = 0; i < NUM_LIGHTS; i++) {
       vToLight[i] = uLightPositions[i] - vec3(position_world); 
     }
 
     vToCamera = normalize(uCameraPosition - vec3(position_world));
     vNormal = normalize(uNMatrix * aVertexNormal);
+    vTangent = normalize(uNMatrix * aVertexTangent);
+    vBinormal = normalize(uNMatrix * aVertexBinormal);
   }
 `;
 

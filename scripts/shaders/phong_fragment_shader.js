@@ -3,13 +3,16 @@ const phong_fragment_shader = `
   precision mediump float; 
   const int NUM_LIGHTS = 4;
 
+  varying vec2 vTextureCoord;
   varying vec3 vNormal;
+  varying vec3 vTangent;
+  varying vec3 vBinormal;
   varying vec3 vToCamera;
   varying vec3 vToLight[NUM_LIGHTS];
   uniform float uLightIntensities[NUM_LIGHTS];
 
-  varying vec2 vTextureCoord;
   uniform sampler2D uSampler;
+  uniform sampler2D uNormalMapSampler;
 
   uniform vec3 uLightAmbientIntensity;
   uniform vec3 uLightDiffuseIntensity;
@@ -20,11 +23,11 @@ const phong_fragment_shader = `
   uniform vec3 uMaterialSpecularRefl;
   uniform float uMaterialShininess;
 
-  vec3 ambientLightning(){
+  vec3 ambientLightning() {
     return uMaterialAmbientRefl * uLightAmbientIntensity;
   }
 
-  vec3 diffuseLightning(in vec3 N, in vec3 L){
+  vec3 diffuseLightning(in vec3 N, in vec3 L) {
     float diffuseTerm = dot(N, L);
     
     if(diffuseTerm < 0.0){
@@ -38,7 +41,7 @@ const phong_fragment_shader = `
     return uMaterialDiffuseRefl * uLightDiffuseIntensity * diffuseTerm;
   }
 
-  vec3 specularLightning(in vec3 N, in vec3 L, in vec3 V){
+  vec3 specularLightning(in vec3 N, in vec3 L, in vec3 V) {
     float specularTerm = 0.0;
 
     if(dot(N, L) > 0.0){
@@ -47,6 +50,13 @@ const phong_fragment_shader = `
     }
 
     return uMaterialSpecularRefl * uLightSpecularIntensity * specularTerm;
+  }
+
+  vec3 applyNormalMap(in vec3 N, in vec3 T, in vec3 B) {
+    mat3 TBN = mat3(T,B,N);
+    vec4 textureColor = texture2D(uNormalMapSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+    vec3 colorRGB = (textureColor.rgb - vec3(0.5,0.5,0.5)) * 2.0;
+    return normalize(TBN * colorRGB);     
   }
 
   void main(void) {
@@ -59,7 +69,7 @@ const phong_fragment_shader = `
     }
 
     vec3 V = normalize(vToCamera);
-    vec3 N = normalize(vNormal);
+    vec3 N = applyNormalMap(normalize(vNormal), normalize(vTangent), normalize(vBinormal));
 
     vec3 resultingLight = ambientLightning();
 

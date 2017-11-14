@@ -20,6 +20,10 @@ function loadAllTextures() {
   textures["marble3"] = loadTexture("resources/marble3.jpg");
   textures["marble4"] = loadTexture("resources/marble4.jpg");
   textures["blank"] = loadTexture("resources/blank.jpg");
+  textures["gotas"] = loadTexture("mapas/gotas.jpg");
+  textures["normal_map_gotas"] = loadTexture("mapas/gotasNormalMap.jpg");
+  textures["marmol"] = loadTexture("mapas/marmol.jpg");
+  textures["normal_map_marmol"] = loadTexture("mapas/marmolNormalMap.jpg");
 }
 
 function loadTexture(url) {

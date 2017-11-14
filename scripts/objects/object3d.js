@@ -1,4 +1,4 @@
-function Object3D(_rows, _cols, _texture, shader, lights, material_specs = null){
+function Object3D(_rows, _cols, _texture, shader, lights, material_specs=null, normal_map=null){
   this.texture = _texture;
   this.rows = _rows;
   this.cols = _cols;
@@ -7,16 +7,21 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs = null)
   this.index_buffer = [];
   this.position_buffer = [];
   this.normal_buffer = [];
+  this.tangent_buffer = [];
+  this.binormal_buffer = [];
   this.texture_buffer = [];
 
   this.webgl_position_buffer = null;
   this.webgl_texture_buffer = null;
   this.webgl_index_buffer = null;
   this.webgl_normal_buffer = null;
+  this.webgl_tangent_buffer = null;
+  this.webgl_binormal_buffer = null;
 
   this.projector = new Projector(shader);
   this.lights = lights;
   this.material_specs = material_specs;
+  this.normal_map = normal_map;
 
   this.shader = shader;
 
@@ -69,6 +74,16 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs = null)
     this.webgl_normal_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);   
+    
+    if (this.shader.usesNormalMap) {
+      this.webgl_tangent_buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.tangent_buffer), gl.STATIC_DRAW);   
+      
+      this.webgl_binormal_buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormal_buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.binormal_buffer), gl.STATIC_DRAW);   
+    }
 
     this.webgl_index_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
@@ -138,6 +153,14 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs = null)
     gl.uniform1f(that.shader.materialShininess, that.material_specs.materialShininess);
   }
 
+  function setUpNormalMap() {
+    if (that.normal_map) {
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D,that.normal_map);
+      gl.uniform1i(this.shader.normalMapSamplerUniform, 1);
+    }
+  }
+
   this.activateShader = function() {
     this.shader.activateShader();
   }
@@ -161,6 +184,14 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs = null)
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
     gl.vertexAttribPointer(this.shader.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+    
+    if (this.shader.usesNormalMap) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+      gl.vertexAttribPointer(this.shader.vertexTangentAttribute, 3, gl.FLOAT, false, 0, 0);
+      
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormal_buffer);
+      gl.vertexAttribPointer(this.shader.vertexBinormalAttribute, 3, gl.FLOAT, false, 0, 0);
+    }
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
     gl.vertexAttribPointer(this.shader.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);

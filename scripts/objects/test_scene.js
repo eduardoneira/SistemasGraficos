@@ -1,26 +1,27 @@
 function TestScene() {
-  var lights = [  new Light([-3.0, 3.0, -3.0], 30.0),
-                  new Light([-3.0, 3.0,  3.0], 10.0),
-                  new Light([ 3.0, 3.0, -3.0], 10.0),
-                  new Light([ 3.0, 3.0,  3.0], 30.0)];
+  var lights = [  new Light([-5.0, 3.0, -5.0], 10.0),
+                  new Light([-5.0, 3.0,  5.0], 1.0),
+                  new Light([ 5.0, 3.0, -5.0], 1.0),
+                  new Light([ 5.0, 3.0,  5.0], 10.0)];
 
-  var specs = { lightIntensities: { ambient:  [0.6, 0.3, 0.3],
-                                    diffuse:  [0.5, 0.5, 0.5],
+  var specs = { lightIntensities: { ambient:  [0.4, 0.4, 0.4],
+                                    diffuse:  [1.0, 1.0, 0.0],
                                     specular: [1.0, 1.0, 1.0]},
                 materialReflectances: { ambient:  [1.0, 1.0, 1.0],
                                         diffuse:  [1.0, 1.0, 1.0],
                                         specular: [1.0, 1.0, 1.0]},
                 materialShininess: 64 };
 
-  var profile = new ConstantRadiusProfile(1.2,10);
+  var profile = new ConstantRadiusProfile(1.5,10);
   profile.travel(0.01);
 
   var main_trunk = new Lathe( profile,
                               Math.PI/36.0,
-                              textures["metallic_white_with_holes"],
+                              textures["blank"],
                               phongShaderHandler,
                               lights,
-                              specs
+                              specs,
+                              textures["normal_map_marmol"]
                               );
   main_trunk.init();
 

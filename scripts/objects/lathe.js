@@ -29,18 +29,32 @@ function Lathe(profile_curve, theta, texture, shader, light, spec) {
         var normal_vector = [0.0,0.0,0.0];
         vec3.add(normal_vector, normal_vector, normal);
         vec3.add(normal_vector, normal_vector, binormal);
-        vec3.add(normal_vector,normal_vector,[0.0,0.0,this.normals_curve[offset]]);
+        vec3.add(normal_vector,normal_vector,[0.0,this.normals_curve[offset],0.0]);
 
         this.normal_buffer.push(normal_vector[0]);
         this.normal_buffer.push(normal_vector[1]);
         this.normal_buffer.push(normal_vector[2]);
+
+        var tangent_vector = [-1.0*binormal[2],0.0,normal[0]]
+
+        this.tangent_buffer.push(tangent_vector[0]);
+        this.tangent_buffer.push(tangent_vector[1]);
+        this.tangent_buffer.push(tangent_vector[2]);
+
+        var binormal_vector = []
+        vec3.cross(binormal_vector,normal_vector,tangent_vector)
+
+        this.binormal_buffer.push(binormal_vector[0]);
+        this.binormal_buffer.push(binormal_vector[1]);
+        this.binormal_buffer.push(binormal_vector[2]);
+
       }
     }
 
     for(var j = 0; j < that.cols; j++){
       for(var i = 0; i < that.rows; i++) {
-        that.texture_buffer.push(i/that.rows);
-        that.texture_buffer.push(j/that.cols);
+        that.texture_buffer.push(i/(that.rows-1));
+        that.texture_buffer.push(j/(that.cols-1));
       }
     }
   }
