@@ -1,4 +1,4 @@
-function Shelve(numberOfShelves, baseSize, texture, shader, light, diffuseColor,withBorders) {
+function Shelve(numberOfShelves, baseSize, texture, shader, lights, specs) {
   Object3D.call(this, null, null, null, null, null, null);
   this.drawEnabled = false;
   
@@ -9,8 +9,8 @@ function Shelve(numberOfShelves, baseSize, texture, shader, light, diffuseColor,
                             10,
                             texture,
                             shader,
-                            light,
-                            diffuseColor,
+                            lights,
+                            specs,
                             true);
 
   //Shelves
@@ -20,16 +20,16 @@ function Shelve(numberOfShelves, baseSize, texture, shader, light, diffuseColor,
                                 10,
                                 texture,
                                 shader,
-                                light,
-                                diffuseColor,
+                                lights,
+                                specs,
                                 true);
     } else {
       this.childs[i] = new Cube(10,
                                 10,
                                 texture,
                                 shader,
-                                light,
-                                diffuseColor,
+                                lights,
+                                specs,
                                 true);
     }
   }
