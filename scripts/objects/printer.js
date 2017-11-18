@@ -1,4 +1,4 @@
-function Printer(light, texture) {
+function Printer(lights, texture, specs) {
   Object3D.call(this, null, null, null, null, null, null);
   this.drawEnabled = false;
 
@@ -80,10 +80,9 @@ function Printer(light, texture) {
   var shelve = new Shelve(1,
                           2,
                           texture,
-                          basicShaderHandler,
-                          light,
-                          [0.1,0.1,0.1],
-                          false);
+                          phongShaderHandler,
+                          lights,
+                          specs);
 
   var printed_object_textures = [ textures["marble1"],
                                   textures["marble2"],

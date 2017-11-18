@@ -16,7 +16,7 @@ function Scene() {
                        );
   floor.init();
 
-  // var printer = new Printer(light,textures["metallic_black"]);
+  var printer = new Printer(lights,textures["metallic_black"],defaultMaterialSpecs());
   // var scene_controller = new SceneController(printer);
 
   // var bookcase = new BookCase(6,
@@ -31,15 +31,15 @@ function Scene() {
   // var scale_bookcase = [2.0,2.0,2.0];
   // bookcase.scale_bookcase_position(scale_bookcase);
 
-  var robot = new Robot(printer,bookcase,light, defaultMaterialSpecs());
+  // var robot = new Robot(printer,bookcase,light, defaultMaterialSpecs());
   // printer.robot = robot;
-  camera.robot = robot;
+  // camera.robot = robot;
 
   this.draw = function() {
-    // var printer_transformations = mat4.create();
-    // mat4.translate(printer_transformations, printer_transformations, [0.0,0.0,10.0])
-    // mat4.scale(printer_transformations,printer_transformations,[2.0,1.0,2.0]);
-    // printer.draw(printer_transformations);
+    var printer_transformations = mat4.create();
+    mat4.translate(printer_transformations, printer_transformations, [0.0,0.0,10.0])
+    mat4.scale(printer_transformations,printer_transformations,[2.0,1.0,2.0]);
+    printer.draw(printer_transformations);
 
     // var bookcase_transformations = mat4.create();
     // mat4.translate(bookcase_transformations,bookcase_transformations,[-5,0.0,-20.0]);
