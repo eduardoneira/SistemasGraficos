@@ -69,7 +69,8 @@ function Robot(printer, bookcase, light, mat_specs) {
     possible_events[current_event].algorithm();
     
     if (!current_position) {
-      current_position = printer.position.slice();
+      // current_position = printer.position.slice();
+      current_position = vec3.fromValues([0,0,0]);
       current_position[1] = 0;
       current_position[2] -= 5;
     }
