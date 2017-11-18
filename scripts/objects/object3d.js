@@ -125,15 +125,19 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs=null, n
     var light_positions = [];
     var light_intensities = [];
 
-    for (var i = 0; i < that.lights.length; i++) {
-      light_positions.push(that.lights[i].position[0]);
-      light_positions.push(that.lights[i].position[1]);
-      light_positions.push(that.lights[i].position[2]);
-      light_intensities.push(that.lights[i].intensity);
+    for (var i = 0; i < that.lights.lights.length; i++) {
+      light_positions.push(that.lights.lights[i].position[0]);
+      light_positions.push(that.lights.lights[i].position[1]);
+      light_positions.push(that.lights.lights[i].position[2]);
+      light_intensities.push(that.lights.lights[i].intensity);
     }
 
     gl.uniform3fv(that.shader.pointLightPositions,light_positions);
     gl.uniform1fv(that.shader.pointLightIntensities,light_intensities);
+
+    gl.uniform3fv(that.shader.lightAmbientIntensity, that.lights.specs.ambient);
+    gl.uniform3fv(that.shader.lightDiffuseIntensity, that.lights.specs.diffuse);
+    gl.uniform3fv(that.shader.lightSpecularIntensity, that.lights.specs.specular);
   }
 
   function setUpCamera(){
@@ -141,14 +145,12 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs=null, n
   }
 
   function setUpMaterial(){
-    gl.uniform3fv(that.shader.lightAmbientIntensity, that.material_specs.lightIntensities.ambient);
-    gl.uniform3fv(that.shader.lightDiffuseIntensity, that.material_specs.lightIntensities.diffuse);
-    gl.uniform3fv(that.shader.lightSpecularIntensity, that.material_specs.lightIntensities.specular);
-
-    gl.uniform3fv(that.shader.materialAmbientRefl, that.material_specs.materialReflectances.ambient);
-    gl.uniform3fv(that.shader.materialDiffuseRefl, that.material_specs.materialReflectances.diffuse);
-    gl.uniform3fv(that.shader.materialSpecularRefl, that.material_specs.materialReflectances.specular);
-    gl.uniform1f(that.shader.materialShininess, that.material_specs.materialShininess);
+    if (that.material_specs){
+      gl.uniform3fv(that.shader.materialAmbientRefl, that.material_specs.materialReflectances.ambient);
+      gl.uniform3fv(that.shader.materialDiffuseRefl, that.material_specs.materialReflectances.diffuse);
+      gl.uniform3fv(that.shader.materialSpecularRefl, that.material_specs.materialReflectances.specular);
+      gl.uniform1f(that.shader.materialShininess, that.material_specs.materialShininess);
+    }
   }
 
   function setUpNormalMap() {
@@ -189,7 +191,6 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs=null, n
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
     gl.vertexAttribPointer(this.shader.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
     
-    // if (this.shader.usesNormalMap) {
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
     gl.vertexAttribPointer(this.shader.vertexTangentAttribute, 3, gl.FLOAT, false, 0, 0);
     

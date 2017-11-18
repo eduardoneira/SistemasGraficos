@@ -1,4 +1,4 @@
-function Lathe(profile_curve, theta, texture, shader, light, spec, normal_map) {
+function Lathe(profile_curve, theta, texture, shader, light, spec=null, normal_map=null) {
   var rows = profile_curve.axis.length;
   var cols = 2*Math.PI / theta + 1;
 

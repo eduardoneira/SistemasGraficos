@@ -1,18 +1,23 @@
 function Scene() {
-  var light = [new Light([0.5, 0.5, 0.5],[-10.0, 10.0, -10.0], 0)];
+  var lights = {  lights: [ new Light([-5.0, 3.0, -5.0], 10.0),
+                            new Light([-5.0, 3.0,  5.0], 10.0),
+                            new Light([ 5.0, 3.0, -5.0], 10.0),
+                            new Light([ 5.0, 3.0,  0.0], 10.0)],
+                  specs: defaultLightSpecs()
+                };
 
-  // var floor = new Plane(100,
-                        // 100,
-                        // textures["floor"],
-                       //  basicShaderHandler,
-                       //  light,
-                       //  [0.1, 0.1, 0.1],
-                       //  true
-                       // );
-  // floor.init();
+  var floor = new Plane(100,
+                        100,
+                        textures["floor"],
+                        phongShaderHandler,
+                        lights,
+                        defaultMaterialSpecs(),
+                        true
+                       );
+  floor.init();
 
   // var printer = new Printer(light,textures["metallic_black"]);
-  // var printer_controller = new PrinterController(printer);
+  // var scene_controller = new SceneController(printer);
 
   // var bookcase = new BookCase(6,
   //                             3,
@@ -26,7 +31,7 @@ function Scene() {
   // var scale_bookcase = [2.0,2.0,2.0];
   // bookcase.scale_bookcase_position(scale_bookcase);
 
-  var robot = new Robot(printer,bookcase,light, defaultSpecs());
+  var robot = new Robot(printer,bookcase,light, defaultMaterialSpecs());
   // printer.robot = robot;
   camera.robot = robot;
 
@@ -41,13 +46,13 @@ function Scene() {
     // mat4.scale(bookcase_transformations,bookcase_transformations,scale_bookcase);
     // bookcase.draw(bookcase_transformations);
 
-    // var floor_transformations = mat4.create();
-    // mat4.scale(floor_transformations,floor_transformations,[200.0,1.0,200.0]);
-    // floor.draw(floor_transformations);
+    var floor_transformations = mat4.create();
+    mat4.scale(floor_transformations,floor_transformations,[50.0,1.0,50.0]);
+    floor.draw(floor_transformations);
 
-    var robot_transformations = mat4.create();
-    mat4.rotate(robot_transformations,robot_transformations,degToRad(90),[0.0,1.0,0.0]);
-    mat4.scale(robot_transformations,robot_transformations,[0.32,0.32,0.32]);
-    robot.draw(robot_transformations);
+    // var robot_transformations = mat4.create();
+    // mat4.rotate(robot_transformations,robot_transformations,degToRad(90),[0.0,1.0,0.0]);
+    // mat4.scale(robot_transformations,robot_transformations,[0.32,0.32,0.32]);
+    // robot.draw(robot_transformations);
   }
 }
