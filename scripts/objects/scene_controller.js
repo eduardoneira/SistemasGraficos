@@ -1,4 +1,4 @@
-function PrinterController(printer) {
+function SceneController(printer) {
   var printer = printer;
 
   var _start = function() {
@@ -25,7 +25,13 @@ function PrinterController(printer) {
     angle_torsion: 0,
     start: _start,
     stop: _stop,
-    cancel: _cancel
+    cancel: _cancel,
+    lights: [1.0, 1.0, 1.0, 1.0],
+    maps: 1,
+    color: 1.0,
+    diffuseMapIntensity: 1.0,
+    glossiness: 50,
+    specularIntensity: 1.0 
   }
 
   function possibleContours() {
@@ -47,11 +53,11 @@ function PrinterController(printer) {
 
     app.contour = 1;
 
-    contour_controller = configuration.add(app,'contour',possibleContours()).name("Contour");
+    contour_controller = shape_configuration.add(app,'contour',possibleContours()).name("Contour");
     contour_controller.updateDisplay();
 
     if (app.mode == "Loft") {
-      angle_controller = configuration.add(app,'angle_torsion',0,360).name("Angle");
+      angle_controller = shape_configuration.add(app,'angle_torsion',0,360).name("Angle");
       angle_controller.updateDisplay();
     } else {
       angle_controller = null;
@@ -60,17 +66,28 @@ function PrinterController(printer) {
 
   var gui = new dat.GUI();
 
-  var configuration = gui.addFolder('Configuration');
-  var mode_controller = configuration.add(app,'mode',["Lathe","Loft"]).name("Mode");
+  var lights = gui.addFolder('Lights');
+  for (var i = 0; i < app.lights.length; i++) {
+    lights.add(app.lights,i.toString(),0.0,1.0).name((i+1).toString())
+  }
+
+  var shape_configuration = gui.addFolder('Shape Configuration');
+  var mode_controller = shape_configuration.add(app,'mode',["Lathe","Loft"]).name("Mode");
   var contour_controller = null;
   var angle_controller = null;
 
   updatePanel();
   mode_controller.onChange(updatePanel);
 
+  var light_configuration = gui.addFolder('Light Configuration');
+  light_configuration.add(app,'maps',generateArrayAlpha(4)).name('Map');
+  light_configuration.add(app,'color',0.0,1.0).name('Base Color');
+  light_configuration.add(app,'diffuseMapIntensity',0.0,1.0).name('Diffuse Map Intensity');
+  light_configuration.add(app,'glossiness',1,100).name('Glossiness');
+  light_configuration.add(app,'specularIntensity',0.0,1.0).name('Specular Intensity');
+
   var commands = gui.addFolder('Commands');
   commands.add(app,'start').name('Start/Resume');  
   commands.add(app,'stop').name('Stop');  
-  commands.add(app,'cancel').name('Discard');  
-
+  commands.add(app,'cancel').name('Discard');
 }

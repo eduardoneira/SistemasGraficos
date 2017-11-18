@@ -12,7 +12,7 @@ function Scene() {
   floor.init();
 
   var printer = new Printer(light,textures["metallic_black"]);
-  var printer_controller = new PrinterController(printer);
+  var scene_controller = new SceneController(printer);
 
   var bookcase = new BookCase(6,
                               3,
