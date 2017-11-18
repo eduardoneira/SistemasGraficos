@@ -1,4 +1,4 @@
-function RobotUpperBody(texture, light, diffuseColor) {
+function RobotUpperBody(texture, light, diffuseColor, mat_specs) {
   // Cylinder
   var profile = new ConstantRadiusProfile(2,6);
   profile.travel(0.01);
@@ -8,7 +8,8 @@ function RobotUpperBody(texture, light, diffuseColor) {
                               texture,
                               basicShaderHandler,
                               light,
-                              diffuseColor
+                              diffuseColor,
+                              mat_specs
                               );
   main_trunk.init();
 
@@ -26,7 +27,8 @@ function RobotUpperBody(texture, light, diffuseColor) {
                       basicShaderHandler, 
                       light, 
                       diffuseColor,
-                      true);
+                      true,
+                      mat_specs);
   base.init();
   base.rotate(degToRad(90),[0.0,0.0,1.0]);
 
@@ -37,7 +39,8 @@ function RobotUpperBody(texture, light, diffuseColor) {
                       basicShaderHandler,
                       light,
                       diffuseColor,
-                      false);
+                      false,
+                      mat_specs);
 
   var cube_transformations = mat4.create();
   mat4.scale(cube_transformations,cube_transformations,[4.5,4.5,4.5]);
@@ -45,7 +48,8 @@ function RobotUpperBody(texture, light, diffuseColor) {
   // Arm
   var robot_arm = new RobotArm( textures["metallic_white_with_holes"],
                                 light,
-                                [0.1, 0.1, 0.1]);
+                                [0.1, 0.1, 0.1],
+                                mat_specs);
 
   var robot_arm_transformations = mat4.create();
   mat4.translate(robot_arm_transformations,robot_arm_transformations,[-1.0,0.0,0.0]);

@@ -1,4 +1,4 @@
-function Robot(printer, bookcase, light) {
+function Robot(printer, bookcase, light, mat_specs) {
   this.printer = printer;
   this.bookcase = bookcase;
   
@@ -38,9 +38,10 @@ function Robot(printer, bookcase, light) {
 
   var robot_upper_body = new RobotUpperBody(textures["metallic_white_with_holes"],
                                             light,
-                                            [0.1, 0.1, 0.1]);
+                                            [0.1, 0.1, 0.1],
+                                            mat_specs);
 
-  var robot_lower_body = new LowerBody();
+  var robot_lower_body = new LowerBody(mat_specs);
 
   var offset_upper = [0,2,0];
   var offset_lower = [0,0.4,0];

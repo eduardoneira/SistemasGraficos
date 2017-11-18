@@ -62,3 +62,14 @@ function print3DPos(vect_array){
                 vect_array[i+2], ";");
   }
 }
+
+function defaultSpecs(){
+    var specs = { lightIntensities: { ambient:  [0.25, 0.25, 0.25],
+                                    diffuse:  [1.0, 1.0, 0.0],
+                                    specular: [1.0, 1.0, 1.0]},
+                materialReflectances: { ambient:  [1.0, 1.0, 1.0],
+                                        diffuse:  [1.0, 1.0, 1.0],
+                                        specular: [1.0, 1.0, 1.0]},
+                materialShininess: 64 };
+    return specs;
+}
