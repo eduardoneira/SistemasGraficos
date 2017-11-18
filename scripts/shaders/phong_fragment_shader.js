@@ -14,6 +14,8 @@ const phong_fragment_shader = `
   uniform sampler2D uSampler;
   uniform sampler2D uNormalMapSampler;
 
+  uniform float uUsesNormalMap;
+
   uniform vec3 uLightAmbientIntensity;
   uniform vec3 uLightDiffuseIntensity;
   uniform vec3 uLightSpecularIntensity;
@@ -69,7 +71,10 @@ const phong_fragment_shader = `
     }
 
     vec3 V = normalize(vToCamera);
-    vec3 N = applyNormalMap(normalize(vNormal), normalize(vTangent), normalize(vBinormal));
+    vec3 N = normalize(vNormal);
+    if(uUsesNormalMap == 1.0){
+      N = applyNormalMap(N, normalize(vTangent), normalize(vBinormal));
+    }
 
     vec3 resultingLight = ambientLightning();
 

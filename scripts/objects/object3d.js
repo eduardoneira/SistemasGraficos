@@ -75,15 +75,13 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs=null, n
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);   
     
-    if (this.shader.usesNormalMap) {
-      this.webgl_tangent_buffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.tangent_buffer), gl.STATIC_DRAW);   
-      
-      this.webgl_binormal_buffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormal_buffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.binormal_buffer), gl.STATIC_DRAW);   
-    }
+    this.webgl_tangent_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.tangent_buffer), gl.STATIC_DRAW);   
+    
+    this.webgl_binormal_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormal_buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.binormal_buffer), gl.STATIC_DRAW);   
 
     this.webgl_index_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
@@ -154,6 +152,12 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs=null, n
   }
 
   function setUpNormalMap() {
+    if(that.normal_map){
+      gl.uniform1f(that.shader.uUsesNormalMap, 1);
+    }
+    else{
+      gl.uniform1f(that.shader.uUsesNormalMap, 0);
+    }
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D,that.normal_map);
     gl.uniform1i(that.shader.normalMapSamplerUniform, 1);
@@ -185,13 +189,12 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs=null, n
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
     gl.vertexAttribPointer(this.shader.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
     
-    if (this.shader.usesNormalMap) {
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
-      gl.vertexAttribPointer(this.shader.vertexTangentAttribute, 3, gl.FLOAT, false, 0, 0);
-      
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormal_buffer);
-      gl.vertexAttribPointer(this.shader.vertexBinormalAttribute, 3, gl.FLOAT, false, 0, 0);
-    }
+    // if (this.shader.usesNormalMap) {
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+    gl.vertexAttribPointer(this.shader.vertexTangentAttribute, 3, gl.FLOAT, false, 0, 0);
+    
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormal_buffer);
+    gl.vertexAttribPointer(this.shader.vertexBinormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_buffer);
     gl.vertexAttribPointer(this.shader.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
