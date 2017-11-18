@@ -26,6 +26,8 @@ function PhongShaderHandler(vertex_shader_src,fragment_shader_src) {
   this.samplerUniform = gl.getUniformLocation(this.glProgram, "uSampler");
   this.normalMapSamplerUniform = gl.getUniformLocation(this.glProgram, "uNormalMapSampler");
   
+  this.uUsesNormalMap = gl.getUniformLocation(this.glProgram, "uUsesNormalMap");
+
   // Attributes
   this.vertexPositionAttribute = gl.getAttribLocation(this.glProgram, "aVertexPosition");
   gl.enableVertexAttribArray(this.vertexPositionAttribute);
@@ -42,7 +44,6 @@ function PhongShaderHandler(vertex_shader_src,fragment_shader_src) {
   this.vertexBinormalAttribute = gl.getAttribLocation(this.glProgram, "aVertexBinormal");
   gl.enableVertexAttribArray(this.vertexBinormalAttribute);
 
-  this.usesNormalMap = true;
 
   this.activateShader = function() {
     gl.useProgram(this.glProgram);
