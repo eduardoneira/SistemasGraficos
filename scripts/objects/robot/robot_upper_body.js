@@ -32,7 +32,7 @@ function RobotUpperBody(lights) {
                                     [1.0,1.0,1.0],
                                     [1.0,1.0,1.0],
                                     64),
-                      );
+                      true);
   base.init();
   base.rotate(degToRad(90),[0.0,0.0,1.0]);
 
@@ -52,10 +52,7 @@ function RobotUpperBody(lights) {
   mat4.scale(cube_transformations,cube_transformations,[4.5,4.5,4.5]);
 
   // Arm
-  var robot_arm = new RobotArm( textures["metallic_white_with_holes"],
-                                light,
-                                [0.1, 0.1, 0.1],
-                                mat_specs);
+  var robot_arm = new RobotArm(lights);
 
   var robot_arm_transformations = mat4.create();
   mat4.translate(robot_arm_transformations,robot_arm_transformations,[-1.0,0.0,0.0]);

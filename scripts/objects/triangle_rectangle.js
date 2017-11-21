@@ -1,5 +1,5 @@
-function TriangleRectangle(rows, cols, texture, shader, light, diffuseColor,repeatTexture) {
-  Object3D.call(this, rows+1, cols+1, texture, shader, light, diffuseColor);
+function TriangleRectangle(rows, cols, texture, shader, lights, specs, repeatTexture) {
+  Object3D.call(this, rows+1, cols+1, texture, shader, lights, specs);
   var that = this;
   var repeatTexture = repeatTexture;
 
@@ -17,6 +17,14 @@ function TriangleRectangle(rows, cols, texture, shader, light, diffuseColor,repe
         this.normal_buffer.push(0);
         this.normal_buffer.push(1);
         this.normal_buffer.push(0);
+
+        this.tangent_buffer.push(1);
+        this.tangent_buffer.push(0);
+        this.tangent_buffer.push(0);
+
+        this.binormal_buffer.push(0);
+        this.binormal_buffer.push(0);
+        this.binormal_buffer.push(1);
 
         if (repeatTexture) {
           that.texture_buffer.push(i);

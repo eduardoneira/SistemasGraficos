@@ -122,6 +122,18 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 			new_shape_normals.forEach(function(elem){
 				that.normal_buffer.push(elem);
 			})
+
+			var tangent_vector = [new_shape_normals[2],0.0,-1.0*new_shape_normals[0]];
+      that.tangent_buffer.push(tangent_vector[0]);
+      that.tangent_buffer.push(tangent_vector[1]);
+      that.tangent_buffer.push(tangent_vector[2]);
+
+      var binormal_vector = [];
+      vec3.cross(binormal_vector,new_shape_normals,tangent_vector);
+      that.binormal_buffer.push(binormal_vector[0]);
+      that.binormal_buffer.push(binormal_vector[1]);
+      that.binormal_buffer.push(binormal_vector[2]);
+
 		}
 
 		if(sweep_path.closed){

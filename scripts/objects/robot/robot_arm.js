@@ -1,14 +1,17 @@
-function RobotArm(texture, light, diffuseColor) {
+function RobotArm(lights) {
   // Trunk
   var profile = new ConstantRadiusProfile(1.2,10);
   profile.travel(0.01);
 
   var main_trunk = new Lathe( profile,
                               Math.PI/36.0,
-                              texture,
-                              basicShaderHandler,
-                              light,
-                              diffuseColor
+                              textures["metallic_white_with_holes"],
+                              phongShaderHandler,
+                              lights,
+                              materialSpecs([1.0,1.0,1.0],
+                                            [1.0,1.0,1.0],
+                                            [1.0,1.0,1.0],
+                                            32)
                               );
   main_trunk.init();
 
@@ -23,18 +26,19 @@ function RobotArm(texture, light, diffuseColor) {
                       line, 
                       textures["metallic_grey"], 
                       0, 
-                      basicShaderHandler, 
-                      light, 
-                      diffuseColor,
+                      phongShaderHandler, 
+                      lights, 
+                      materialSpecs([1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    64),
                       true);
   base.init();
   base.translate([0,-8,0]);
   base.rotate(degToRad(90),[0.0,0.0,1.0]);
 
   // Robot hand
-  var robot_hand = new RobotHand( textures["metallic_white"],
-                                  light,
-                                  [0.1, 0.1, 0.1]);
+  var robot_hand = new RobotHand( lights);
 
   var robot_hand_transformations = mat4.create();
   mat4.rotate(robot_hand_transformations,robot_hand_transformations,degToRad(270),[1.0,0.0,0.0]);

@@ -1,29 +1,28 @@
-function TriangleLoft(length, texture, shader, light, diffuseColor) {
+function TriangleLoft(length, texture, shader, lights, specs) {
   var line = new Line(length);
-
   line.travel(0.01);
 
   var shape = new TriangleSurface();
   shape.discretize(0.01);  
 
   var sweep_path = new Polygon(line.points);
-
+  debugger;
   var loft = new Loft(shape, 
                       sweep_path, 
                       texture, 
                       0, 
                       shader, 
-                      light, 
-                      diffuseColor);
+                      lights, 
+                      specs);
   loft.init();
 
   //Tapas
   var triangle_left = new TriangleRectangle(20,
                                             20,
                                             texture,
-                                            basicShaderHandler,
-                                            light,
-                                            diffuseColor,
+                                            shader,
+                                            lights,
+                                            specs,
                                             false
                                             );
   triangle_left.init();
@@ -36,9 +35,9 @@ function TriangleLoft(length, texture, shader, light, diffuseColor) {
   var triangle_right = new TriangleRectangle( 20,
                                               20,
                                               texture,
-                                              basicShaderHandler,
-                                              light,
-                                              diffuseColor,
+                                              shader,
+                                              lights,
+                                              specs,
                                               false
                                               );
   triangle_right.init();

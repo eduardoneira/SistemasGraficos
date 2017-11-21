@@ -1,4 +1,4 @@
-function RobotHand(texture, light, diffuseColor) {
+function RobotHand(lights) {
   var initial_holding_position = [0.0,0.0,6];
   this.holding_position = [];
   var printed_object = null;
@@ -7,36 +7,34 @@ function RobotHand(texture, light, diffuseColor) {
   // Centre cube
   var cube = new Cube(10,
                       10,
-                      texture,
-                      basicShaderHandler,
-                      light,
-                      diffuseColor,
+                      textures["metallic_white"],
+                      phongShaderHandler,
+                      lights,
+                      materialSpecs([1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    64),
                       false,
                       true);
+
   var cube_transformations = mat4.create();
   mat4.scale(cube_transformations,cube_transformations,[4,2,2]);
 
   // Left finger
-  var triangleLoftLeft = new SideBaseRobotHand( texture,
-                                                light,
-                                                diffuseColor);
+  var triangleLoftLeft = new SideBaseRobotHand( textures["metallic_white"],
+                                                lights);
   var left_transformations = mat4.create();
   mat4.translate(left_transformations,left_transformations,[2,0,-1]);
   mat4.rotate(left_transformations,left_transformations,degToRad(90),[0,0,1]);
 
   // Right finger
-  var triangleLoftRight = new SideBaseRobotHand( texture,
-                                                 light,
-                                                 diffuseColor);
+  var triangleLoftRight = new SideBaseRobotHand(textures["metallic_white"],
+                                                lights);
   var right_transformations = mat4.create();
   mat4.translate(right_transformations,right_transformations,[-2,2,-1]);
   mat4.rotate(right_transformations,right_transformations,degToRad(270),[0,0,1]);
 
   // Logic
-  // var current_width = 4;
-  // var current_width_world = [];
-  
-  // var length_finger = 6;
   var current_angle = degToRad(10);
   var delta_angle = 0.01;
 
@@ -108,12 +106,16 @@ function RobotHand(texture, light, diffuseColor) {
   }
 }
 
-function SideBaseRobotHand(texture, light, diffuseColor, delta_angle) {
+function SideBaseRobotHand(texture, lights) {
   var triangleLoft = new TriangleLoft(2,
                                       texture,
-                                      basicShaderHandler,
-                                      light,
-                                      diffuseColor);
+                                      phongShaderHandler,
+                                      lights,
+                                      materialSpecs([1.0,1.0,1.0],
+                                                    [1.0,1.0,1.0],
+                                                    [1.0,1.0,1.0],
+                                                    64)
+                                      );
 
   var line = new Line(2);
   line.travel(0.05);
@@ -125,9 +127,12 @@ function SideBaseRobotHand(texture, light, diffuseColor, delta_angle) {
                       line, 
                       texture, 
                       0, 
-                      basicShaderHandler, 
-                      light, 
-                      diffuseColor,
+                      phongShaderHandler, 
+                      lights, 
+                      materialSpecs([1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    64),
                       true);
   loft.init();
 
@@ -139,9 +144,12 @@ function SideBaseRobotHand(texture, light, diffuseColor, delta_angle) {
   var cube = new Cube(10,
                       10,
                       textures["metallic_grey"],
-                      basicShaderHandler,
-                      light,
-                      diffuseColor,
+                      phongShaderHandler,
+                      lights,
+                      materialSpecs([1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    64),
                       true);
 
   var hand_transformations = mat4.create();
