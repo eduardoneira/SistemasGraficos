@@ -64,10 +64,10 @@ function print3DPos(vect_array){
 }
 
 function defaultMaterialSpecs() {
-  return { materialReflectances: { ambient:  [1.0, 1.0, 1.0],
-                                   diffuse:  [1.0, 1.0, 1.0],
-                                   specular: [1.0, 1.0, 1.0]},
-           materialShininess: 64 };
+  return materialSpecs([1.0, 1.0, 1.0],
+                       [1.0, 1.0, 1.0],
+                       [1.0, 1.0, 1.0],
+                       64);
 }
 
 function defaultLightSpecs() {
@@ -75,4 +75,11 @@ function defaultLightSpecs() {
            diffuse:  [1.0, 1.0, 0.0],
            specular: [1.0, 1.0, 1.0]
          };
+}
+
+function materialSpecs(ambient, diffuse, specular, glossiness) {
+  return { materialReflectances: { ambient:  ambient,
+                                   diffuse:  diffuse,
+                                   specular: specular},
+           materialShininess: glossiness };
 }

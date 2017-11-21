@@ -1,15 +1,17 @@
-function RobotUpperBody(texture, light, diffuseColor, mat_specs) {
+function RobotUpperBody(lights) {
   // Cylinder
   var profile = new ConstantRadiusProfile(2,6);
   profile.travel(0.01);
 
   var main_trunk = new Lathe( profile,
                               Math.PI/36.0,
-                              texture,
-                              basicShaderHandler,
-                              light,
-                              diffuseColor,
-                              mat_specs
+                              textures["metallic_white_with_holes"],
+                              phongShaderHandler,
+                              lights,
+                              materialSpecs([1.0,1.0,1.0],
+                                            [1.0,1.0,1.0],
+                                            [1.0,1.0,1.0],
+                                            16)
                               );
   main_trunk.init();
 
@@ -24,11 +26,13 @@ function RobotUpperBody(texture, light, diffuseColor, mat_specs) {
                       line, 
                       textures["metallic_grey"], 
                       0, 
-                      basicShaderHandler, 
-                      light, 
-                      diffuseColor,
-                      true,
-                      mat_specs);
+                      phongShaderHandler,
+                      lights,
+                      materialSpecs([1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    64),
+                      );
   base.init();
   base.rotate(degToRad(90),[0.0,0.0,1.0]);
 
@@ -36,12 +40,14 @@ function RobotUpperBody(texture, light, diffuseColor, mat_specs) {
   var cube = new Cube(10,
                       10,
                       textures["metallic_black2"],
-                      basicShaderHandler,
-                      light,
-                      diffuseColor,
-                      false,
-                      mat_specs);
-
+                      phongShaderHandler,
+                      lights,
+                      materialSpecs([1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    64),
+                      false);
+  
   var cube_transformations = mat4.create();
   mat4.scale(cube_transformations,cube_transformations,[4.5,4.5,4.5]);
 

@@ -1,6 +1,5 @@
 var textures = {};
 
-// No se puede acceder al filesystem, vamos a tener que hardcodear a mano aca
 function loadAllTextures() {
   textures["cylinder"] = loadTexture("resources/cylinder.jpg");
   textures["checker"] = loadTexture("resources/checker.jpg");
@@ -26,6 +25,9 @@ function loadAllTextures() {
   textures["normal_map_marmol"] = loadTexture("mapas/marmolNormalMap.jpg");
   textures["madera1"] = loadTexture("mapas/parquet13.jpg");
   textures["normal_map_madera1"] = loadTexture("mapas/parquet13NormalMap.jpg");
+  textures["normal_map_baldosas"] = loadTexture("mapas/baldosasSquareNormalMap.jpg");
+  textures["alfombra"] = loadTexture("mapas/alfombraBlanca_128.jpg");
+  textures["normal_map_alfombra"] = loadTexture("mapas/alfombraBlanca_128_normal.jpg");
 }
 
 function loadTexture(url) {

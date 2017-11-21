@@ -1,4 +1,4 @@
-function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor, close = false){
+function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null, close = false){
 
 	var rows = shape.positions.length/2;
 	var cols = sweep_path.length;
@@ -11,7 +11,7 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 		cols += 2;
 	}
 
-	Object3D.call(this,rows,cols,texture, shader, light, diffuseColor);
+	Object3D.call(this, rows, cols, texture, shader, lights, specs);
 	var that = this;
 	that.sweep_path = sweep_path;
 	that.shape = shape;
@@ -71,10 +71,20 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 				that.normal_buffer.push(-sweep_path.tangents[0]); 
 				that.normal_buffer.push(-sweep_path.tangents[1]); 
 				that.normal_buffer.push(-sweep_path.tangents[2]); 
+				
+				var tangent_vector = [sweep_path.tangents[1],-1.0*sweep_path.tangents[0],0.0];
+	      that.tangent_buffer.push(tangent_vector[0]);
+	      that.tangent_buffer.push(tangent_vector[1]);
+	      that.tangent_buffer.push(tangent_vector[2]);
+
+	      var binormal_vector = [];
+	      vec3.cross(binormal_vector,that.normal_buffer.slice(-3),tangent_vector);
+	      that.binormal_buffer.push(binormal_vector[0]);
+	      that.binormal_buffer.push(binormal_vector[1]);
+	      that.binormal_buffer.push(binormal_vector[2]);
 			}
 		}
 
-		// for(var j = 0; j < sweep_path.length - 2; j+=3){
 		for(var j = 0; j < sweep_path.length; j+=1){
 			var tangent, normal, binormal;
 			var curr_vert, prev_vert, next_vert;
@@ -140,11 +150,22 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 
 			new_shape.forEach(function(elem){
 				that.position_buffer.push(elem);
-			})
+			});
 
 			new_shape_normals.forEach(function(elem){
 				that.normal_buffer.push(elem);
-			})
+			});
+
+			var tangent_vector = [new_shape_normals[2],0.0,-1.0*new_shape_normals[0]];
+      that.tangent_buffer.push(tangent_vector[0]);
+      that.tangent_buffer.push(tangent_vector[1]);
+      that.tangent_buffer.push(tangent_vector[2]);
+
+      var binormal_vector = [];
+      vec3.cross(binormal_vector,new_shape_normals,tangent_vector);
+      that.binormal_buffer.push(binormal_vector[0]);
+      that.binormal_buffer.push(binormal_vector[1]);
+      that.binormal_buffer.push(binormal_vector[2]);
 		}
 
 		if (that.close) {
@@ -156,6 +177,17 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 				that.normal_buffer.push(sweep_path.tangents[sweep_path.points.length-3]); 
 				that.normal_buffer.push(sweep_path.tangents[sweep_path.points.length-2]); 
 				that.normal_buffer.push(sweep_path.tangents[sweep_path.points.length-1]); 
+
+				var tangent_vector = [sweep_path.tangents[sweep_path.points.length-2],-1.0*sweep_path.tangents[sweep_path.points.length-3],0.0];
+	      that.tangent_buffer.push(tangent_vector[0]);
+	      that.tangent_buffer.push(tangent_vector[1]);
+	      that.tangent_buffer.push(tangent_vector[2]);
+
+	      var binormal_vector = [];
+	      vec3.cross(binormal_vector,that.normal_buffer.slice(-3),tangent_vector);
+	      that.binormal_buffer.push(binormal_vector[0]);
+	      that.binormal_buffer.push(binormal_vector[1]);
+	      that.binormal_buffer.push(binormal_vector[2]);
 			}
 		}
 
@@ -166,7 +198,6 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, light, diffuseColor
 			}
 		}
 	}
-
 }
 
 inheritPrototype(Cylinder, Object3D);

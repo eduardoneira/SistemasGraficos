@@ -6,13 +6,17 @@ function Scene() {
                   specs: defaultLightSpecs()
                 };
 
-  var floor = new Plane(100,
-                        100,
-                        textures["floor"],
+  var floor = new Plane(25,
+                        25,
+                        textures["alfombra"],
                         phongShaderHandler,
                         lights,
-                        defaultMaterialSpecs(),
-                        true
+                        materialSpecs([1.0,1.0,1.0],
+                                      [1.0,1.0,1.0],
+                                      [0.0,0.0,0.0],
+                                      1),
+                        true,
+                        textures["normal_map_alfombra"]
                        );
   floor.init();
 
@@ -31,9 +35,9 @@ function Scene() {
   var scale_bookcase = [2.0,2.0,2.0];
   bookcase.scale_bookcase_position(scale_bookcase);
 
-  // var robot = new Robot(printer,bookcase,light, defaultMaterialSpecs());
-  // printer.robot = robot;
-  // camera.robot = robot;
+  var robot = new Robot(printer, bookcase, lights);
+  printer.robot = robot;
+  camera.robot = robot;
 
   this.draw = function() {
     var printer_transformations = mat4.create();
@@ -50,9 +54,9 @@ function Scene() {
     mat4.scale(floor_transformations,floor_transformations,[50.0,1.0,50.0]);
     floor.draw(floor_transformations);
 
-    // var robot_transformations = mat4.create();
-    // mat4.rotate(robot_transformations,robot_transformations,degToRad(90),[0.0,1.0,0.0]);
-    // mat4.scale(robot_transformations,robot_transformations,[0.32,0.32,0.32]);
-    // robot.draw(robot_transformations);
+    var robot_transformations = mat4.create();
+    mat4.rotate(robot_transformations,robot_transformations,degToRad(90),[0.0,1.0,0.0]);
+    mat4.scale(robot_transformations,robot_transformations,[0.32,0.32,0.32]);
+    robot.draw(robot_transformations);
   }
 }
