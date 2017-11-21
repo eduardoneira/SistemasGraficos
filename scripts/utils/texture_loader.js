@@ -24,6 +24,8 @@ function loadAllTextures() {
   textures["normal_map_gotas"] = loadTexture("mapas/gotasNormalMap.jpg");
   textures["marmol"] = loadTexture("mapas/marmol.jpg");
   textures["normal_map_marmol"] = loadTexture("mapas/marmolNormalMap.jpg");
+  textures["madera1"] = loadTexture("mapas/parquet13.jpg");
+  textures["normal_map_madera1"] = loadTexture("mapas/parquet13NormalMap.jpg");
 }
 
 function loadTexture(url) {

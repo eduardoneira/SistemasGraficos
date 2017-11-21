@@ -1,4 +1,4 @@
-function Shelve(numberOfShelves, baseSize, texture, shader, lights, specs) {
+function Shelve(numberOfShelves, baseSize, texture, shader, lights, specs, repeatTexture, normal_map=null) {
   Object3D.call(this, null, null, null, null, null, null);
   this.drawEnabled = false;
   
@@ -11,7 +11,9 @@ function Shelve(numberOfShelves, baseSize, texture, shader, lights, specs) {
                             shader,
                             lights,
                             specs,
-                            true);
+                            repeatTexture,
+                            false,
+                            normal_map);
 
   //Shelves
   for (var i = 1; i <= numberOfShelves*5; i++) {
@@ -22,7 +24,9 @@ function Shelve(numberOfShelves, baseSize, texture, shader, lights, specs) {
                                 shader,
                                 lights,
                                 specs,
-                                true);
+                                repeatTexture,
+                                false,
+                                normal_map);
     } else {
       this.childs[i] = new Cube(10,
                                 10,
@@ -30,7 +34,9 @@ function Shelve(numberOfShelves, baseSize, texture, shader, lights, specs) {
                                 shader,
                                 lights,
                                 specs,
-                                true);
+                                repeatTexture,
+                                false,
+                                normal_map);
     }
   }
 

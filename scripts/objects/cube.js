@@ -1,4 +1,4 @@
-function Cube(rows, cols, texture, shader, light, diffuseColor, repeatTexture, hollow = false, mat_specs) {
+function Cube(rows, cols, texture, shader, lights, specs, repeatTexture, hollow = false, normal_map=null) {
   Object3D.call(this, null, null, null, null, null);
   this.drawEnabled = false;
   var that = this;
@@ -8,10 +8,10 @@ function Cube(rows, cols, texture, shader, light, diffuseColor, repeatTexture, h
                                 cols,
                                 texture,
                                 shader,
-                                light,
-                                diffuseColor,
+                                lights,
+                                specs,
                                 repeatTexture,
-                                mat_specs
+                                normal_map
                                );
     this.childs[i].init();
   }

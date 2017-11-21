@@ -1,5 +1,5 @@
-function Plane(rows, cols, texture, shader, lights, specs,repeatTexture) {
-  Object3D.call(this, rows+1, cols+1, texture, shader, lights, specs);
+function Plane(rows, cols, texture, shader, lights, specs, repeatTexture, normal_map=null) {
+  Object3D.call(this, rows+1, cols+1, texture, shader, lights, specs, normal_map);
   var that = this;
   var repeatTexture = repeatTexture;
 

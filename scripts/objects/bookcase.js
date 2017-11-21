@@ -1,4 +1,4 @@
-function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, shader, light, diffuseColor, withBorders) {
+function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, shader, lights, specs, normal_map=null) {
   var that = this;
   var shelves = [];
   var initial_position = [numberOfHorizontals/2,baseSize,0.0];
@@ -26,9 +26,10 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
                             baseSize,
                             texture,
                             shader,
-                            light,
-                            diffuseColor,
-                            withBorders
+                            lights,
+                            specs,
+                            false,
+                            normal_map
     ));
   }
 

@@ -82,7 +82,8 @@ function Printer(lights, texture, specs) {
                           texture,
                           phongShaderHandler,
                           lights,
-                          specs);
+                          specs,
+                          true);
 
   var printed_object_textures = [ textures["marble1"],
                                   textures["marble2"],
