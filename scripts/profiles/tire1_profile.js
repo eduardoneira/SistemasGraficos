@@ -37,11 +37,8 @@ function Tire1Profile(){
       that.positions.push(bezier_curve.positions[i]);
       that.positions.push(bezier_curve.positions[i+1]);
       
-      that.normals.push(bezier_curve.tangents[i+1]);
-      that.normals.push(-1.0*bezier_curve.tangents[i]);
+      that.normals.push(-1.0*bezier_curve.tangents[i+1]);
+      that.normals.push(bezier_curve.tangents[i]);
     }
-
-    this.normals = this.positions.slice();
-
   }
 }

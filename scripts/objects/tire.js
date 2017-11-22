@@ -10,7 +10,6 @@ function Tire(delta, M, radius, lights){
   shape.discretize(delta);
 
   var sweep_path = new CurveCircle(radius);
-  // var sweep_path = new Polygon(makeFlatCircle(radius, M));
   sweep_path.travel(delta);
   sweep_path.closed = true;
 
@@ -23,9 +22,10 @@ function Tire(delta, M, radius, lights){
                        materialSpecs([1.0,1.0,1.0],
                                      [1.0,1.0,1.0],
                                      [1.0,1.0,1.0],
-                                     1),
+                                     32),
                        false,
-                       false
+                       false,
+                       textures["normal_map_gotas"]
                        );
   this.loft.init();
 

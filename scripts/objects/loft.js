@@ -1,5 +1,5 @@
 function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null, close = false, mapping_close = false, normal_map = null) {
-
+	var that = this;
 	var rows = shape.positions.length/2;
 	var cols = sweep_path.length;
 	
@@ -12,7 +12,7 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 	}
 
 	Object3D.call(this, rows, cols, texture, shader, lights, specs, normal_map);
-	var that = this;
+	
 	that.sweep_path = sweep_path;
 	that.shape = shape;
 	that.twist = twist;
