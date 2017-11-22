@@ -11,11 +11,11 @@ function Tire(delta, M, radius, lights){
 
   var sweep_path = new CurveCircle(radius);
   sweep_path.travel(delta);
-  sweep_path.closed = true;
+  sweep_path.closed = false;
 
   this.loft = new Loft(shape, 
                        sweep_path, 
-                       textures["blank"], 
+                       textures["normal_map_gotas"], 
                        0, 
                        phongShaderHandler, 
                        lights, 
@@ -24,17 +24,8 @@ function Tire(delta, M, radius, lights){
                                      [1.0,1.0,1.0],
                                      32),
                        false,
-                       false,
-                       textures["normal_map_gotas"]
-                       );
+                       false);
   this.loft.init();
-
-  debugger;
-
-  // rescalo textura:
-  // for(var i = 0; i < this.loft.texture_buffer.length; i++){
-  //   this.loft.texture_buffer[i] /= 2;
-  //  }  
 
   this.draw = function(transformations){
     this.loft.activateShader();

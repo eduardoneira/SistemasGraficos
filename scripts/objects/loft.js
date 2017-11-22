@@ -138,8 +138,8 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 
 		if(sweep_path.closed){
 			curr_vert = vec3.fromValues(sweep_path.points[0],
-     			                      sweep_path.points[1],
-     			                      sweep_path.points[2]);
+		   			                      sweep_path.points[1],
+		   			                      sweep_path.points[2]);
 
 			tangent = vec3.fromValues(sweep_path.tangents[0],
      			                      sweep_path.tangents[1],
@@ -203,25 +203,26 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 			}
 		}
 
-		for(j = 0; j < that.cols; j++){
-			if (that.mapping_close && (j == 0 || j == that.cols-1)) {
-				for(i = 0; i < that.rows; i++) {
+		for(var j = 0; j < cols; j++){
+			if (that.mapping_close && (j == 0 || j == cols-1)) {
+				for(var i = 0; i < rows; i++) {
 					that.texture_buffer.push(0.5);
 					that.texture_buffer.push(0.5);
 				}
-			} else if (that.mapping_close && (j == 1 || j == that.cols-2)) {
+			} else if (that.mapping_close && (j == 1 || j == cols-2)) {
 				var deltaTheta = 2.0 * Math.PI / (that.rows-1);
-				for(i = 0; i < that.rows; i++){
+				for(var i = 0; i < that.rows; i++){
 					that.texture_buffer.push(0.5 + 0.4*Math.cos(i*deltaTheta));
 					that.texture_buffer.push(0.5 + 0.4*Math.sin(i*deltaTheta));
 				}
 			} else {
-				for(i = 0; i < that.rows; i++){
-					that.texture_buffer.push(i/that.rows);
-					that.texture_buffer.push(j/that.cols);
+				for(var i = 0; i < that.rows; i++){
+					that.texture_buffer.push(i/(that.rows-1));
+					that.texture_buffer.push(j/(that.cols-1));
 				}
 			}
 		}
+		debugger;
 	}
 }
 
