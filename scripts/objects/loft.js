@@ -217,12 +217,11 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 				}
 			} else {
 				for(var i = 0; i < that.rows; i++){
-					that.texture_buffer.push(i/(that.rows-1));
+					that.texture_buffer.push(i/that.rows);
 					that.texture_buffer.push(j/(that.cols-1));
 				}
 			}
 		}
-		debugger;
 	}
 }
 

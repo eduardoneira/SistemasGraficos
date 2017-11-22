@@ -26,11 +26,11 @@ function Scene() {
   var bookcase = new BookCase(6,
                               3,
                               1.5,
-                              textures["madera1"],
+                              textures["normal_map_madera1"],
                               phongShaderHandler,
                               lights,
-                              defaultMaterialSpecs(),
-                              textures['normal_map_madera1']);
+                              defaultMaterialSpecs());
+                              // textures['normal_map_madera1']);
 
   var scale_bookcase = [2.0,2.0,2.0];
   bookcase.scale_bookcase_position(scale_bookcase);

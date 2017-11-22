@@ -40,5 +40,6 @@ function Tire1Profile(){
       that.normals.push(-1.0*bezier_curve.tangents[i+1]);
       that.normals.push(bezier_curve.tangents[i]);
     }
+    debugger;
   }
 }

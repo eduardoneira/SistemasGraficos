@@ -72,6 +72,7 @@ const phong_fragment_shader = `
 
     vec3 V = normalize(vToCamera);
     vec3 N = normalize(vNormal);
+    
     if(uUsesNormalMap == 1.0){
       N = applyNormalMap(N, normalize(vTangent), normalize(vBinormal));
     }

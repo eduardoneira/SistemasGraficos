@@ -20,7 +20,6 @@ function BookCase(numberOfHorizontals, numberOfVerticals, baseSize, texture, sha
     }
   }
 
-
   for (var i = 0; i < numberOfHorizontals; i++) {
     shelves.push(new Shelve(numberOfVerticals,
                             baseSize,
