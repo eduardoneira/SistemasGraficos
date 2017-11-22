@@ -5,7 +5,7 @@ function SurfaceCircle(_radius) {
 
   this.discretize = function(delta) {
     this._circle.travel(delta);
-    this.positions = this._circle.positions.filter(
+    this.positions = this._circle.points.filter(
     	function(element,index) {
     		return (index-2) % 3;
     	});

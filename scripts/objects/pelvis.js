@@ -1,4 +1,4 @@
-function Pelvis(delta, M, radius, light){
+function Pelvis(delta, M, radius, lights){
 
   var that = this;
 
@@ -13,11 +13,14 @@ function Pelvis(delta, M, radius, light){
 
   this.loft = new Loft(shape, 
                       line, 
-                      textures["checker"], 
+                      textures["blank"], 
                       0, 
-                      basicShaderHandler, 
-                      light, 
-                      [0.1, 0.1, 0.1],
+                      phongShaderHandler, 
+                      lights, 
+                      materialSpecs([1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    [1.0,1.0,1.0],
+                                    32),
                       true);
   this.loft.init();
 
@@ -25,9 +28,8 @@ function Pelvis(delta, M, radius, light){
   this.loft.init();
   this.loft.translate([0,-4.3,0]);
   this.loft.rotate(Math.PI/2, [0,0,1]);
-  // this.loft.scale([10,10,10]);
 
-    // rescalo textura:
+  // rescalo textura:
   for(var i = 1; i < this.loft.texture_buffer.length; i+=2){
     this.loft.texture_buffer[i+1] *= 10;
    } 

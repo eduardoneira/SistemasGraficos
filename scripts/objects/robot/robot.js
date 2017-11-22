@@ -38,7 +38,7 @@ function Robot(printer, bookcase, lights) {
 
   var robot_upper_body = new RobotUpperBody(lights);
 
-  // var robot_lower_body = new LowerBody(lights);
+  var robot_lower_body = new LowerBody(lights);
 
   var offset_upper = [0,2,0];
   var offset_lower = [0,0.4,0];
@@ -77,11 +77,11 @@ function Robot(printer, bookcase, lights) {
     mat4.multiply(aux,aux,transformations);
     robot_upper_body.draw(aux);
 
-    // aux = mat4.create();
-    // mat4.translate(aux,aux,current_position);
-    // mat4.translate(aux,aux,offset_lower);
-    // mat4.multiply(aux,aux,transformations);
-    // robot_lower_body.draw(aux);
+    aux = mat4.create();
+    mat4.translate(aux,aux,current_position);
+    mat4.translate(aux,aux,offset_lower);
+    mat4.multiply(aux,aux,transformations);
+    robot_lower_body.draw(aux);
   }
 
   function do_nothing() {}

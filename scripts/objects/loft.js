@@ -1,4 +1,4 @@
-function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null, close = false){
+function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null, close = false, mapping_close = false, normal_map = null) {
 
 	var rows = shape.positions.length/2;
 	var cols = sweep_path.length;
@@ -11,12 +11,13 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 		cols += 2;
 	}
 
-	Object3D.call(this, rows, cols, texture, shader, lights, specs);
+	Object3D.call(this, rows, cols, texture, shader, lights, specs, normal_map);
 	var that = this;
 	that.sweep_path = sweep_path;
 	that.shape = shape;
 	that.twist = twist;
 	that.close = close;
+	that.mapping_close = mapping_close;
 
 	this._createAttributesBuffers = function(){
 
@@ -32,7 +33,6 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 				vec3.transformMat4(aux_vert, aux_vert, rot);
 
 				vec3.transformMat4(aux_vert, aux_vert, transform_matrix);
-
 
 				concatVectorElems(new_shape, aux_vert);
 			}
@@ -204,9 +204,22 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 		}
 
 		for(j = 0; j < that.cols; j++){
-			for(i = 0; i < that.rows; i++){
-				that.texture_buffer.push(i/that.rows);
-				that.texture_buffer.push(j/that.cols);
+			if (that.mapping_close && (j == 0 || j == that.cols-1)) {
+				for(i = 0; i < that.rows; i++) {
+					that.texture_buffer.push(0.5);
+					that.texture_buffer.push(0.5);
+				}
+			} else if (that.mapping_close && (j == 1 || j == that.cols-2)) {
+				var deltaTheta = 2.0 * Math.PI / (that.rows-1);
+				for(i = 0; i < that.rows; i++){
+					that.texture_buffer.push(0.5 + 0.4*Math.cos(i*deltaTheta));
+					that.texture_buffer.push(0.5 + 0.4*Math.sin(i*deltaTheta));
+				}
+			} else {
+				for(i = 0; i < that.rows; i++){
+					that.texture_buffer.push(i/that.rows);
+					that.texture_buffer.push(j/that.cols);
+				}
 			}
 		}
 	}

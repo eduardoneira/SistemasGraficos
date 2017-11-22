@@ -6,7 +6,6 @@ function TriangleLoft(length, texture, shader, lights, specs) {
   shape.discretize(0.01);  
 
   var sweep_path = new Polygon(line.points);
-  debugger;
   var loft = new Loft(shape, 
                       sweep_path, 
                       texture, 
@@ -15,6 +14,7 @@ function TriangleLoft(length, texture, shader, lights, specs) {
                       lights, 
                       specs);
   loft.init();
+  loft.rotate(degToRad(270),[1.0,0.0,0.0]);
 
   //Tapas
   var triangle_left = new TriangleRectangle(20,

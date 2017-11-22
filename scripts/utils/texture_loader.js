@@ -28,6 +28,8 @@ function loadAllTextures() {
   textures["normal_map_baldosas"] = loadTexture("mapas/baldosasSquareNormalMap.jpg");
   textures["alfombra"] = loadTexture("mapas/alfombraBlanca_128.jpg");
   textures["normal_map_alfombra"] = loadTexture("mapas/alfombraBlanca_128_normal.jpg");
+  textures["eye"] = loadTexture("resources/eye.jpg");
+  textures["normal_map_tire"] = loadTexture("mapas/cubiertaNormalMap.jpg");
 }
 
 function loadTexture(url) {

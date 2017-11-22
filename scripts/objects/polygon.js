@@ -10,7 +10,6 @@ function Polygon(points, closed=false){
 		this.points.push(points[2]);
 	}
 
-
 	this.tangents = [];
 	this.normals = [];
 	this.binormals = [];
@@ -32,7 +31,7 @@ function Polygon(points, closed=false){
 		vec3.cross(binormal, tangent, normal);
 
 		if (vec3.length(binormal) == 0.0) {
-			normal = vec3.fromValues(tangent[1],tangent[2],tangent[0]);
+			normal = vec3.fromValues(tangent[1],-1.0*tangent[0],0.0);
 			vec3.cross(binormal, tangent, normal);
 		}
 

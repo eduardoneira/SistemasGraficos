@@ -1,4 +1,4 @@
-function Spoke(delta, M, radius, light){
+function Spoke(delta, M, radius, lights){
 
   var that = this;
 
@@ -8,13 +8,31 @@ function Spoke(delta, M, radius, light){
   this.min_coords = [null, null, null];
   this.min_coords2 = [null, null, null];
 
-  var shape = new Spoke2Profile();
-  shape.travel(delta);
+  // var shape = new Spoke2Profile();
+  // shape.travel(delta);
 
-  var sweep_path = new Polygon(makeFlatCircle(radius, M));
-  sweep_path.closed = true;
+  // var sweep_path = new Polygon(makeFlatCircle(radius, M));
+  // sweep_path.closed = true;
 
-  this.loft = new Loft(shape, sweep_path, textures["checker"], 0, basicShaderHandler, light, [0.1, 0.1, 0.1]);
+  var line = new Line(1);
+  line.travel(0.05);
+
+  var shape = new SurfaceCircle(radius);
+  shape.discretize(0.05);
+
+  this.loft = new Loft(shape, 
+                       line, 
+                       textures["eye"], 
+                       0, 
+                       phongShaderHandler, 
+                       lights,
+                       materialSpecs([1.0,1.0,1.0],
+                                     [1.0,1.0,1.0],
+                                     [1.0,1.0,1.0],
+                                     32),
+                       true,
+                       true
+                      );
   this.loft.init();
 
   for(var i = 0; i < this.loft.position_buffer.length; i+=3){

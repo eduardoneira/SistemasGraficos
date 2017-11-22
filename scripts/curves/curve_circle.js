@@ -1,9 +1,11 @@
 function CurveCircle(_radius) {
   this.radius = _radius;
-  this.positions = [];
+  this.points = [];
   this.tangents = [];
   this.normals = [];
   this.binormals = [];
+  this.length = 0;
+  this.closed = false;
 
   var _bezier_curve;
 
@@ -31,9 +33,10 @@ function CurveCircle(_radius) {
 
   this.travel = function(delta) {
     var points = _bezier_curve.travel(delta);
-    this.positions = points.positions;
+    this.points = points.positions;
     this.tangents = points.tangents;
     this.normals = points.normals;
     this.binormals = points.binormals;
+    this.length = points.positions.length / 3.0;
   }
 }
