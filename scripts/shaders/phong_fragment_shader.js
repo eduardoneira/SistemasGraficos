@@ -84,7 +84,7 @@ const phong_fragment_shader = `
     for (int i = 0; i < NUM_LIGHTS; i++) {
       vec3 Idiff = diffuseLightning(N, L[i]);
       vec3 Ispec = specularLightning(N, L[i], V);
-      float decay = D[i]*D[i];
+      float decay = 0.05 * D[i]*D[i];
       decay = uLightIntensities[i] / decay;
       resultingLight += decay * (Idiff + Ispec);
     }

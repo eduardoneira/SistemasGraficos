@@ -1,5 +1,6 @@
-function SceneController(printer) {
+function SceneController(printer, lights) {
   var printer = printer;
+  var lights = lights;
 
   var _start = function() {
     if (!printer.busy()) {
@@ -66,10 +67,22 @@ function SceneController(printer) {
 
   var gui = new dat.GUI();
 
-  var lights = gui.addFolder('Lights');
+  var intensity_lights = gui.addFolder('Lights');
+  var lights_controller = [];
+
   for (var i = 0; i < app.lights.length; i++) {
-    lights.add(app.lights,i.toString(),0.0,1.0).name((i+1).toString())
+    lights_controller.push(intensity_lights.add(app.lights,i.toString(),0.0,1.0).name((i+1).toString()));
   }
+  
+  for (var i = 0; i < lights_controller.length; i++) {
+    lights_controller[i].onChange(function() {
+      for (var i = 0; i < lights_controller.length; i++) {
+        lights.lights[i].intensity = app.lights[i];
+      }
+      debugger; 
+    });
+  }
+
 
   var shape_configuration = gui.addFolder('Shape Configuration');
   var mode_controller = shape_configuration.add(app,'mode',["Lathe","Loft"]).name("Mode");

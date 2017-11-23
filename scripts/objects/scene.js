@@ -1,8 +1,8 @@
 function Scene() {
-  var lights = {  lights: [ new Light([-7.0, 5.0, -23.0], 10.0),
-                            new Light([-5.0, 4.0,  10.0], 20.0),
-                            new Light([ 7.0, 5.0, -23.0], 10.0),
-                            new Light([ 5.0, 4.0,  10.0], 20.0)],
+  var lights = {  lights: [ new Light([-7.0, 5.0, -23.0], 1.0),
+                            new Light([ 7.0, 5.0, -23.0], 1.0),
+                            new Light([-5.0, 4.0,  10.0], 1.0),
+                            new Light([ 5.0, 4.0,  10.0], 1.0)],
                   specs: defaultLightSpecs()
                 };
 
@@ -21,7 +21,7 @@ function Scene() {
   floor.init();
 
   var printer = new Printer(lights,textures["metallic_black"],defaultMaterialSpecs());
-  var scene_controller = new SceneController(printer);
+  var scene_controller = new SceneController(printer,lights);
 
   var bookcase = new BookCase(6,
                               3,
