@@ -25,10 +25,14 @@ const printable_object_fragment_shader = `
   uniform vec3 uMaterialSpecularRefl;
   uniform float uMaterialShininess;
 
+  uniform float uColorBase;
+  uniform float uKs;
+  uniform float uDMI;
+
   varying float vDraw;
   
   vec3 ambientLightning() {
-    return uMaterialAmbientRefl * uLightAmbientIntensity;
+    return uColorBase * uMaterialAmbientRefl * uLightAmbientIntensity / 2.0;
   }
 
   vec3 diffuseLightning(in vec3 N, in vec3 L) {
@@ -42,7 +46,7 @@ const printable_object_fragment_shader = `
       diffuseTerm = 1.0;
     }
 
-    return uMaterialDiffuseRefl * uLightDiffuseIntensity * diffuseTerm;
+    return uColorBase * uMaterialDiffuseRefl * uLightDiffuseIntensity * diffuseTerm;
   }
 
   vec3 specularLightning(in vec3 N, in vec3 L, in vec3 V) {
@@ -55,7 +59,7 @@ const printable_object_fragment_shader = `
       specularTerm = pow(specAngle, uMaterialShininess);
     }
 
-    return uMaterialSpecularRefl * uLightSpecularIntensity * specularTerm;
+    return uKs * uMaterialSpecularRefl * uLightSpecularIntensity * specularTerm;
   }
 
   vec3 applyNormalMap(in vec3 N, in vec3 T, in vec3 B) {
@@ -92,8 +96,9 @@ const printable_object_fragment_shader = `
         resultingLight += decay * (Idiff + Ispec);
       }
 
-      vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-      gl_FragColor = vec4(textureColor.rgb * resultingLight, 1.0);      
+      vec4 sampledColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+      vec3 textureColor = uDMI * sampledColor.rgb + vec3(1.0, 1.0, 1.0) - vec3(uDMI,uDMI,uDMI);
+      gl_FragColor = vec4(textureColor * resultingLight.rgb, 1.0);
     } else {
       discard;
     }

@@ -89,14 +89,18 @@ function Printer(lights, texture, specs) {
                                   textures["marble2"],
                                   textures["marble3"],
                                   textures["marble4"]];
-  function randomTexture() {
-    var rnd_number = Math.floor(Math.random() * 4);
-    return printed_object_textures[rnd_number];
-  }
+
+  var printed_objects_normal_map = [textures["normal_map_alicia"],
+                                    textures["normal_map_marmol"],
+                                    textures["normal_map_gotas"],
+                                    textures["normal_map_gotas"]]
 
   this.startPrinting = function(config) {
     var object = null;
-
+    var object_specs = materialSpecs([1.0,1.0,1.0],
+                                     [1.0,1.0,1.0],
+                                     [0.0,0.0,0.0],
+                                     config.glossiness);
     if (config.mode == "Lathe") {
       deltaX = 1;
       deltaY = 1;
@@ -104,10 +108,11 @@ function Printer(lights, texture, specs) {
 
       object = new Lathe( lathe_contours[config.contour - 1].profile,
                           Math.PI/36.0,
-                          randomTexture(),
+                          printed_object_textures[config.maps - 1],
                           printableObjectShaderHandler,
-                          light,
-                          [0.1, 0.1, 0.1]
+                          lights,
+                          specs,
+                          printed_objects_normal_map[config.maps - 1]
                           );
       object.init();
       var contours = lathe_contours;
@@ -120,11 +125,14 @@ function Printer(lights, texture, specs) {
       var twist = config.angle_torsion/360;
       object = new Loft( loft_contours[config.contour - 1].shape,
                          sweep_path,
-                         randomTexture(),
+                         printed_object_textures[config.maps - 1],
                          twist,
                          printableObjectShaderHandler,
-                         light,
-                         [0.1, 0.1, 0.1]
+                         lights,
+                         specs,
+                         false,
+                         false,
+                         printed_object_textures[config.maps - 1]
                          );
       object.init();
       var contours = loft_contours;
@@ -136,7 +144,10 @@ function Printer(lights, texture, specs) {
 
     object_to_print = new PrintedObject(object,
                                         contours[config.contour - 1].scale,        
-                                        traveler.maxY);
+                                        traveler.maxY,
+                                        config.color,
+                                        config.diffuseMapIntensity,
+                                        config.specularIntensity);
 
     this.resumePrinting();
   }

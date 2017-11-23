@@ -19,7 +19,7 @@ function Pelvis(delta, M, radius, lights){
                       lights, 
                       materialSpecs([1.0,1.0,1.0],
                                     [1.0,1.0,1.0],
-                                    [1.0,1.0,1.0],
+                                    [0.3,0.3,0.3],
                                     16),
                       true);
   this.loft.init();

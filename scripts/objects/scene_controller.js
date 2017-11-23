@@ -31,7 +31,7 @@ function SceneController(printer, lights) {
     maps: 1,
     color: 1.0,
     diffuseMapIntensity: 1.0,
-    glossiness: 50,
+    glossiness: 32,
     specularIntensity: 1.0 
   }
 
@@ -79,7 +79,6 @@ function SceneController(printer, lights) {
       for (var i = 0; i < lights_controller.length; i++) {
         lights.lights[i].intensity = app.lights[i];
       }
-      debugger; 
     });
   }
 
