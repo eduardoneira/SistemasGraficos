@@ -45,10 +45,12 @@ const phong_fragment_shader = `
 
   vec3 specularLightning(in vec3 N, in vec3 L, in vec3 V) {
     float specularTerm = 0.0;
+    float lambertian = max(dot(N, L), 0.0);
 
-    if(dot(N, L) > 0.0){
-      vec3 H = normalize(L + V);
-      specularTerm = pow(dot(N, H), uMaterialShininess);
+    if(lambertian > 0.0){
+      vec3 R = reflect(-L, N);     
+      float specAngle = max(dot(R, V), 0.0);
+      specularTerm = pow(specAngle, uMaterialShininess);
     }
 
     return uMaterialSpecularRefl * uLightSpecularIntensity * specularTerm;

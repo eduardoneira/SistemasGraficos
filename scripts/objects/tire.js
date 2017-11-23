@@ -14,7 +14,7 @@ function Tire(delta, M, radius, lights){
 
   this.loft = new Loft(shape, 
                        sweep_path, 
-                       textures["blank"],
+                       textures["tire"],
                        0, 
                        phongShaderHandler, 
                        lights, 
@@ -24,10 +24,8 @@ function Tire(delta, M, radius, lights){
                                      32),
                        false,
                        false,
-                       textures["normal_map_gotas"]);
+                       textures["normal_map_tire"]);
   this.loft.init();
-
-  debugger;
 
   this.draw = function(transformations){
     this.loft.activateShader();

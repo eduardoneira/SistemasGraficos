@@ -20,11 +20,8 @@ function Pelvis(delta, M, radius, lights){
                       materialSpecs([1.0,1.0,1.0],
                                     [1.0,1.0,1.0],
                                     [1.0,1.0,1.0],
-                                    32),
+                                    16),
                       true);
-  this.loft.init();
-
-
   this.loft.init();
   this.loft.translate([0,-4.3,0]);
   this.loft.rotate(Math.PI/2, [0,0,1]);

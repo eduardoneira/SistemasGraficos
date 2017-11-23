@@ -89,10 +89,9 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 			var tangent, normal, binormal;
 			var curr_vert, prev_vert, next_vert;
 
-			
 			curr_vert = vec3.fromValues(sweep_path.points[3*j], 
-														sweep_path.points[3*j+1], 
-														sweep_path.points[3*j+2]);
+																	sweep_path.points[3*j+1], 
+																	sweep_path.points[3*j+2]);
 
 
 			tangent = vec3.fromValues(sweep_path.tangents[3*j],
@@ -116,23 +115,26 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 
 			new_shape.forEach(function(elem){
 				that.position_buffer.push(elem);
-			})
+			});
 
+			for (var i = 0; i < new_shape_normals.length ; i+=3) {
+				that.normal_buffer.push(new_shape_normals[i]);
+				that.normal_buffer.push(new_shape_normals[i+1]);
+				that.normal_buffer.push(new_shape_normals[i+2]);
+				
+				var normal_vector = that.normal_buffer.slice(-3);
 
-			new_shape_normals.forEach(function(elem){
-				that.normal_buffer.push(elem);
-			})
+				var tangent_vector = [normal_vector[2],0.0,-1.0*normal_vector[0]];
+		    that.tangent_buffer.push(tangent_vector[0]);
+		    that.tangent_buffer.push(tangent_vector[1]);
+		    that.tangent_buffer.push(tangent_vector[2]);
 
-			var tangent_vector = [new_shape_normals[2],0.0,-1.0*new_shape_normals[0]];
-      that.tangent_buffer.push(tangent_vector[0]);
-      that.tangent_buffer.push(tangent_vector[1]);
-      that.tangent_buffer.push(tangent_vector[2]);
-
-      var binormal_vector = [];
-      vec3.cross(binormal_vector,new_shape_normals,tangent_vector);
-      that.binormal_buffer.push(binormal_vector[0]);
-      that.binormal_buffer.push(binormal_vector[1]);
-      that.binormal_buffer.push(binormal_vector[2]);
+		    var binormal_vector = [];
+		    vec3.cross(binormal_vector,normal_vector,tangent_vector);
+		    that.binormal_buffer.push(binormal_vector[0]);
+		    that.binormal_buffer.push(binormal_vector[1]);
+		    that.binormal_buffer.push(binormal_vector[2]);
+			}
 
 		}
 
@@ -164,20 +166,25 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 				that.position_buffer.push(elem);
 			});
 
-			new_shape_normals.forEach(function(elem){
-				that.normal_buffer.push(elem);
-			});
+			for (var i = 0; i < new_shape_normals.length ; i+=3) {
+				that.normal_buffer.push(new_shape_normals[i]);
+				that.normal_buffer.push(new_shape_normals[i+1]);
+				that.normal_buffer.push(new_shape_normals[i+2]);
+				
+				var normal_vector = that.normal_buffer.slice(-3);
 
-			var tangent_vector = [new_shape_normals[2],0.0,-1.0*new_shape_normals[0]];
-      that.tangent_buffer.push(tangent_vector[0]);
-      that.tangent_buffer.push(tangent_vector[1]);
-      that.tangent_buffer.push(tangent_vector[2]);
+				var tangent_vector = [normal_vector[2],0.0,-1.0*normal_vector[0]];
+		    that.tangent_buffer.push(tangent_vector[0]);
+		    that.tangent_buffer.push(tangent_vector[1]);
+		    that.tangent_buffer.push(tangent_vector[2]);
 
-      var binormal_vector = [];
-      vec3.cross(binormal_vector,new_shape_normals,tangent_vector);
-      that.binormal_buffer.push(binormal_vector[0]);
-      that.binormal_buffer.push(binormal_vector[1]);
-      that.binormal_buffer.push(binormal_vector[2]);
+		    var binormal_vector = [];
+		    vec3.cross(binormal_vector,normal_vector,tangent_vector);
+		    that.binormal_buffer.push(binormal_vector[0]);
+		    that.binormal_buffer.push(binormal_vector[1]);
+		    that.binormal_buffer.push(binormal_vector[2]);
+			}
+
 		}
 
 		if (that.close) {
