@@ -38,21 +38,3 @@ const phong_vertex_shader = `
     vBinormal = normalize(uNMatrix * aVertexBinormal);
   }
 `;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

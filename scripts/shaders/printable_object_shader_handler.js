@@ -1,5 +1,5 @@
 function PrintableObjectShaderHandler(vertex_shader_src,fragment_shader_src) {
-  BasicShaderHandler.call(this,vertex_shader_src,fragment_shader_src);
+  PhongShaderHandler.call(this,vertex_shader_src,fragment_shader_src);
   
   this.uMaxY = gl.getUniformLocation(this.glProgram, "uMaxY");
   this.uDeltaY = gl.getUniformLocation(this.glProgram, "uDeltaY");
@@ -8,5 +8,5 @@ function PrintableObjectShaderHandler(vertex_shader_src,fragment_shader_src) {
   this.uMaxZ = gl.getUniformLocation(this.glProgram, "uMaxZ");
 }
 
-inheritPrototype(PrintableObjectShaderHandler,BasicShaderHandler);
+inheritPrototype(PrintableObjectShaderHandler,PhongShaderHandler);
 
