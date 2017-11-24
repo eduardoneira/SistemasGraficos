@@ -7,7 +7,7 @@ function PrintableObjectShaderHandler(vertex_shader_src,fragment_shader_src) {
   this.uMaxX = gl.getUniformLocation(this.glProgram, "uMaxX");
   this.uDeltaX = gl.getUniformLocation(this.glProgram, "uDeltaX");
   this.uMaxZ = gl.getUniformLocation(this.glProgram, "uMaxZ");
-  this.stopPrinting = gl.getUniformLocation(this.glProgram,"uStopPrinting");
+  this.uStopPrinting = gl.getUniformLocation(this.glProgram,"uStopPrinting");
   
   //Light config
   this.uColorBase = gl.getUniformLocation(this.glProgram,"uColorBase");
