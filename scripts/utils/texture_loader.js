@@ -22,9 +22,11 @@ function loadAllTextures() {
   textures["gotas"] = loadTexture("mapas/gotas.jpg");
   textures["alicia"] = loadTexture("mapas/alicia.jpg");
   textures["marmol"] = loadTexture("mapas/marmol.jpg");
+  textures["copper"] = loadTexture("mapas/copper.png");
   textures["normal_map_gotas"] = loadTexture("mapas/gotasNormalMap.jpg");
   textures["normal_map_alicia"] = loadTexture("mapas/aliciaNormalMap.jpg");
   textures["normal_map_marmol"] = loadTexture("mapas/marmolNormalMap.jpg");
+  textures["normal_map_copper"] = loadTexture("mapas/copperNormalMap.png");
   textures["madera1"] = loadTexture("mapas/parquet13.jpg");
   textures["normal_map_madera1"] = loadTexture("mapas/parquet13NormalMap.jpg");
   textures["normal_map_baldosas"] = loadTexture("mapas/baldosasSquareNormalMap.jpg");

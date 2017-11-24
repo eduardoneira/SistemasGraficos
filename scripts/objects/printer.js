@@ -60,6 +60,9 @@ function Printer(lights, texture, specs) {
   var profile4 = new GreenLanternProfile();
   profile4.travel(0.01);
 
+  var profile5 = new DetergentProfile();
+  profile5.travel(0.01);
+
   var crossB1 = new CrossB1Shape();
   crossB1.travel(0.01);
   var crossB2 = new CrossB2Shape();
@@ -70,7 +73,8 @@ function Printer(lights, texture, specs) {
   var lathe_contours = [{profile: profile1, scale: [2.0,1.5,2.0]}, 
                         {profile: profile2, scale: [1.2,1.4,1.2]},
                         {profile: profile3, scale: [1.2,1.2,1.2]},
-                        {profile: profile4, scale: [1.4,1.4,1.4]}];
+                        {profile: profile4, scale: [1.4,1.4,1.4]},
+                        {profile: profile5, scale: [1.4,1.4,1.4]}];
 
   var loft_contours = [{shape: crossB1, scale: [0.5,1.2,0.5]},
                        {shape: crossB2, scale: [0.8,1.25,0.8]},
@@ -88,12 +92,12 @@ function Printer(lights, texture, specs) {
   var printed_object_textures = [ textures["alicia"],
                                   textures["marmol"],
                                   textures["gotas"],
-                                  textures["marble4"]];
+                                  textures["copper"]];
 
   var printed_objects_normal_map = [textures["normal_map_alicia"],
                                     textures["normal_map_marmol"],
                                     textures["normal_map_gotas"],
-                                    textures["normal_map_gotas"]]
+                                    textures["normal_map_copper"]]
 
   this.startPrinting = function(config) {
     var object = null;
@@ -117,9 +121,9 @@ function Printer(lights, texture, specs) {
       object.init();
       var contours = lathe_contours;
     } else if (config.mode == "Loft") {
-      deltaX = 0.25;
-      deltaY = 0.25;
-      deltaZ = 0.25;
+      deltaX = 0.1;
+      deltaY = 0.1;
+      deltaZ = 0.1;
 
       var sweep_path = new StraightLineSweep();
       var twist = config.angle_torsion/360;
