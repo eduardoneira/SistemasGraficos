@@ -41,10 +41,10 @@ function Printer(lights, texture, specs) {
 
   this.releaseObject = function() {
     var object = object_to_print;
+    object.stopPrinting();
     object_to_print = null; 
     finished = false;
     locked = false;
-    object.stopPrinting();
     return object;
   }
 
@@ -72,7 +72,7 @@ function Printer(lights, texture, specs) {
 
   var lathe_contours = [{profile: profile1, scale: [2.0,1.5,2.0]}, 
                         {profile: profile2, scale: [1.2,1.4,1.2]},
-                        {profile: profile3, scale: [1.2,1.2,1.2]},
+                        {profile: profile3, scale: [1.18,1.18,1.18]},
                         {profile: profile4, scale: [1.4,1.4,1.4]},
                         {profile: profile5, scale: [1.35,1.35,1.35]}];
 

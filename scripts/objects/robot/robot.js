@@ -37,7 +37,6 @@ function Robot(printer, bookcase, lights) {
   var current_tangent = null;
 
   var robot_upper_body = new RobotUpperBody(lights);
-
   var robot_lower_body = new LowerBody(lights);
 
   var offset_upper = [0,2,0];
@@ -132,6 +131,7 @@ function Robot(printer, bookcase, lights) {
     max_height_printed_object = printer.getHeightObject();
 
     busy = true;
+    relax = true;
     current_event_finished = true;
   }
 
