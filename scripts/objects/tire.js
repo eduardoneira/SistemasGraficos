@@ -12,7 +12,7 @@ function Tire(delta, M, radius, lights){
   sweep_path.travel(0.04);
   sweep_path.closed = false;
 
-  this.loft = new Loft(shape, 
+  this.loft = new Loft2(shape, 
                        sweep_path, 
                        textures["tire"],
                        0, 
