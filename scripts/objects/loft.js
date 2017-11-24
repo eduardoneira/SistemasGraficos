@@ -172,19 +172,33 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 				that.normal_buffer.push(new_shape_normals[i+1]);
 				that.normal_buffer.push(new_shape_normals[i+2]);
 				
-				var normal_vector = that.normal_buffer.slice(-3);
+				// var normal_vector = that.normal_buffer.slice(-3);
 
-				var tangent_vector = [normal_vector[2],0.0,-1.0*normal_vector[0]];
-		    that.tangent_buffer.push(tangent_vector[0]);
-		    that.tangent_buffer.push(tangent_vector[1]);
-		    that.tangent_buffer.push(tangent_vector[2]);
+				// var tangent_vector = [normal_vector[2],0.0,-1.0*normal_vector[0]];
+		  //   that.tangent_buffer.push(tangent_vector[0]);
+		  //   that.tangent_buffer.push(tangent_vector[1]);
+		  //   that.tangent_buffer.push(tangent_vector[2]);
 
-		    var binormal_vector = [];
-		    vec3.cross(binormal_vector,normal_vector,tangent_vector);
-		    that.binormal_buffer.push(binormal_vector[0]);
-		    that.binormal_buffer.push(binormal_vector[1]);
-		    that.binormal_buffer.push(binormal_vector[2]);
+		  //   var binormal_vector = [];
+		  //   vec3.cross(binormal_vector,normal_vector,tangent_vector);
+		  //   that.binormal_buffer.push(binormal_vector[0]);
+		  //   that.binormal_buffer.push(binormal_vector[1]);
+		  //   that.binormal_buffer.push(binormal_vector[2]);
 			}
+
+		  for(var i = 0; i < new_shape_tangents.length; i+=3){
+		  	that.tangent_buffer.push(new_shape_tangents[i]);
+		  	that.tangent_buffer.push(new_shape_tangents[i+1]);
+		  	that.tangent_buffer.push(new_shape_tangents[i+2]);
+		  }
+
+		  for(var i = 0; i < new_shape_binormals.length; i+=3){
+		  	that.tangent_buffer.push(new_shape_binormals[i]);
+		  	that.tangent_buffer.push(new_shape_binormals[i+1]);
+		  	that.tangent_buffer.push(new_shape_binormals[i+2]);
+		  }
+
+
 
 		}
 
