@@ -51,7 +51,8 @@ function Scene() {
     bookcase.draw(bookcase_transformations);
 
     var floor_transformations = mat4.create();
-    mat4.scale(floor_transformations,floor_transformations,[50.0,1.0,50.0]);
+    mat4.translate(floor_transformations,floor_transformations,[0.0,0.0,-5.0]);
+    mat4.scale(floor_transformations,floor_transformations,[20.0,1.0,35.0]);
     floor.draw(floor_transformations);
 
     var robot_transformations = mat4.create();

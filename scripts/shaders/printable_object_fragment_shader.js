@@ -97,8 +97,8 @@ const printable_object_fragment_shader = `
       }
 
       vec4 sampledColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-      vec3 textureColor = uDMI * sampledColor.rgb + vec3(1.0, 1.0, 1.0) - vec3(uDMI,uDMI,uDMI);
-      gl_FragColor = vec4(textureColor * resultingLight.rgb, 1.0);
+      vec3 textureColor = uDMI * sampledColor.rgb + (1.0 - uDMI) * vec3(1.0,1.0,1.0);
+      gl_FragColor = vec4(textureColor * resultingLight, 1.0);
     } else {
       discard;
     }

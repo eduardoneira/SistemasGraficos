@@ -20,10 +20,10 @@ function loadAllTextures() {
   textures["marble4"] = loadTexture("resources/marble4.jpg");
   textures["blank"] = loadTexture("resources/blank.jpg");
   textures["gotas"] = loadTexture("mapas/gotas.jpg");
+  textures["alicia"] = loadTexture("mapas/alicia.jpg");
+  textures["marmol"] = loadTexture("mapas/marmol.jpg");
   textures["normal_map_gotas"] = loadTexture("mapas/gotasNormalMap.jpg");
   textures["normal_map_alicia"] = loadTexture("mapas/aliciaNormalMap.jpg");
-  textures["normal_map_marmol"] = loadTexture("mapas/marmolNormalMap.jpg");
-  textures["marmol"] = loadTexture("mapas/marmol.jpg");
   textures["normal_map_marmol"] = loadTexture("mapas/marmolNormalMap.jpg");
   textures["madera1"] = loadTexture("mapas/parquet13.jpg");
   textures["normal_map_madera1"] = loadTexture("mapas/parquet13NormalMap.jpg");

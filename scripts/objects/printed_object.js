@@ -16,8 +16,8 @@ function PrintedObject(object, scale, maxY, base_color, diffuse_map_intensity, s
   this.activateShader = function() {
     this.printed_object.activateShader();
     gl.uniform1f(that.printed_object.shader.uColorBase, base_color);
-    gl.uniform1f(that.printed_object.shader.uKs, diffuse_map_intensity);
-    gl.uniform1f(that.printed_object.shader.uDMI, specular);
+    gl.uniform1f(that.printed_object.shader.uDMI, diffuse_map_intensity);
+    gl.uniform1f(that.printed_object.shader.uKs, specular);
   }
 
   this.draw = function(position) {

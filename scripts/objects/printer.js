@@ -85,9 +85,9 @@ function Printer(lights, texture, specs) {
                           specs,
                           true);
 
-  var printed_object_textures = [ textures["marble1"],
-                                  textures["marble2"],
-                                  textures["marble3"],
+  var printed_object_textures = [ textures["alicia"],
+                                  textures["marmol"],
+                                  textures["gotas"],
                                   textures["marble4"]];
 
   var printed_objects_normal_map = [textures["normal_map_alicia"],
@@ -99,7 +99,7 @@ function Printer(lights, texture, specs) {
     var object = null;
     var object_specs = materialSpecs([1.0,1.0,1.0],
                                      [1.0,1.0,1.0],
-                                     [0.0,0.0,0.0],
+                                     [1.0,1.0,1.0],
                                      config.glossiness);
     if (config.mode == "Lathe") {
       deltaX = 1;
@@ -111,7 +111,7 @@ function Printer(lights, texture, specs) {
                           printed_object_textures[config.maps - 1],
                           printableObjectShaderHandler,
                           lights,
-                          specs,
+                          object_specs,
                           printed_objects_normal_map[config.maps - 1]
                           );
       object.init();
@@ -129,7 +129,7 @@ function Printer(lights, texture, specs) {
                          twist,
                          printableObjectShaderHandler,
                          lights,
-                         specs,
+                         object_specs,
                          false,
                          false,
                          printed_object_textures[config.maps - 1]
@@ -148,6 +148,8 @@ function Printer(lights, texture, specs) {
                                         config.color,
                                         config.diffuseMapIntensity,
                                         config.specularIntensity);
+
+    debugger;
 
     this.resumePrinting();
   }

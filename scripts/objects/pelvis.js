@@ -13,7 +13,7 @@ function Pelvis(delta, M, radius, lights){
 
   this.loft = new Loft(shape, 
                       line, 
-                      textures["blank"], 
+                      textures["brushed_aluminum_rot"], 
                       0, 
                       phongShaderHandler, 
                       lights, 

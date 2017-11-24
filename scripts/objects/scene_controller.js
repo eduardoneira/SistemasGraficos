@@ -95,7 +95,7 @@ function SceneController(printer, lights) {
   light_configuration.add(app,'maps',generateArrayAlpha(4)).name('Map');
   light_configuration.add(app,'color',0.0,1.0).name('Base Color');
   light_configuration.add(app,'diffuseMapIntensity',0.0,1.0).name('Diffuse Map Intensity');
-  light_configuration.add(app,'glossiness',1,100).name('Glossiness');
+  light_configuration.add(app,'glossiness',0,100).name('Glossiness');
   light_configuration.add(app,'specularIntensity',0.0,1.0).name('Specular Intensity');
 
   var commands = gui.addFolder('Commands');
