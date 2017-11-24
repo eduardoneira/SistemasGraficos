@@ -24,6 +24,7 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs=null, n
   this.normal_map = normal_map;
 
   this.shader = shader;
+  this.optionalParamsShader = null;
 
   this.initial_state = mat4.create();
   this.childs = {};
@@ -167,6 +168,8 @@ function Object3D(_rows, _cols, _texture, shader, lights, material_specs=null, n
 
   this.activateShader = function() {
     this.shader.activateShader();
+    if (this.optionalParamsShader)
+      this.optionalParamsShader()
   }
 
   this.setShader = function(shader) {

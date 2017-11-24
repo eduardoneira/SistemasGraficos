@@ -44,7 +44,7 @@ function Printer(lights, texture, specs) {
     object_to_print = null; 
     finished = false;
     locked = false;
-    object.stop_printing();
+    object.stopPrinting();
     return object;
   }
 
@@ -74,7 +74,7 @@ function Printer(lights, texture, specs) {
                         {profile: profile2, scale: [1.2,1.4,1.2]},
                         {profile: profile3, scale: [1.2,1.2,1.2]},
                         {profile: profile4, scale: [1.4,1.4,1.4]},
-                        {profile: profile5, scale: [1.4,1.4,1.4]}];
+                        {profile: profile5, scale: [1.35,1.35,1.35]}];
 
   var loft_contours = [{shape: crossB1, scale: [0.5,1.2,0.5]},
                        {shape: crossB2, scale: [0.8,1.25,0.8]},
@@ -153,8 +153,6 @@ function Printer(lights, texture, specs) {
                                         config.diffuseMapIntensity,
                                         config.specularIntensity);
 
-    debugger;
-
     this.resumePrinting();
   }
 
@@ -213,12 +211,11 @@ function Printer(lights, texture, specs) {
       }
     } 
 
-    gl.uniform1f(printableObjectShaderHandler.uMaxY,curY);
-    gl.uniform1f(printableObjectShaderHandler.uDeltaY,deltaY);
-    gl.uniform1f(printableObjectShaderHandler.uMaxX,curX);
-    gl.uniform1f(printableObjectShaderHandler.uDeltaX,deltaX);
-    gl.uniform1f(printableObjectShaderHandler.uMaxZ,curZ);
-    gl.uniform3fv(printableObjectShaderHandler.uPositionPrinter,[0.0,0.0,0.0]);
+    object_to_print.curY = curY;
+    object_to_print.deltaY = deltaY;
+    object_to_print.curX = curX;
+    object_to_print.deltaX = deltaX;
+    object_to_print.curZ = curZ;
   }
 
   this._drawChilds = function(transformations) {
@@ -232,7 +229,6 @@ function Printer(lights, texture, specs) {
     shelve.draw(printer_transformations);
     
     if (object_to_print) {
-      object_to_print.activateShader();
       head_position();
       vec3.add(this.position,getPositionMat4(transformations),[0.0,vertical_scale*2,0.0]);    
       object_to_print.draw(this.position);

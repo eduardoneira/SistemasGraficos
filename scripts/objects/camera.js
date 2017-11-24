@@ -86,6 +86,7 @@ function Camera(radius = 15, speed = 0.003) {
     }
 
     if (that.modes[key_pressed] != undefined && key_pressed != that.current_mode) {
+      that.radius = 15;
       that.current_mode = key_pressed;
       that.switch_mode = true;
     }      
