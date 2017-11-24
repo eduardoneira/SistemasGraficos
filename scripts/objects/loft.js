@@ -62,6 +62,52 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 			}
 		}
 
+		function transformShapeTangents(){
+			// new_shape, shape, transform_matrix
+			var aux_vert, rot;
+
+			transform_matrix[12] = 0;
+			transform_matrix[13] = 0;
+			transform_matrix[14] = 0;
+			transform_matrix[15] = 1;
+
+			for(i = 0; i < shape.tangents.length; i+=2){
+				aux_vert = vec3.fromValues(shape.tangents[i], shape.tangents[i+1], 0);
+
+				rot = mat4.create();
+				mat4.rotateZ(rot, rot, twist*j);
+				vec3.transformMat4(aux_vert, aux_vert, rot);
+
+				vec3.transformMat4(aux_vert, aux_vert, transform_matrix);
+
+
+				concatVectorElems(new_shape_tangents, aux_vert);
+			}
+		}
+
+		function transformShapeBinormals(){
+			// new_shape, shape, transform_matrix
+			var aux_vert, rot;
+
+			transform_matrix[12] = 0;
+			transform_matrix[13] = 0;
+			transform_matrix[14] = 0;
+			transform_matrix[15] = 1;
+
+			for(i = 0; i < shape.normals.length; i+=2){
+				aux_vert = vec3.fromValues(0, 0, 1);
+
+				rot = mat4.create();
+				mat4.rotateZ(rot, rot, twist*j);
+				vec3.transformMat4(aux_vert, aux_vert, rot);
+
+				vec3.transformMat4(aux_vert, aux_vert, transform_matrix);
+
+
+				concatVectorElems(new_shape_binormals, aux_vert);
+			}
+		}
+
 		if (that.close) {
 			for(var i = 0; i < that.shape.positions.length/2; i++) {
 				that.position_buffer.push(sweep_path.points[0]); 
@@ -110,8 +156,12 @@ function Loft(shape, sweep_path, texture, twist = 0, shader, lights, specs=null,
 
 			var new_shape = [];
 			var new_shape_normals = [];
+			var new_shape_tangents = [];
+			var new_shape_binormals = [];
 			transformShape();
 			transformShapeNormals();
+			transformShapeTangents();
+			transformShapeBinormals();
 
 			new_shape.forEach(function(elem){
 				that.position_buffer.push(elem);

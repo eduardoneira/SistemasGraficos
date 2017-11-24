@@ -11,6 +11,12 @@ function SurfaceCircle(_radius) {
     	});
 
     this.normals = this.positions.slice();
+    this.tangents = [];
+
+    for(var i = 0; i < this.positions.length; i+=2){
+      this.tangents.push = -this.positions[i+1];
+      this.tangents.push = this.positions[i];
+    }
   }
 
 }
