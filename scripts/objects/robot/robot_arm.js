@@ -71,6 +71,10 @@ function RobotArm(lights) {
     return false;
   }
 
+  this.set_printed_object_angle = function(angle) {
+    robot_hand.set_printed_object_angle(angle);
+  }
+
   this.close_hand = function(maxWidth) {
     return robot_hand.close_hand(maxWidth);
   }

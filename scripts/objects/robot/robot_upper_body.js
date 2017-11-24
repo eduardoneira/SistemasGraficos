@@ -87,6 +87,8 @@ function RobotUpperBody(lights) {
     } else{
       angle_arm -= 0.01;
     }
+    
+    robot_arm.set_printed_object_angle(angle_arm);
 
     if (Math.abs(angle_arm - initial_angle_arm) > degToRad(180)) {
       initial_angle_arm = angle_arm;

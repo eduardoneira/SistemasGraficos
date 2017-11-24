@@ -18,6 +18,8 @@ function PrintedObject(object, scale, maxY, base_color, diffuse_map_intensity, s
   this.curZ = null;
   var positionPrinter = [0.0,0.0,0.0];
 
+  this.angle = 0.0;
+
   this.stopPrinting = function() {
     stop_printing = 1.0;
   }
@@ -39,6 +41,7 @@ function PrintedObject(object, scale, maxY, base_color, diffuse_map_intensity, s
   this.draw = function(position) {
     var transformations = mat4.create();
     mat4.translate(transformations, transformations, position);
+    mat4.rotate(transformations,transformations,this.angle,[0.0,1.0,0.0]);
     mat4.scale(transformations,transformations,[scale_factor[0]/maxY,scale_factor[1]/maxY,scale_factor[2]/maxY]);
     this.printed_object.draw(transformations);
   }  

@@ -61,6 +61,11 @@ function RobotHand(lights) {
     maxYObject = maxY;
   }
 
+  this.set_printed_object_angle = function(angle) {
+    if (printed_object)
+      printed_object.angle = angle;
+  }
+
   var printed_object_world_height = 0;
 
   this.set_height_printed_object = function(world_height) {
