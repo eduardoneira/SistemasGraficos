@@ -121,9 +121,9 @@ function Printer(lights, texture, specs) {
       object.init();
       var contours = lathe_contours;
     } else if (config.mode == "Loft") {
-      deltaX = 0.1;
-      deltaY = 0.1;
-      deltaZ = 0.1;
+      deltaX = 0.2;
+      deltaY = 0.2;
+      deltaZ = 0.2;
 
       var sweep_path = new StraightLineSweep();
       var twist = config.angle_torsion/360;
