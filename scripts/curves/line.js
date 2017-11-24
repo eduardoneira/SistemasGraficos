@@ -1,5 +1,5 @@
-function Line(length) {
-  this.length = length;
+function Line(length, vertical=false) {
+  this.real_length = length;
   this.points = [];
 
   this.tangents = [];
@@ -10,18 +10,25 @@ function Line(length) {
 
   var _bezier_curve;
 
-  function _init(length) {
+  function _init(length,vertical) {
     var control_points = [];
-    
-    control_points.push([0,0,0]);
-    control_points.push([length/2,0,0]);
-    control_points.push([length/2,0,0]);
-    control_points.push([length,0,0]);
-    
+
+    if (vertical) {
+      control_points.push([0,0,0]);
+      control_points.push([0,length/2,0]);
+      control_points.push([0,length/2,0]);
+      control_points.push([0,length,0]); 
+    } else {
+      control_points.push([0,0,0]);
+      control_points.push([length/2,0,0]);
+      control_points.push([length/2,0,0]);
+      control_points.push([length,0,0]);
+    }
+
     _bezier_curve = new CubicBezierCurve(control_points);
   }
 
-  _init(length);
+  _init(length,vertical);
 
   this.travel = function(delta) {
     var points = _bezier_curve.travel(delta);

@@ -125,7 +125,8 @@ function Printer(lights, texture, specs) {
       deltaY = 0.1;
       deltaZ = 0.1;
 
-      var sweep_path = new StraightLineSweep();
+      var sweep_path = new Line(1,true);
+      sweep_path.travel(0.01);
       var twist = config.angle_torsion/360;
       object = new Loft( loft_contours[config.contour - 1].shape,
                          sweep_path,

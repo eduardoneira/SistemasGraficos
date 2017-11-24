@@ -12,21 +12,6 @@ function CrossB3Shape(){
   function _init(){
     var _control_points = [];
 
-    // _control_points.push([1,0,0]);
-    // _control_points.push([1,1,0]);
-    // _control_points.push([0,1,0]);
-    // _control_points.push([0,0,0]);
-    // _control_points.push([0,-0.25,0]);
-    // _control_points.push([0,-0.75,0]);
-    // _control_points.push([0,-1,0]);
-    // _control_points.push([0,-2,0]);
-    // _control_points.push([1,-2,0]);
-    // _control_points.push([1,-1,0]);
-    // _control_points.push([1,-0.75,0]);
-    // _control_points.push([1,-0.25,0]);
-    // _control_points.push([1,0,0]);
-
-
     _control_points.push([1,0,0]);
     _control_points.push([1,1,0]);
     _control_points.push([0,1,0]);
@@ -40,8 +25,6 @@ function CrossB3Shape(){
     _control_points.push([1,-0.45,0]);
     _control_points.push([1,-0.15,0]);
     _control_points.push([1,0,0]);
-
-
 
     var centerx = 0;
     var centery = 0;
@@ -68,8 +51,6 @@ function CrossB3Shape(){
     }
 
     _bezier_curve = new CubicBezierCurve(_control_points);
-
-    // debugger;
   }
 
   _init();
@@ -79,7 +60,11 @@ function CrossB3Shape(){
     for(var i = 0; i < bezier_curve.positions.length; i+=3){
       that.positions.push(bezier_curve.positions[i]);
       that.positions.push(bezier_curve.positions[i+1]);
+
+      that.normals.push(-1.0*bezier_curve.tangents[i+1]);
+      that.normals.push(bezier_curve.tangents[i]);
     }
+
 
     that.normals = that.positions.slice();
   }
